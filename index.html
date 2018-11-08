@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+		<link rel="stylesheet" type="text/css" href="css/index.css"/>
+		<script src="js/jquery-3.1.1.js"></script>
+		<script src="js/main.js"></script>
+	</head>
+
+	<body>
+		<header>
+			<nav class="navbar navbar-default">
+				<div>
+					<a class="float-left navbar-brand"></a>
+					<ul class="float-left nav-fnc" >
+						<li><span>公司注册</span></li>
+						<li><span>在线治理</span></li>
+						<li><span>资产交易</span></li>
+					</ul>
+					<ul class="float-right nav-token">
+						<li><span><a href="register.html">注册</a></span></li>
+						<li><span><a href="login.html">登录</a></span></li>
+						<li class="dropdown">
+							<span>简体中文</span>
+							<i class="icon iconfont icon-jiantou2"></i>
+							<ul class="dropdown-menu">
+								<li>
+									<a href="#">English</a>
+								</li>
+								<li>
+									<a href="#">简体中文</a>
+								</li>
+								<li>
+									<a href="#">한글</a>
+								</li>
+								<li>
+									<a href="#">日本語</a>
+								</li>
+							</ul>
+						</li>
+					</ul>
+				</div>
+			</nav>
+		</header>
+		<section class="home">
+			<div class="home-banner">
+				<div class="banner-container">
+					<div class="banner-group">
+						<div class="banner-body">
+							<h2>基于区块链技术的企业价值生态网络</h2>
+							<h2>未来企业分布式自治型组织</h2>
+						</div>
+						<div class="banner-layer"></div>
+					</div>
+				</div>
+			</div>
+		</section>
+		<section class="platform">
+			<div class="container">
+				<div class="title">
+					<h2>全球领先、安全、创新的区块链应用</h2>
+					<p>分布式、可信任、安全、高效、流动性支持，帮助企业提升价值</p>
+				</div>
+				<div class="platform-item">
+					<div class="items items1 scrollChange">
+						<div class="icon"></div>
+						<h3>全球公司注册</h3>
+						<p>LittleBeeX将全球不同地区法律体系下的公司注册及等相关规范和法律文件植入区块链。与政府许可的注册登记机构深度合作。可以帮助您在24小时内成立一家国际公司</p>
+						<!--<a class="item-layer" target="_blank" href="http://www.littlebeex.com" target="_blank"></a>-->
+						<a class="item-layer" target="_blank" href="javascript:void(0)" target="_blank"></a>
+					</div>
+					<div class="items items2 scrollChange">
+						<div class="icon "></div>
+						<h3>全球公司治理</h3>
+						<p>LittleBeeX利用区块链技术帮助全球企业推动企业数字化转型，可以轻松将你的公司登记在区块链上，通过KYC身份认证和私钥签名，进行公司治理和数字资产发行</p>
+						<!--<a class="item-layer" target="_blank" href="http://www.littlebeex.com" target="_blank"></a>-->
+						<a class="item-layer" target="_blank" href="javascript:void(0)" target="_blank"></a>
+					</div>
+					<div class="items items3 scrollChange">
+						<div class="icon"></div>
+						<h3>数字资产交易</h3>
+						<p>LittleBeeX的终极目标是支持全球不同法律制度下的公司股权、债权、收益权等各类资产的数字化交易和流动性支持，同时支持Utility Token和 Security Token交易服务</p>
+						<!--<a class="item-layer" target="_blank" href="http://www.littlebeex.com" target="_blank"></a>-->
+						<a class="item-layer" target="_blank" href="javascript:void(0)" target="_blank"></a>
+					</div>
+				</div>
+			</div>
+		</section>
+		<section class="littlebee-form">
+			<div class="form-title">
+				<h4>加入社区生态</h4>
+				<p>订阅LittleBeeX 区块链解决方案的最新消息</p>
+			</div>
+			<div class="form-board">
+				<form action="">
+					<input type="email" class="form-control" id="exampleInputEmail1" placeholder="Email">
+					<span id="button">提交</span>
+				</form>
+			</div>
+		</section>
+		<footer>
+			<div class="footer-logo">
+				<img src="images/littlebeex-logo.png"/>
+			</div>
+			<div class="footer-board">
+				<div class="float-left">
+					<p>
+						LittleBeeX 是一个旨在通过使用区块链技术帮助实现公司创建、<br/>
+						治理以及资产流通。我们权衡了中心化和非中心化的优势，在保<br/>
+						证效率和快速决策的同时，是公司治理透明化、自动化。
+					</p>
+					<p>@2018 LittleBeeX 版权所有</p>
+				</div>
+				<ul class="float-right">
+					<li>152 BEACH ROAD</li>
+					<li>#14-02 GATEWAY EASY</li>
+					<li>SINGAPORE(189721)</li>
+					<li>support@LittleBeeX.com</li>
+					<li>+65 86870888</li>
+				</ul>
+			</div>
+		</footer>
+		
+		<script>
+			$('.dropdown').click(function(e){
+				$(this).find('ul.dropdown-menu').show();
+				e.stopPropagation();
+				$(document).click(function(){
+					$(this).find('ul.dropdown-menu').hide();
+				})
+			})
+		</script>
+	</body>
+</html>
