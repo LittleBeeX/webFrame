@@ -502,7 +502,8 @@ header .navbar.active {
   font-size: 20px;
   transform: translate(0, 15px) scale(1);
 }
-.additional ul li input[type="text"] {
+.additional ul li input[type="text"],
+.additional ul li input[type="password"] {
   border: 0;
   outline: 0;
   background: none;

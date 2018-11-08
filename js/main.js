@@ -1,3 +1,5 @@
+$(document).ready(function(){
+	
 	$('.additional li.item input').focus(function(){
 		if(!$(this).hasClass('focus')){
 			$(this).parent('li').addClass('focus');
@@ -29,13 +31,13 @@
 			$('.country .list').hide();
 		})
 	})
+	
 	$('.country .list p').click(function(){
 		$('.country input[type="text"]').val($(this).find('.float-left').text());
 		$('.country b').text($(this).find('.float-right').text());
 	})
 	
 	$('.v-code').click(function(){
-		console.log(333);
 		settime(this);
 	})
 	var countdown = 60;
@@ -79,3 +81,5 @@
 			$('.tooltip').remove();
 		},4000)
 	}
+
+})
