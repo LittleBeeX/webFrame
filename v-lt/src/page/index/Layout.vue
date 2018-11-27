@@ -11,8 +11,9 @@
 							<li><router-link to="config">资产交易</router-link></li>
 						</ul>
 						<ul class="float-right nav-token">
-							<li><span><a href="register.html">注册</a></span></li>
-							<li><span><a href="login.html">登录</a></span></li>
+							<li v-if="isLogin"><span><a href="register.html">注册</a></span></li>
+							<li v-if="isLogin"><span><a href="login.html">登录</a></span></li>
+							<li v-else><span><a href="javascript:void(0)" @click="closeLogin">退出</a></span></li>
 							<Dropdown trigger="click">
 								<a href="javascript:void(0)">
 									简体中文
@@ -55,6 +56,7 @@
 	</div>
 </template>
 <script>
+	import {mapState} from 'vuex'
 	export default {
 		data(){
 			return{
@@ -73,8 +75,34 @@
 						name:'日本語',
 						type:'it-JP'
 					}
-				]
+				],
+				isLogin:true
 			}
+		},
+		methods:{
+			closeLogin(){
+				this.$axios.post('/index.php/cn/home/index/exit_ajax')
+					.then(() => {
+						this.$Notice.info({
+							title: '已成功退出！',
+						});
+						this.isLogin = true
+						this.$router.push({
+							path:'/'
+						})
+					})
+			}
+		},
+		computed:mapState({
+			Address: state => state.web3.coinbase
+		}),
+		mounted(){
+			this.$axios.post('/index.php/cn/home/node_se/session_user')
+				.then(response => {
+					if(response.data.info && response.data.info != ''){
+						this.isLogin = false
+					}
+				})
 		}
 	}
 </script>
@@ -84,11 +112,9 @@
 		margin: 0;
 		position: relative;
 		min-height: 100vh;
-		padding-bottom: 300px;
 		background: #f2f3f8;
 		.ivu-layout
 			background: transparent;
-			min-height: calc(100vh - 300px)
 			
 	.ivu-layout-header
 		background: #20206A;
@@ -136,19 +162,18 @@
 		flex: 1;
 		position:relative;
 		.index-board
-			width: 900px;
-			margin: 50px auto;
-			height: auto;
+			position: relative;
+			width: 1200px;
+			margin: 100px auto 100px;
+			height: 705px;
 			box-shadow: 0 2px 7px rgba(0,0,0,.15);
-			background: rgb(255, 255, 255);
+			background-color: rgb(255, 255, 255);
 			border-radius: 3px;
 			box-sizing: border-box;
-			padding: 50px 100px;
+			padding: 50px 100px 80px;
 	
 	.ivu-layout-footer	
 		background: #20206a;
-		position: absolute;
-		bottom: 0;
 		width: 100%;
 	footer
 		width: 1200px;

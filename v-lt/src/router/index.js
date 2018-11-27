@@ -2,6 +2,9 @@ import Vue from 'vue'
 import Router from 'vue-router'
 Vue.use(Router)
 
+import {store} from '../store/'
+import mutil from '@/util/mutil'
+
 /*管理后台模块*/
 const HomeLayout = () =>
 	import('@/page/home/Layout')
@@ -44,10 +47,13 @@ const scrollBehavior = (to, from, savedPosition) => {
 	}
 }
 
-
-export default new Router({
+const router = new Router({
 	scrollBehavior,
 	routes: [
+		{
+			path:'/',
+			redirect:'/index'
+		},
 		{
 			path: '/home',
 			name: 'Home',
@@ -101,3 +107,13 @@ export default new Router({
 		}
 	]
 })
+
+
+ router.beforeEach((to, from ,next) => {
+	if(store.state.web3.coinbase == null){
+		store.commit('refreshCoinbase',mutil.getSection('myAddress'))
+	}
+	next();
+}) 
+
+export default router

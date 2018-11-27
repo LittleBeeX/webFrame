@@ -1,15 +1,22 @@
 import Web3 from 'web3'
 import { store } from '../store/'
+import mutil from '@/util/mutil'
 
 let pollWeb3 = function (state) {
-  let web3 = window.web3
-  web3 = new Web3(web3.currentProvider)
-
+  let web3js = window.web3
+	let newCoinbase
+  let web3 = new Web3(web3js.currentProvider)
   setInterval(() => {
-    if (web3 && store.state.web3.web3Instance) {
-      if (web3.eth.coinbase !== store.state.web3.coinbase) {
-        let newCoinbase = web3.eth.coinbase
-        web3.eth.getBalance(web3.eth.coinbase, function (err, newBalance) {
+		web3.eth.getCoinbase().then(result => {
+				newCoinbase = result
+		})
+		if (newCoinbase !== undefined && newCoinbase !== store.state.web3.coinbase) {
+			mutil.setSection('myAddress', newCoinbase)
+			location.reload()
+		}
+   if (web3 && store.state.web3.web3Instance) {
+      if (newCoinbase !== store.state.web3.coinbase) {
+        web3.eth.getBalance(newCoinbase, function (err, newBalance) {
           if (err) {
             console.log(err)
           } else {

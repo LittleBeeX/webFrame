@@ -26,7 +26,7 @@
 <style scoped lang="stylus">
 	.index-board
 		padding: 100px 100px !important;
-		height: 470px !important;
+		height: 570px !important;
 		display: flex;
 		display: -webkit-flex;
 		flex-direction: column;
@@ -39,6 +39,6 @@
 		.btn-con
 			text-align: center;
 			button
-				padding: 12px 30px;
+				padding: 8px 40px;
 				font-size: 16px;
 </style>

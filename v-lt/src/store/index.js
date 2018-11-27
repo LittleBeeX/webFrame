@@ -1,39 +1,39 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import state from './state'
-
-import getWeb3 from '@/util/getWeb'
-import pollWeb3 from '../util/pollWeb3'
-import getContract from '../util/getContract'
 
 Vue.use(Vuex);
+
+import state from './state'
+import getWeb3 from '@/util/getWeb'
+import pollWeb3 from '@/util/pollWeb3'
+import getContract from '@/util/getContract'
 
 export const store = new Vuex.Store({
 	strict: true,
 	state,
 	mutations: {
 		registerWeb3Instance(state, payload) {
-			let result = payload
-			let web3Copy = state.web3
-			web3Copy.coinbase = result.coinbase
-			web3Copy.networkId = result.networkId
-			web3Copy.balance = parseInt(result.balance, 10)
-			web3Copy.isInjected = result.injectedWeb3
-			web3Copy.web3Instance = result.web3
-			state.web3 = web3Copy
-			pollWeb3()
+		    let result = payload
+				let web3Copy = state.web3
+				web3Copy.coinbase = result.coinbase
+				web3Copy.networkId = result.networkId
+				web3Copy.balance = parseInt(result.balance, 10)
+				web3Copy.web3Instance = result.web3
+				state.web3 = web3Copy
 		},
-		pollWeb3Instance (state, payload) {
-	      state.web3.coinbase = payload.coinbase
-	      state.web3.balance = parseInt(payload.balance, 10)
-	    },
+		pollWeb3Instance(state, payload) {
+			state.web3.coinbase = payload.coinbase
+			state.web3.balance = parseInt(payload.balance, 10) 
+		},
 		registerContractInstance(state, payload) {
 			state.contractInstance = () => payload
+		},
+		refreshCoinbase(state,payload){
+			state.web3.coinbase = payload
 		}
-		
 	},
 	actions: {
-		registerWeb3({
+	    registerWeb3({
 			commit
 		}) {
 			getWeb3.then(result => {

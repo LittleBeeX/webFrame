@@ -1,22 +1,26 @@
 <template>
 	<div>
-		<Breadcrumb class="bread">
-			<div class="title">{{BreadTitle}}</div>
-			<div class="b_func">
-				<div style="width:300px">
-					<Input search enter-button placeholder="Enter something..." />
-				</div>
-			</div>
-		</Breadcrumb>
-		<Card shadow>
-			<div>这是STO文件</div>
-		</Card>
+		<div class="isDevelopment">
+			<Icon type="md-alert" size="50" color="#515a6e"/>
+			<p>程序员小哥正在努力开发中!</p>
+			<p>谢谢支持，请耐心等待。</p>
+		</div>
 		
 	</div>
 </template>
 
-<script>
-	export default {
-		props:['BreadTitle']
-	}
-</script>
+<style scoped lang="stylus">
+	.isDevelopment
+		margin: 100px auto 0
+		width: 300px
+		padding: 50px 0;
+		background: white
+		border-radius: 4px
+		text-align: center
+		i
+			margin-bottom: 25px;
+		p
+			line-height: 30px;
+			font-size: 16px;
+		
+</style>

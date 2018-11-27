@@ -3,54 +3,70 @@
 		<div class="inner">
 			<h3>个人信息认证</h3>
 			<div>
-				 <Form :model="userIdent" label-position="left" :label-width="80" inline ref="userIdent" :rules="ruleInline">
-					<FormItem label="名" prop="Name">
-						<Input v-model="userIdent.Name" placeholder="请输入名"></Input>
+				 <Form :model="userIdent" label-position="left" :label-width="75" inline ref="userIdent" :rules="ruleInline">
+					<FormItem label="名" prop="name">
+						<Input v-model="userIdent.name" size="large" placeholder="请输入名" :readonly="userIsIdint"></Input>
 					</FormItem>
-					<FormItem label="姓" prop="Surname">
-						<Input v-model="userIdent.Surname" placeholder="请输入姓"></Input>
+					<FormItem label="姓" prop="surname">
+						<Input v-model="userIdent.surname" size="large" placeholder="请输入姓" :readonly="userIsIdint"></Input>
 					</FormItem>
-					<FormItem label="性别" prop="Sex">
-						<Select v-model="userIdent.Sex">
-							<Option v-for="item in sexList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+					<FormItem label="性别" prop="sex">
+						<Select v-model="userIdent.sex" :readonly="userIsIdint">
+							<Option v-for="item in sexList" size="large" :value="item.value" :key="item.value">{{ item.label }}</Option>
 						</Select>
 					</FormItem>
 					<FormItem label="国籍" prop="nationality">
-						<Select v-model="userIdent.nationality">
-							<Option v-for="item in nationalityList" :value="item.value" :key="item.value">{{ item.label }}</Option>
-						</Select>
+						 <Select v-model="userIdent.nationality" :readonly="userIsIdint" size="large">
+							<Option v-for="(item,index) in nationalityList" :value="index" :key="index" :label="item.country">
+								<span>{{ item.country }}</span>
+								<span style="float:right;color:#ccc">{{item.en}}</span>
+							</Option>
+						</Select> 
 					</FormItem>
-					<FormItem label="出生日期" prop="BirDate">
-						<DatePicker style="width:100%" type="date" placeholder="出生日期" v-model="userIdent.BirDate" ></DatePicker>
+					<FormItem label="出生日期" prop="birDate">
+						<DatePicker style="width:100%" type="date" size="large" placeholder="出生日期" v-model="userIdent.birDate"  :readonly="userIsIdint"></DatePicker>
+					</FormItem>
+					<FormItem label="护照号码" prop="passports">
+						<Input v-model="userIdent.passports" size="large" placeholder="请输入护照号码" :readonly="userIsIdint"></Input>
 					</FormItem>
 					<br>
-					<FormItem label="Address" class="address">
-						<Input v-model="userIdent.Address" readonly></Input>
-					</FormItem>
+					<FormItem label="钱包地址" class="address" >
+						<Input v-model="Address" size="large" readonly></Input>
+					</FormItem><br>
 					<FormItem label="护照上传">
 						<Upload
 							ref="upload"
+							:readonly="userIsIdint"
+							:data="{
+								address:Address,
+								name:userIdent.name,
+								surname:userIdent.surname,
+								passports:userIdent.passports,
+								sex:userIdent.sex,
+								nationality:userIdent.nationality,
+								birthtime:userIdent.birDate,
+								only: onlys
+							}"
 							:show-upload-list="false"
 							:default-file-list="defaultList"
 							:on-success="handleSuccess"
 							:format="['jpg','jpeg','png']"
 							:max-size="2048"
 							:on-format-error="handleFormatError"
-							:on-exceeded-size="handleMaxSize"
 							:before-upload="handleBeforeUpload"
 							multiple
-							action="/index.php/cn/home/node_su/geren_tijiao_img">
-								<Button icon="ios-cloud-upload-outline">Select the file to upload</Button>
+							name="picture" 
+							action="/index.php/cn/home/node_su/geren_tijiao">
+								<Button icon="ios-cloud-upload-outline">上传护照</Button>
 						</Upload>
-						<Modal title="View Image" v-model="visible">
-							<img :src="'https://o5wwk8baw.qnssl.com/' + imgName + '/large'" v-if="visible" style="width: 100%">
+						<Modal title="查看图片" v-model="visible" cancel-text="">
+							<img :src="imgUrl" v-if="visible" style="width: 100%">
 						</Modal>
-						<div class="demo-upload-list" v-for="item in uploadList">
+						<div class="demo-upload-list" v-for="(item,index) in uploadList">
 							<template v-if="item.status === 'finished'">
 								<img :src="item.url">
 								<div class="demo-upload-list-cover">
-									<Icon type="ios-eye-outline" @click.native="handleView(item.name)"></Icon>
-									<Icon type="ios-trash-outline" @click.native="handleRemove(item)"></Icon>
+									<Icon type="ios-eye-outline" @click.native="handleView(item.url)"></Icon>
 								</div>
 							</template>
 							<template v-else>
@@ -58,23 +74,21 @@
 							</template>
 						</div>
 					</FormItem>
-					<!-- <FormItem label="护照上传">
-							<Upload
-								:before-upload="handleUpload"
-								action="/index.php/cn/home/node_su/geren_tijiao_img">
-								<Button icon="ios-cloud-upload-outline">Select the file to upload</Button>
-							</Upload>
-							<div v-if="file !== null">Upload file: {{ file.name }} <Button type="text" @click="upload" :loading="loadingStatus">{{ loadingStatus ? 'Uploading' : 'Click to upload' }}</Button></div>
-					</FormItem> -->
 				</Form>
-				<Alert class="w96">当前个人信息审核中</Alert>
-				<div class="btn-con">
-				    <Button type="primary" @click="backConfig()">
+				<Alert v-if="userType.isShow" :type="userType.type">{{userType.setMes}}</Alert>
+				<div class="btn-con" v-else>
+				    <Button class="fl" type="primary" @click="backConfig()">
 						<Icon type="ios-arrow-back"></Icon>
 						上一步
 					</Button>
-					<Button type="primary" @click="goCompany('userIdent')">
+					<Button class="fr" type="primary" @click="goCompany('userIdent')" >
 						下一步
+						<Icon type="ios-arrow-forward"></Icon>
+					</Button>
+				</div>
+				<div class="btn-con" v-if="userType.type == 'error'">
+					<Button class="fr" type="primary" @click="goCompany('userIdent')" >
+						提交
 						<Icon type="ios-arrow-forward"></Icon>
 					</Button>
 				</div>
@@ -84,18 +98,27 @@
 </template>
 
 <script>
+	import Qs from 'qs'
+	import {mapState} from 'vuex'
+	import mutil from '@/util/mutil'
 	export default {
 		data(){
 			return{
 				file: null,
                 loadingStatus: false,
+				userType:{
+					isShow: false,
+					setMes: '',
+					type:'info'
+				},
+				userIsIdint: false,
 				userIdent: {
-                    Name: '',
-                    Surname: '',
-                    Sex: '',
+                    name: '',
+                    surname: '',
+                    passports: '',
+                    sex: '',
 					nationality:'',
-					BirDate:'',
-					Address:''
+					birDate:''
                 },
 				sexList:[
 					{
@@ -106,26 +129,21 @@
 						label:'女'
 					},
 				],
-				nationalityList:[
-					{
-						value:'1',
-						label:'中国'
-					},{
-						value:'2',
-						label:'美国'
-					},
-				],
+				nationalityList:[{country: "中国", en: "China", code: "86"},{country: "中国香港", en: "Hong Kong", code: "852"}],
 				ruleInline: {
-                    Name: [
+                    name: [
                         { required: true, message: '请输入名', trigger: 'blur' }
                     ],
-                    Surname: [
+                    surname: [
                         { required: true, message: '请输入姓', trigger: 'blur' }
                     ],
-					BirDate: [
+					passports: [
+                        { required: true, message: '请输入护照号码', trigger: 'blur' }
+                    ],
+					birDate: [
                         { required: true, type: 'date', message: '请选择出生日期', trigger: 'change' }
                     ],
-                    Sex: [
+                    sex: [
                         { required: true, message: '请选择性别', trigger: 'change' }
                     ], 
 					nationality: [
@@ -136,83 +154,135 @@
                     {
                         'name': 'a42bdcc1178e62b4694c830f028db5c0',
                         'url': 'https://o5wwk8baw.qnssl.com/a42bdcc1178e62b4694c830f028db5c0/avatar'
-                    },
-                    {
-                        'name': 'bc7521e033abdd1e92222d733590f104',
-                        'url': 'https://o5wwk8baw.qnssl.com/bc7521e033abdd1e92222d733590f104/avatar'
                     }
                 ],
-                imgName: '',
-                visible: false,
-                uploadList: []
+				imgUrl: '',
+				visible: false,
+				uploadList: [],
+				onlys: ''
 			}
 		},
+		computed: {
+			...mapState({
+				Address: state => state.web3.coinbase
+			})
+		},	
 		methods:{
 			backConfig(){
 				this.$router.push({path:'Config'})
 			},
 			goCompany(name){
-				//this.$router.push({path:'CompanyIdent'}),
-				
-				 this.$refs[name].validate((valid) => {
-                    if (valid) {
-						this.$router.push({path:'CompanyIdent'})
-                    } else {
-                        this.$Message.error('请正确输入表单信息！');
-                    }
-                })
+				this.$refs[name].validate((valid) => {
+						if (valid) {
+							let data = {
+								"address":this.Address,
+								"name":this.userIdent.name,
+								"surname":this.userIdent.surname,
+								"passports":this.userIdent.passports,
+								"sex":this.userIdent.sex,
+								"nationality":this.userIdent.nationality,
+								"birthtime":this.userIdent.birDate,
+								"only": this.onlys
+							};
+							this.$axios({ 
+								method: 'post',
+								url: '/index.php/cn/home/node_su/geren_tijiao',
+								data: Qs.stringify(data)
+							}).then((response) => {
+								if(response.data.state == 0){
+									if(this.$route.query.only != undefined){
+										this.$router.push({
+											path:'TokenPayment',
+											query:{only:this.onlys}
+										})
+									}else{
+										if(this.userType.type == 'error'){
+											this.$router.push({
+												path:'/'
+											})
+										}else{
+											this.$router.push({
+												path:'companyIdent'
+											})
+										}
+									}
+								}
+							}) 
+						} else {
+							 this.$Notice.warning({
+									title: '请正确输入表单信息！',
+							 });
+						}
+				})
 			},
-			/* handleUpload (file) {
-				console.log(file);
-				console.log(this.file);
-                this.file = file;
-                return false;
-            },
-            upload () {
-                this.loadingStatus = true;
-                setTimeout(() => {
-                    this.file = null;
-                    this.loadingStatus = false;
-                    this.$Message.success('Success')
-                }, 1500);
-            } */
-			handleView (name) {
-                this.imgName = name;
+			handleView (urls) {
+                this.imgUrl = urls;
                 this.visible = true;
             },
-            handleRemove (file) {
-                const fileList = this.$refs.upload.fileList;
-                this.$refs.upload.fileList.splice(fileList.indexOf(file), 1);
-            },
             handleSuccess (res, file) {
-                file.url = 'https://o5wwk8baw.qnssl.com/7eb99afb9d5f317c912f08b5212fd69a/avatar';
+                file.url = res.picture;
                 file.name = '7eb99afb9d5f317c912f08b5212fd69a';
             },
             handleFormatError (file) {
                 this.$Notice.warning({
-                    title: 'The file format is incorrect',
-                    desc: 'File format of ' + file.name + ' is incorrect, please select jpg or png.'
+                    title: '文件提交错误！',
                 });
             },
-            handleMaxSize (file) {
-                this.$Notice.warning({
-                    title: 'Exceeding file size limit',
-                    desc: 'File  ' + file.name + ' is too large, no more than 2M.'
-                });
-            },
-            handleBeforeUpload () {
-                const check = this.uploadList.length < 5;
-                if (!check) {
-                    this.$Notice.warning({
-                        title: 'Up to five pictures can be uploaded.'
-                    });
-                }
-                return check;
+            handleBeforeUpload (file) {
+				const fileList = this.$refs.upload.fileList;
+				this.$refs.upload.fileList.splice(fileList.indexOf(file), 1);
+                return true;
             }
         },
-        mounted () {
-            this.uploadList = this.$refs.upload.fileList;
-        }
+		created(){
+			this.$axios.post('/index.php/cn/home/node_se/nationality')
+				.then((response) => {
+					this.nationalityList = response.data.info;
+				})
+				
+			if(this.$route.query.only != undefined){
+				this.onlys = this.$route.query.only
+				let data = {
+					"address": this.Address,
+					"only": this.onlys
+				};
+				this.$axios({
+					method: 'post',
+					url: '/index.php/cn/home/node_se/company_individual',
+					data: Qs.stringify(data)
+				}).then((response) => {
+					let info = response.data.info.chain;
+					if(response.data.state == 0){
+						this.userIdent.surname = info.surname
+						this.userIdent.passports = info.passports
+						this.userIdent.name = info.name
+						this.userIdent.sex = info.sex
+						this.userIdent.nationality = info.nationality
+						this.userIdent.birDate = mutil.timestampToTime(info.birthtime)
+						this.defaultList[0].url = info.picture
+					}
+					if(info.state == 1){
+						this.userType.isShow = true
+						this.userType.setMes = '个人认证正在加速审核中，请耐心等耐！'
+						this.userIsIdint = true
+					}else if(info.state == 3){
+						this.userType.isShow = true
+						this.userType.type = 'error'
+						this.userType.setMes =  info.remarks
+						this.nextBtn = true
+					}else if(info.state == 2){
+						this.userType.isShow = true
+						this.userType.setMes = '个人认证审核已经通过！'
+					}	
+				})
+			}else{
+				this.onlys = ''
+			}
+		},
+		mounted () {
+			this.uploadList = this.$refs.upload.fileList;
+				
+		}
 	}
 </script>
 
@@ -221,29 +291,44 @@
 		padding: 50px 100px !important;
 		h3
 			font-size:26px;
-			margin-bottom: 20px;
+			margin-bottom: 40px;
 		.ivu-form-item
-			min-width: 330px;
+			min-width: 321px
+			&.w66
+				width: 65.5%
 			.ivu-form-item-label
 				font-size: 16px;
+			button[type="button"]
+				width: 170px
 		.address
-			width: 96%;
+			width: 65.5%;
 		.btn-con
-			display: flex;
-			display: -webkit-flex;
-			justify-content: space-between;
-			align-items: center;
+			bottom: 80px
+			left: 100px
+			width: 1000px;
+			position: absolute
+			overflow: hidden
 			margin-top: 50px;
+			.fl
+				float: left
+			.fr
+				float: right
 	
 </style>
 <style>
+	.ivu-upload-select{
+		margin-bottom: 24px;
+	}
+	.ivu-form-label-left .ivu-form-item-label{
+		font-size: 14px;
+		color:#000;
+	}
     .demo-upload-list{
         display: inline-block;
-        width: 60px;
-        height: 60px;
-		margin-top: 24px;
+        width: 170px;
+        height: 170px;
         text-align: center;
-        line-height: 60px;
+        line-height: 170px;
         border: 1px solid transparent;
         border-radius: 4px;
         overflow: hidden;

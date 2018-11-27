@@ -3,34 +3,44 @@
 		<div class="inner">
 			<h3>公司信息认证</h3>
 			<div>
-				 <Form :model="companyIdent" label-position="left" :label-width="100" inline ref="companyIdent" :rules="ruleInline">
-					<FormItem label="公司名称" class="w96" prop="Name">
-						<Input v-model="companyIdent.Name" placeholder="请输入公司名称"></Input>
+				 <Form :model="companyIdent" label-position="left" :label-width="75" inline ref="companyIdent" :rules="ruleInline">
+					<FormItem label="公司名称" prop="Name" class=" w66">
+						<Input v-model="companyIdent.Name" size="large" placeholder="请输入公司名称" :readonly="companyIsIdint"></Input>
 					</FormItem><br/>
 					<FormItem label="注册号码" prop="Number">
-						<Input v-model="companyIdent.Number" number placeholder="请输入注册号码"></Input>
+						<Input v-model="companyIdent.Number" size="large" placeholder="请输入注册号码" :readonly="companyIsIdint"></Input>
 					</FormItem>
 					<FormItem label="注册地点" prop="Site">
-						<Input v-model="companyIdent.Site" placeholder="请输入注册地点"></Input>
-					</FormItem><br/>
-					<FormItem label="注册资本" prop="Fund">
-						<Input v-model="companyIdent.Fund" placeholder="请输入注册资本"></Input>
+						<Input v-model="companyIdent.Site" size="large" placeholder="请输入注册地点" :readonly="companyIsIdint"></Input>
 					</FormItem>
-					<FormItem label="成立日期" prop="BirDate">
-						<DatePicker style="width:100%" type="date" placeholder="成立日期" v-model="companyIdent.BirDate"></DatePicker>
-					</FormItem><br/>
-					<FormItem label="组织名称" class="w96" prop="IdentCode">
-						<Input search enter-button placeholder="企业组织名称"  v-model="companyIdent.IdentCode" @click.native="isIdentCode(companyIdent.IdentCode)"/>
+					<FormItem label="注册资本" prop="Fund"  >
+						<Input v-model="companyIdent.Fund" size="large" placeholder="请输入注册资本" :readonly="companyIsIdint"></Input>
+					</FormItem>
+					<FormItem label="成立日期" prop="BirDate" >
+						<DatePicker style="width:100%" size="large" type="date" placeholder="成立日期" v-model="companyIdent.BirDate" :readonly="companyIsIdint"></DatePicker>
+					</FormItem>
+					<FormItem label="组织名称" prop="IdentCode">
+						<Input  placeholder="企业组织名称" size="large" v-model="companyIdent.IdentCode" :readonly="companyIsIdint">
+							 <Button slot="append" @click="isIdentCode(companyIdent.IdentCode)">
+								 <Icon type="ios-search" size="16"/>
+							 </Button>
+						</Input>
 					</FormItem>
 				</Form>
-				<Alert class="w96" v-if="approve.type">{{approve.text}}</Alert>
-				<div class="btn-con">
-				    <Button type="primary" @click="backUser()">
+				<Alert :type="companyType.type" v-if="companyType.isShow">{{companyType.setMes}}</Alert>
+				<div class="btn-con" v-else>
+				    <Button class="fl" type="primary" @click="backUser()">
 						<Icon type="ios-arrow-back"></Icon>
 						上一步
 					</Button>
-					<Button type="primary" @click="goTokenSet('companyIdent')">
+					<Button class="fr" type="primary" @click="goTokenSet('companyIdent')">
 						下一步
+						<Icon type="ios-arrow-forward"></Icon>
+					</Button>
+				</div>
+				<div class="btn-con" v-if="companyType.type == 'error'">
+					<Button class="fr" type="primary" @click="goTokenSet('companyIdent')" >
+						提交
 						<Icon type="ios-arrow-forward"></Icon>
 					</Button>
 				</div>
@@ -40,6 +50,8 @@
 </template>
 
 <script>
+	import Qs from 'qs'
+	import {mapState} from 'vuex'
 	export default {
 		data(){
 			return{
@@ -51,17 +63,18 @@
 					BirDate:'',
 					IdentCode:''
                 },
-				approve:{
-					type: false,
-					text:'当前公司信息审核中'
+				companyType:{
+					isShow: false,
+					setMes: '',
+					type:'info'
 				},
+				companyIsIdint: false,
 				ruleInline:{
 					Name:[
 						{required:true, message:'请输入公司名称', trigger:'blur'}
 					],
 					Number:[
-						{required:true, message:'请输入注册号码'},
-						{type: 'number', message: '注册号码必须为数字值'}
+						{required:true, message:'请输入注册号码', trigger:'blur'}
 					],
 					Site:[
 						{required:true, message:'请输入注册地点', trigger:'blur'}
@@ -78,45 +91,168 @@
 				}
 			}
 		},
+		computed: mapState({
+			Address: state => state.web3.coinbase
+		}),
 		methods:{
 			backUser(){
-				this.$router.push({path:'UserIdent'})
+				let onlyMsg = this.$route.query.only != undefined ? this.$route.query.only : null
+				this.$router.push({
+					path:'UserIdent',
+					query:{
+						"only":onlyMsg
+					}
+				})
 			},
 			goTokenSet(name){
 				this.$refs[name].validate((valid) => {
 					if (valid) {
-						this.$router.push({path:'TokenSet'})
+						let data = {
+							"code":this.companyIdent.Number,
+							"name":this.companyIdent.Name,
+							"address":this.companyIdent.Site,
+							"capital":this.companyIdent.Fund,
+							"only":this.companyIdent.IdentCode,
+							"establish":this.companyIdent.BirDate,
+						};
+						this.$axios({
+							method: 'post',
+							url: '/index.php/cn/home/node_su/company_tijiao',
+							data: Qs.stringify(data)
+						}).then((response) => {
+							if(response.data.state == 0){
+								if(this.companyType.type == 'error'){
+									this.$router.push({
+										path:'/'
+									})
+								}else{
+									this.$router.push({
+										path:'TokenSet',
+										query:{
+											"only":this.companyIdent.IdentCode
+										}
+									})
+								}
+							}else{
+								this.$Notice.warning({
+									title: '该组织名称已被占用！',
+								});
+							}
+						})
 					} else {
-						this.$Message.error('请正确输入表单信息！');
+						this.$Notice.warning({
+							title: '请正确输入表单信息！',
+						});
 					}
 				})
+			},
+			isIdentCode(code){
+				if(this.companyIdent.IdentCode != ''){
+					if(this.companyIdent.IdentCode != this.$route.query.only){
+						let data = {
+							"address": this.Address,
+							"only": this.companyIdent.IdentCode
+						};
+						this.$axios({
+							method: 'post',
+							url: '/index.php/cn/home/node_se/company_individual',
+							data: Qs.stringify(data)
+						}).then((response) => {
+							let state = response.data.state;
+							if(state == 2){
+								this.$Notice.info({
+									title: '该组织名称暂无占用！'
+								});
+							}else{
+								this.$Notice.warning({
+									title: '该组织名称已被占用！'
+								});
+							}
+						})
+					}else{
+						this.$Notice.info({
+							title: '该组织名称暂无占用！'
+						});
+					}
+				}else{
+					this.$Notice.warning({
+						title: '组织名称不能为空！'
+					});
+				}
 			}
+		},
+		mounted(){
+			if(this.$route.query.only != undefined){
+				let data = {
+					"address": this.Address,
+					"only": this.$route.query.only
+				};
+				this.$axios({
+					method: 'post',
+					url: '/index.php/cn/home/node_se/company_individual',
+					data: Qs.stringify(data)
+				}).then((response) => {
+					let company = response.data.info.company;
+					if(response.data.state == 0){
+						this.companyIdent.Number = company.code
+						this.companyIdent.Name = company.name
+						this.companyIdent.Site = company.address
+						this.companyIdent.BirDate = company.establish
+						this.companyIdent.Fund = company.capital
+						this.companyIdent.IdentCode = company.only
+					}
+					if(company.state == 1){
+						this.companyType.isShow = true
+						this.companyType.setMes = '公司认证正在加速审核中，请耐心等耐！'
+						this.companyIsIdint = true
+					}else if(company.state == 3){
+						this.companyType.isShow = true
+						this.companyType.type = 'error'
+						this.companyType.setMes = company.remarks
+						this.companyIsIdint = false
+					}else if(company.state == 2){
+						this.companyType.isShow = true
+						this.companyType.setMes = '公司认证审核已经通过！'
+						this.companyIsIdint = true
+					}	
+				})
+			}
+			
 		}
 	}
 </script>
 
 <style scoped lang="stylus">
 	.index-board
-		padding: 50px 100px !important;
 		h3
 			font-size:26px;
-			margin-bottom: 20px;
+			margin-bottom: 40px;
 		.ivu-form-item
-			min-width: 330px;
+			min-width: 321px
+			&.w66
+				width: 65.5%
 			.ivu-form-item-label
 				font-size: 16px;
-		.w96
-			width: 96%;
 		.btn-con
-			width: 96%;
-			display: flex;
-			display: -webkit-flex;
-			justify-content: space-between;
-			align-items: center;
+			bottom: 80px
+			left: 100px
+			width: 1000px;
+			position: absolute
+			overflow: hidden
 			margin-top: 50px;
+			.fl
+				float: left
+			.fr
+				float: right
 		.hint
 			font-size: 14px;
 			label
 				display: inline-block;
 				width: 100px;
+</style>
+<style>
+	.ivu-form-label-left .ivu-form-item-label{
+		font-size: 14px;
+		color:#000;
+	}
 </style>
