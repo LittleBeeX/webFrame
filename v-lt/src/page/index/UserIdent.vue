@@ -239,7 +239,6 @@
 				.then((response) => {
 					this.nationalityList = response.data.info;
 				})
-				
 			if(this.$route.query.only != undefined){
 				this.onlys = this.$route.query.only
 				let data = {
@@ -260,20 +259,21 @@
 						this.userIdent.nationality = info.nationality
 						this.userIdent.birDate = mutil.timestampToTime(info.birthtime)
 						this.defaultList[0].url = info.picture
+						
+						if(info.state == 1){
+							this.userType.isShow = true
+							this.userType.setMes = '个人认证正在加速审核中，请耐心等耐！'
+							this.userIsIdint = true
+						}else if(info.state == 3){
+							this.userType.isShow = true
+							this.userType.type = 'error'
+							this.userType.setMes =  info.remarks
+							this.nextBtn = true
+						}else if(info.state == 2){
+							this.userType.isShow = true
+							this.userType.setMes = '个人认证审核已经通过！'
+						}	
 					}
-					if(info.state == 1){
-						this.userType.isShow = true
-						this.userType.setMes = '个人认证正在加速审核中，请耐心等耐！'
-						this.userIsIdint = true
-					}else if(info.state == 3){
-						this.userType.isShow = true
-						this.userType.type = 'error'
-						this.userType.setMes =  info.remarks
-						this.nextBtn = true
-					}else if(info.state == 2){
-						this.userType.isShow = true
-						this.userType.setMes = '个人认证审核已经通过！'
-					}	
 				})
 			}else{
 				this.onlys = ''

@@ -10,7 +10,7 @@
 						<p slot="title" class="">公司信息</p>
 						<div class="msgBoard">
 							<div class="logo">
-								<img src="../../../static/images/fiveReason.png" mode="" />
+								<img :src="companyLogoSrc" mode="" />
 							</div>
 							<div class="msg">
 								<p v-for="item in companyMsgList"><b>{{item.label}}</b>{{item.vals}}</p>
@@ -19,18 +19,33 @@
 						</div>
 						<div class="btn">
 							<Upload
-							ref="upload"
-							:show-upload-list="false"
-							:on-success="companyUpSuccess"
-							:format="['jpg','jpeg','png']"
-							:max-size="2048"
-							:on-format-error="handleFormatError"
-							multiple
-							name="picture" 
-							action="/index.php/cn/home/node_su/geren_tijiao">
+								ref="upload"
+								:show-upload-list="false"
+								:on-success="companyUpSuccess"
+								:format="['jpg','jpeg','png']"
+								:max-size="2048"
+								:data="{
+									address:Address,
+									only: $route.query.only,
+								}"
+								:on-format-error="handleFormatError"
+								multiple
+								name="logo" 
+								action="/index.php/cn/home/node_su/company_logo">
 								<Button type="primary" icon="ios-cloud-upload-outline">提交公司logo</Button>
 							</Upload> 
-							<Upload v-if="isCreator" :show-upload-list="false" action="//jsonplaceholder.typicode.com/posts/">
+							<Upload
+								v-if="isCreator" 
+								:on-success="fileUpSuccess"
+								:show-upload-list="false" 
+								:on-format-error="handleFormatError"
+								:data="{
+									address:Address,
+									only: $route.query.only,
+								}"
+								:format="['doc','docx','xls','xlsx','ppt','pptx','pdf','pdfx']"
+								name="zhangcheng" 
+								action="/index.php/cn/home/node_su/company_zhangcheng">
 								<Button type="primary" icon="ios-cloud-upload-outline">提交公司章程</Button>
 							</Upload>
 						</div>
@@ -56,7 +71,7 @@
 						<p slot="title">个人信息</p>
 						<div class="msgBoard">
 							<div class="logo">
-								<img src="../../../static/images/Yiming Wang.jpg" mode="" />
+								<img :src="userSrc" mode="" />
 							</div>
 							<div class="msg">
 								<p v-for="item in userMsgList"><b>{{item.label}}</b>{{item.vals}}</p>
@@ -69,10 +84,14 @@
 								:on-success="userUpSuccess"
 								:format="['jpg','jpeg','png']"
 								:max-size="2048"
+								:data="{
+									address:Address,
+									only: $route.query.only,
+								}"
 								:on-format-error="handleFormatError"
 								multiple
-								name="picture" 
-								action="/index.php/cn/home/node_su/geren_tijiao">
+								name="portrait" 
+								action="/index.php/cn/home/node_su/chain_portrait">
 								<Button type="primary" icon="ios-cloud-upload-outline">提交个人头像</Button>
 							</Upload> 
 						</div>
@@ -98,6 +117,8 @@
 		props:['BreadTitle'],
 		data(){
 			return{
+				companyLogoSrc: require('../../assets/images/fiveReason.png'),
+				userSrc: require('../../assets/images/Yiming Wang.jpg'),
 				businessList:{
 					rows:[
 						 {
@@ -185,7 +206,7 @@
 			},
 			mountedRefreshCompanyList(){
 				let data = {
-					"address": this.$store.state.web3.coinbase
+					"address": this.Address
 				};
 				this.$axios({
 					method: 'post',
@@ -203,12 +224,14 @@
 				});
 			},
 			userUpSuccess(res,file){
-				file.url = res.picture;
-				file.name = '7eb99afb9d5f317c912f08b5212fd69a';
+				this.userSrc = res.portrait;
 			},
 			companyUpSuccess(res,file){
-				file.url = res.picture;
-				file.name = '7eb99afb9d5f317c912f08b5212fd69a';
+				this.companyLogoSrc = res.logo;
+			},
+			fileUpSuccess(res,file){
+				this.constitution.src = res.zhangcheng;
+				this.constitution.title = '公司章程';
 			},
 			mountedRefreshMsg(){
 				let data = {
@@ -234,6 +257,17 @@
 						}
 						
 						this.isCreator = companyMsg.creator
+						
+						if(companyMsg.logo != ''){
+							this.companyLogoSrc = companyMsg.logo;
+						}
+						if(companyMsg.zhangcheng != ''){
+							this.constitution.src = companyMsg.zhangcheng;
+							this.constitution.title = '公司章程';
+						}
+						if(userMsg.portrait != ''){
+							this.userSrc = userMsg.portrait;
+						}
 						return true;
 					}else{
 						this.$Notice.warning({

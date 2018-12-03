@@ -24,8 +24,8 @@
 			<Col  :xs="24" :sm="12" :lg="8" v-for="item in voteList">
 				<Card :bordered="false" class="voteItem">
 					<p slot="title">
-						<Tooltip :content="item.content" placement="top-start">
-							{{item.content}}
+						<Tooltip max-width="300" :content="item.content">
+							<p class="tooltip-msg">{{item.content}}</p>
 						</Tooltip>
 					</p>
 					<div class="msgBoard">
@@ -35,8 +35,8 @@
 						<p><b>同意<span>(50%可通过审核)</span></b> <Progress :percent="item.yes_proportion" status="active" /></p>
 						<p><b>否决</b> <Progress :percent="item.no_proportion" class="warningProgress"/></p>
 						<div class="btn" v-if="item.btn_show">
-							<Button type="success" size="large" icon="md-albums">同意</Button>
-							<Button type="info" size="large" icon="md-albums">否决</Button>
+							<Button type="success" size="large" icon="md-albums" @click="userVote(1,item.id)">同意</Button>
+							<Button type="info" size="large" icon="md-albums" @click="userVote(2,item.id)">否决</Button>
 						</div>
 					</div>
 				</Card>
@@ -114,22 +114,55 @@
 				this.isShowDrawer = !this.isShowDrawer
 			},
 			takeVote(){
+				if(this.addVoteInput != ''){
+					let data = {
+						"only":this.$route.query.only,
+						"state": 0,
+						"content": this.addVoteInput,
+						"address": this.Address
+					};
+					this.$axios({
+						method: 'post',
+						url: '/index.php/cn/home/node_su/meeting',
+						data: Qs.stringify(data)
+					}).then((response) => {
+						if(response.data.state == 0){
+							this.$Notice.info({
+								title: '会议提交成功！'
+							});
+							this.isAddDrawer = !this.isAddDrawer
+							this.changeSearchType(this.searchType)
+							return true
+						}else{
+							this.$Notice.warning({
+								title: '无该成员信息！'
+							});
+							this.$router.push({
+								path:'/'
+							})
+							return false
+						}
+					})
+				}
+			},
+			userVote(state,id){
 				let data = {
 					"only":this.$route.query.only,
-					"state": 0,
-					"content": this.addVoteInput,
+					"state": state,
+					"id": id,
 					"address": this.Address
 				};
 				this.$axios({
 					method: 'post',
-					url: '/index.php/cn/home/node_su/meeting',
+					url: '/index.php/cn/home/node_su/vote',
 					data: Qs.stringify(data)
 				}).then((response) => {
 					if(response.data.state == 0){
 						this.$Notice.info({
-							title: '会议提交成功！'
+							title: '投票成功！'
 						});
-						return true;
+						this.changeSearchType(this.searchType)
+						return true
 					}else{
 						this.$Notice.warning({
 							title: '无该成员信息！'
@@ -137,7 +170,7 @@
 						this.$router.push({
 							path:'/'
 						})
-						return false;
+						return false
 					}
 				})
 			},
@@ -170,6 +203,7 @@
 						for(let i=0; i<list.length;i++){
 							list[i].start_time =  mutil.timestampToTime(list[i].start_time)
 							list[i].name =  list[i].surname + list[i].name 
+							list[i].id =  list[i].id 
 							list[i].no_proportion =  Number(list[i].no_proportion )
 							list[i].yes_proportion =  Number(list[i].yes_proportion )
 							list[i].btn_show = false
@@ -234,8 +268,9 @@
 	.warningProgress .ivu-progress-bg{
 		background-color: #ed4014
 	}
-		
-			
+	.tooltip-msg{
+		width: 300px	
+	}
 </style>
 
 <style scoped lang="stylus">
@@ -272,7 +307,7 @@
 			
 			.btn
 				text-align: right
-				margin-top: 30px
+				margin-top: 20px
 	
 	.mouldBoard
 		margin-top: 100px

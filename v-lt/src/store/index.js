@@ -14,12 +14,12 @@ export const store = new Vuex.Store({
 	mutations: {
 		registerWeb3Instance(state, payload) {
 		    let result = payload
-				let web3Copy = state.web3
-				web3Copy.coinbase = result.coinbase
-				web3Copy.networkId = result.networkId
-				web3Copy.balance = parseInt(result.balance, 10)
-				web3Copy.web3Instance = result.web3
-				state.web3 = web3Copy
+			let web3Copy = state.web3
+			web3Copy.coinbase = result.coinbase
+			web3Copy.networkId = result.networkId
+			web3Copy.balance = parseInt(result.balance, 10)
+			web3Copy.web3Instance = result.web3
+			state.web3 = web3Copy
 		},
 		pollWeb3Instance(state, payload) {
 			state.web3.coinbase = payload.coinbase

@@ -23,6 +23,7 @@ import iView from 'iview'
 import 'iview/dist/styles/iview.css'
 Vue.use(iView);
 
+import mutil from '@/util/mutil'
 import axios from 'axios'
 Vue.prototype.$axios = axios
 
@@ -30,15 +31,13 @@ axios.defaults.timeout = 5000
 
 axios.interceptors.request.use(request => {
 		iView.LoadingBar.start();
-		if(store.state.web3.coinbase == null || store.state.web3.coinbase == ''){
-			Vue.nextTick(() => {
-				if(store.state.web3.coinbase == null || store.state.web3.coinbase == ''){
-					iView.Notice.warning({
-							title: '请先登录metamask钱包，刷新后进行操作！',
-					});
-				}
-			})
-		}
+		setTimeout(() => {
+			if(mutil.getSection('myAddress') == null || mutil.getSection('myAddress') == ''){
+				iView.Notice.warning({
+						title: '请先登录metamask钱包，刷新后进行操作！',
+				});
+			}
+		},500)
 		return request
 }, error => {
 		iView.LoadingBar.error();
@@ -52,7 +51,7 @@ axios.interceptors.response.use(response => {
 	  iView.LoadingBar.finish()
 		if(response.data.state == 101 || response.data.state == 102){
 			iView.Notice.warning({
-					title: '请先登录！',
+					title: response.data.info + ',请先登录！',
 			});
 			router.push({
 				path:'/'

@@ -15,6 +15,10 @@
 				<p><Input v-model="companyName" size="large" :maxlength="20" type="text"/></p>
 				<Button class="open" type="primary" @click="openOrganization" :disabled="!isClick" :loading="loading">打开组织</Button>
 			</div>
+			<!-- <input type="text" v-model="newAddress">
+			<input type="text" v-model="newCode">
+			<Button type="primary" @click="haha" >转账</Button>
+			<Button type="primary" @click="heihei" >增发</Button> -->
 		</div>
 	</div>
 </template>
@@ -27,7 +31,9 @@
 			return {
 				companyName:'',
 				loading: false,
-				isClick: false
+				isClick: false,
+				/* newAddress:'',
+				newCode:'' */
 			}
 		},
 		computed: mapState({
@@ -89,19 +95,37 @@
 				}else{
 					this.$router.push({path:'UserIdent'});
 				}
-			}
+			},
+			/* haha(){
+				this.$store.state.contractInstance().methods.transfer(this.newAddress,this.newCode).send({
+					from: this.Address
+				}).then(result => {
+					console.log('asdasd');
+				})
+			},
+			heihei(){
+				this.$store.state.contractInstance().methods.mint(this.newAddress,this.newCode).send({
+					from: this.Address
+				}).then(result => {
+					console.log('asdasd');
+				})
+			}, */
+			
 		},
 		watch:{
 			companyName(){
 				this.isClick = this.companyName == ''? false : true;
 			}
+		},
+		mounted(){
+			//this.$store.state.contractInstance().events.Instructor()
 		}
 	}
 </script>
 
 <style scoped lang="stylus">
 	.index-board
-		background: url(/static/images/index-img.png) no-repeat;
+		background: url(../../assets/images/index-img.png) no-repeat;
 		background-position: 860px center;
 		background-size: 57%;
 		h2

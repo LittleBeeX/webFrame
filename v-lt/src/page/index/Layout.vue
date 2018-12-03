@@ -6,13 +6,14 @@
 					<a class="float-left navbar-brand"></a>
 					<div class="funcall">
 						<ul class="float-left nav-fnc" >
-							<li><a href="http://www.baidu.com">公司注册</a></li>
+							<li><a href="/">首页</a></li>
+							<li><a href="/">公司注册</a></li>
 							<li><router-link to="config">在线治理</router-link></li>
 							<li><router-link to="config">资产交易</router-link></li>
 						</ul>
 						<ul class="float-right nav-token">
-							<li v-if="isLogin"><span><a href="register.html">注册</a></span></li>
-							<li v-if="isLogin"><span><a href="login.html">登录</a></span></li>
+							<li v-if="isLogin"><span><a href="/index.php/cn/home/index/register">注册</a></span></li>
+							<li v-if="isLogin"><span><a href="/index.php/cn/home/index/login">登录</a></span></li>
 							<li v-else><span><a href="javascript:void(0)" @click="closeLogin">退出</a></span></li>
 							<Dropdown trigger="click">
 								<a href="javascript:void(0)">
@@ -68,15 +69,9 @@
 					},{
 						name:'简体中文',
 						type:'zh-CN'
-					},{
-						name:'한글',
-						type:'ko-KR'
-					},{
-						name:'日本語',
-						type:'it-JP'
 					}
 				],
-				isLogin:true
+				isLogin:false
 			}
 		},
 		methods:{
@@ -101,6 +96,8 @@
 				.then(response => {
 					if(response.data.info && response.data.info != ''){
 						this.isLogin = false
+					}else{
+						this.isLogin = true
 					}
 				})
 		}
@@ -130,7 +127,7 @@
 		.navbar-brand
 			padding: 0;
 			margin: 0 20px 0 0;
-			background: url(../../../static/images/littlebeex-logo.png) ;
+			background: url(../../../static/images/littlebeex-logo.png) no-repeat;
 			background-size: contain;
 			width: 180px;
 			height: 40px;
@@ -179,7 +176,7 @@
 		width: 1200px;
 		margin: 26px auto;
 		.footer-logo
-			background: url(../../../static/images/littlebeex-logo.png) no-repeat;
+			background: url(../../assets/images/littlebeex-logo.png) no-repeat;
 			background-size: contain;
 			width: 210px;
 			height: 47px;

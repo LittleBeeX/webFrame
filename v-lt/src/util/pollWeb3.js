@@ -6,11 +6,12 @@ let pollWeb3 = function (state) {
   let web3js = window.web3
 	let newCoinbase
   let web3 = new Web3(web3js.currentProvider)
+	console.log(web3.eth.accounts.wallet);
   setInterval(() => {
 		web3.eth.getCoinbase().then(result => {
 				newCoinbase = result
 		})
-		if (newCoinbase !== undefined && newCoinbase !== store.state.web3.coinbase) {
+		if (newCoinbase !== undefined && newCoinbase !== mutil.getSection('myAddress')) {
 			mutil.setSection('myAddress', newCoinbase)
 			location.reload()
 		}

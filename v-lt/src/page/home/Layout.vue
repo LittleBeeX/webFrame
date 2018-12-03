@@ -16,7 +16,7 @@
 	<div class="layout">
 		<Sider class="slider">
 			<div class="page_logo">
-				<img src="../../../static/images/littlebeex-logo.png" mode="" @click="goIndex"/>
+				<img src="../../assets/images/littlebeex-logo.png" mode="" @click="goIndex"/>
 			</div>
 			<Menu active-name="1-2" theme="dark" width="auto" :open-names="['1']" class="slider-menu" @on-select="changeBreadTitle">
 				<MenuItem :name="item.name" :itemName="item.title" v-for="item in slider" :title="item.urls">
