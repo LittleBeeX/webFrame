@@ -37,7 +37,7 @@ axios.interceptors.request.use(request => {
 						title: '请先登录metamask钱包，刷新后进行操作！',
 				});
 			}
-		},500)
+		},1000)
 		return request
 }, error => {
 		iView.LoadingBar.error();
@@ -56,8 +56,11 @@ axios.interceptors.response.use(response => {
 			router.push({
 				path:'/'
 			})
+			return false
+		}else{
+			return response 
 		}
-		return false
+		
 }, error => {
 		iView.LoadingBar.error();
 		iView.Notice.warning({

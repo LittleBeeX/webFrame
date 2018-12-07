@@ -8,6 +8,7 @@ let state = {
 		error : null
 	},
 	contractInstance : null,
+	tokenInstance: null
 }
 
 export default state;

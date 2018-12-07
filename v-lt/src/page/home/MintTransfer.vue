@@ -10,9 +10,9 @@
 					<div class="msgBoard">
 						<p><b>钱包地址</b>{{Address}}</p>
 						<p><b>目标地址</b><Input v-model="mintAddress" placeholder="请输入目标地址"  style="width: 500px"/></p>
-						<p><b>增发数量</b><Input v-model="mintNumber" placeholder="请输入增发数量"  style="width: 500px"/></p>
+						<p><b>转让数量</b><InputNumber v-model="mintNumber" placeholder="请输入增发数量"  style="width: 500px"></InputNumber></p>
 						<div class="btn">
-							<Button type="primary" size="large" icon="md-git-compare" @click="mint(mintAddress,mintNumber)">执行</Button>
+							<Button type="primary" size="large" icon="md-git-compare" @click="mint(mintAddress,mintNumber)">生成决议</Button>
 						</div>
 					</div>
 				</Card>
@@ -23,9 +23,9 @@
 					<div class="msgBoard">
 						<p><b>钱包地址</b>{{Address}}</p>
 						<p><b>目标地址</b><Input v-model="transferAddress" placeholder="请输入目标地址" style="width: 500px"/></p>
-						<p><b>转让数量</b><Input v-model="transferNumber" placeholder="请输入转发数量"  style="width: 500px"/></p>
+						<p><b>转让数量</b><InputNumber v-model="transferNumber" placeholder="请输入转发数量"  style="width: 500px"></InputNumber></p>
 						<div class="btn">
-							<Button type="primary" size="large" icon="md-git-compare" @click="transfer(transferAddress,transferNumber)">执行</Button>
+							<Button type="primary" size="large" icon="md-git-compare" @click="transfer(transferAddress,transferNumber)">生成决议</Button>
 						</div>
 					</div>
 				</Card>
@@ -41,9 +41,9 @@
 		data(){
 			return{
 				mintAddress:'',
-				mintNumber:'',
+				mintNumber:0,
 				transferAddress:'',
-				transferNumber:''
+				transferNumber:0
 			}
 		},
 		computed: {
@@ -54,24 +54,36 @@
 		methods:{
 			mint(address,nums){
 				if(address != '' && nums != ''){
-					this.$Modal.confirm({
-						title: '增发',
-						content: '<p>确定给'+address+'<br/>增发'+nums+'枚Token吗</p>',
-						onOk: () => {
-							this.takeVote(1,address,1,nums,'给'+address+'增发'+nums+'枚Token')
-						}
-					});
+					let _this = this;
+					this.$store.state.contractInstance().methods._mint(this.$route.query.only, address, nums).send({
+						from: this.Address
+					}).on('transactionHash',function(number, receipt){
+						_this.$Spin.show();
+					}).on('error',function(number, receipt){
+						this.$Notice.info({
+							title: '填写失败，请重新填写！'
+						})
+					}).then(result => {
+						this.$Spin.hide();
+						this.takeVote(1,address,1,nums,'给'+address+'增发'+nums+'枚Token')
+					})
 				}
 			},
 			transfer(address,nums){
 				 if(address != '' && nums != ''){
-				 	this.$Modal.confirm({
-				 		title: '转让',
-				 		content: '<p>确定给'+address+'<br/>转让'+nums+'枚Token吗</p>',
-				 		onOk: () => {
-							this.takeVote(2,address,2,nums,'给'+address+'转让'+nums+'枚Token')
-				 		}
-				 	});
+				 	let _this = this;
+				 	this.$store.state.contractInstance().methods._transfer(this.$route.query.only, address, nums).send({
+				 		from: this.Address
+				 	}).on('transactionHash',function(number, receipt){
+				 		_this.$Spin.show();
+				 	}).on('error',function(number, receipt){
+				 		this.$Notice.info({
+				 			title: '填写失败，请重新填写！'
+				 		})
+				 	}).then(result => {
+				 		this.$Spin.hide();
+				 		this.takeVote(2,address,2,nums,'给'+address+'转让'+nums+'枚Token')
+				 	})
 				 }
 			},
 			takeVote(state,address,type,nums,content){
@@ -100,17 +112,7 @@
 							}
 						})
 						return true
-					}else if(response.data.state == 7){
-						this.$Notice.warning({
-							title: '组织内无目标成员信息！'
-						})
-						return false
-					}else if(response.data.state == 9){
-						this.$Notice.warning({
-							title: '成员的Token数量不足！'
-						})
-						return false
-					}else if(response.data.state>0 && response.data.state<5){
+					}else{
 						this.$Notice.warning({
 							title: '无当前组织信息！'
 						})
@@ -118,11 +120,6 @@
 							path:'/'
 						})
 						return false
-					}else{
-						this.$Notice.warning({
-							title: '操作失败！'
-						})
-						return false;
 					}
 				})
 			}

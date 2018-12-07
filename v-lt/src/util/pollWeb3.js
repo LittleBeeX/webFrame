@@ -6,7 +6,6 @@ let pollWeb3 = function (state) {
   let web3js = window.web3
 	let newCoinbase
   let web3 = new Web3(web3js.currentProvider)
-	console.log(web3.eth.accounts.wallet);
   setInterval(() => {
 		web3.eth.getCoinbase().then(result => {
 				newCoinbase = result
@@ -15,31 +14,6 @@ let pollWeb3 = function (state) {
 			mutil.setSection('myAddress', newCoinbase)
 			location.reload()
 		}
-   if (web3 && store.state.web3.web3Instance) {
-      if (newCoinbase !== store.state.web3.coinbase) {
-        web3.eth.getBalance(newCoinbase, function (err, newBalance) {
-          if (err) {
-            console.log(err)
-          } else {
-            store.dispatch('pollWeb3', {
-              coinbase: newCoinbase,
-              balance: parseInt(newBalance, 10)
-            })
-          }
-        })
-      } else {
-        web3.eth.getBalance(store.state.web3.coinbase, (err, polledBalance) => {
-          if (err) {
-            console.log(err)
-          } else if (parseInt(polledBalance, 10) !== store.state.web3.balance) {
-            store.dispatch('pollWeb3', {
-              coinbase: store.state.web3.coinbase,
-              balance: polledBalance
-            })
-          }
-        })
-      }
-    }
   }, 500)
 }
 

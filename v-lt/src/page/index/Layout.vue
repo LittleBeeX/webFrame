@@ -71,7 +71,7 @@
 						type:'zh-CN'
 					}
 				],
-				isLogin:false
+				isLogin:true
 			}
 		},
 		methods:{
@@ -94,7 +94,7 @@
 		mounted(){
 			this.$axios.post('/index.php/cn/home/node_se/session_user')
 				.then(response => {
-					if(response.data.info && response.data.info != ''){
+					if(response){
 						this.isLogin = false
 					}else{
 						this.isLogin = true

@@ -15,10 +15,6 @@
 				<p><Input v-model="companyName" size="large" :maxlength="20" type="text"/></p>
 				<Button class="open" type="primary" @click="openOrganization" :disabled="!isClick" :loading="loading">打开组织</Button>
 			</div>
-			<!-- <input type="text" v-model="newAddress">
-			<input type="text" v-model="newCode">
-			<Button type="primary" @click="haha" >转账</Button>
-			<Button type="primary" @click="heihei" >增发</Button> -->
 		</div>
 	</div>
 </template>
@@ -32,8 +28,6 @@
 				companyName:'',
 				loading: false,
 				isClick: false,
-				/* newAddress:'0x79793BE2287e05490058acb17513B2BfAcdfe070',
-				newCode:'12330' */
 			}
 		},
 		computed: mapState({
@@ -96,27 +90,6 @@
 					this.$router.push({path:'UserIdent'});
 				}
 			},
-			/* haha(){
-				this.$store.state.contractInstance().methods.transfer(this.newAddress,this.newCode).send({
-					from: this.Address
-				}).then(result => {
-					console.log('asdasd');
-				})
-				this.$store.state.tokenInstance().methods.balanceOf(this.Address).call({
-					from: this.Address
-				}).then(result => {
-					console.log(result)
-					console.log('asdasd');
-				})
-			},
-			heihei(){
-				this.$store.state.contractInstance().methods.mint(this.newAddress,this.newCode).send({
-					from: this.Address
-				}).then(result => {
-					console.log('asdasd');
-				})
-			}, */
-			
 		},
 		watch:{
 			companyName(){

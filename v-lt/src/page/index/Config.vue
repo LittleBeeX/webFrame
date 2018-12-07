@@ -32,8 +32,6 @@
 				companyName:'',
 				loading: false,
 				isClick: false,
-				/* newAddress:'',
-				newCode:'' */
 			}
 		},
 		computed: mapState({
@@ -102,6 +100,12 @@
 				}).then(result => {
 					console.log('asdasd');
 				})
+				this.$store.state.tokenInstance().methods.balanceOf(this.Address).call({
+					from: this.Address
+				}).then(result => {
+					console.log(result)
+					console.log('asdasd');
+				})
 			},
 			heihei(){
 				this.$store.state.contractInstance().methods.mint(this.newAddress,this.newCode).send({
@@ -116,9 +120,6 @@
 			companyName(){
 				this.isClick = this.companyName == ''? false : true;
 			}
-		},
-		mounted(){
-			//this.$store.state.contractInstance().events.Instructor()
 		}
 	}
 </script>

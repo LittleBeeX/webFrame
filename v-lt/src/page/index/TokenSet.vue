@@ -149,8 +149,14 @@
 						this.tokenIdent.token_number = company.token_number
 					}
 				})
+			}else{
+				this.$Notice.warning({
+					title: '组织名称不能为空！'
+				});
+				this.$router.push({
+					path:'/'
+				})
 			}
-			
 		}
 	}
 	

@@ -48,7 +48,7 @@ axios.interceptors.request.use(request => {
 })
 
 axios.interceptors.response.use(response => {
-	  iView.LoadingBar.finish()
+	  	iView.LoadingBar.finish()
 		if(response.data.state == 101 || response.data.state == 102){
 			iView.Notice.warning({
 					title: response.data.info + ',请先登录！',
@@ -56,8 +56,10 @@ axios.interceptors.response.use(response => {
 			router.push({
 				path:'/'
 			})
+			return false
+		}else{
+			return response 
 		}
-		return response
 		
 }, error => {
 		iView.LoadingBar.error();

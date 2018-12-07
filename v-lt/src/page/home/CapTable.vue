@@ -5,7 +5,7 @@
 		</Breadcrumb>
 		<div>
 			<Row>
-				<Col span="19">
+				<Col span="18">
 					<Card :bordered="false" class="capTable">
 						<p slot="title">股权信息</p>
 						<div class="tabBoard">
@@ -13,7 +13,7 @@
 						</div>
 					</Card>
 				</Col>
-				<Col span="5">
+				<Col span="6">
 					<Card :bordered="false" class="tokenBoard">
 						<p slot="title">Token信息</p>
 						<div class="msgBoard">
@@ -21,6 +21,7 @@
 									<b>{{item.title}}</b>
 									{{item.vals}}
 								</p>
+								<p><b>钱包地址</b>{{Address}}</p>
 						</div>
 					</Card>
 				</Col>
@@ -32,6 +33,7 @@
 
 <script>
 	import Qs from 'qs'
+	import {mapState} from 'vuex'
 	export default {
 		props:['BreadTitle'],
 		data(){
@@ -85,10 +87,12 @@
 				]
 			}
 		},
+		computed: {
+			...mapState({
+				Address: state => state.web3.coinbase
+			})
+		},
 		methods:{
-			searchCapTable(vals){
-				
-			},
 			mountedRefreshListMsg(){
 				let data = {
 					"only":this.$route.query.only
