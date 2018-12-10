@@ -26,7 +26,7 @@
 
 <script>
 	import {mapState} from 'vuex'
-	import {tokenAddress} from '@/util/constants/casinoContract'
+	import {tokenAddress} from '@/util/constants/contract'
 	import Qs from 'qs'
 	export default {
 		data(){

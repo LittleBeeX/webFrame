@@ -23,6 +23,7 @@ export const store = new Vuex.Store({
 		registerContractInstance(state, payload) {
 			state.contractInstance = () => payload.adminContractInstance
 			state.tokenInstance = () => payload.tokenContractInstance
+			state.userInstance = () => payload.userContractInstance
 		},
 		refreshCoinbase(state,payload){
 			state.web3.coinbase = payload

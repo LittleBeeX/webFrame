@@ -53,38 +53,25 @@
 		},
 		methods:{
 			mint(address,nums){
-				if(address != '' && nums != ''){
-					let _this = this;
-					this.$store.state.contractInstance().methods._mint(this.$route.query.only, address, nums).send({
-						from: this.Address
-					}).on('transactionHash',function(number, receipt){
-						_this.$Spin.show();
-					}).on('error',function(number, receipt){
-						this.$Notice.info({
-							title: '填写失败，请重新填写！'
-						})
-					}).then(result => {
-						this.$Spin.hide();
-						this.takeVote(1,address,1,nums,'给'+address+'增发'+nums+'枚Token')
-					})
-				}
+				this.$store.state.userInstance().methods.addVoteList(1,this.Address,address,nums,'给'+address+'增发'+nums+'枚Token').send({
+					from: this.Address
+				}).on('transactionHash',function( receipt){
+					 _this.$Spin.show();
+				}).then(result => {
+					this.$Spin.hide();
+					this.addVoteList(2,address,2,nums,'给'+address+'增发'+nums+'枚Token')
+				})
 			},
 			transfer(address,nums){
-				 if(address != '' && nums != ''){
-				 	let _this = this;
-				 	this.$store.state.contractInstance().methods._transfer(this.$route.query.only, address, nums).send({
-				 		from: this.Address
-				 	}).on('transactionHash',function(number, receipt){
-				 		_this.$Spin.show();
-				 	}).on('error',function(number, receipt){
-				 		this.$Notice.info({
-				 			title: '填写失败，请重新填写！'
-				 		})
-				 	}).then(result => {
-				 		this.$Spin.hide();
-				 		this.takeVote(2,address,2,nums,'给'+address+'转让'+nums+'枚Token')
-				 	})
-				 }
+				let _this = this;
+				this.$store.state.userInstance().methods.addVoteList(2,this.Address,address,nums,'给'+address+'转让'+nums+'枚Token').send({
+					from: this.Address
+				}).on('transactionHash',function( receipt){
+					 _this.$Spin.show();
+				}).then(result => {
+					this.$Spin.hide();
+			 		this.addVoteList(2,address,2,nums,'给'+address+'转让'+nums+'枚Token')
+				})
 			},
 			takeVote(state,address,type,nums,content){
 				let data = {
