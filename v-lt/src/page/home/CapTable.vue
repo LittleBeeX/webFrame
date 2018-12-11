@@ -21,7 +21,18 @@
 									<b>{{item.title}}</b>
 									{{item.vals}}
 								</p>
-								<p><b>钱包地址</b>{{Address}}</p>
+								<p><b>合约地址</b>{{userAddress}}</p>
+						</div>
+					</Card>
+					
+					<Card :bordered="false" class="userBoard">
+						<p slot="title">个人信息</p>
+						<div class="msgBoard">
+							<p><b>钱包地址</b>{{Address}}</p>
+							<p v-for="item in userMsgList">
+								<b>{{item.title}}</b>
+								{{item.vals}}
+							</p>
 						</div>
 					</Card>
 				</Col>
@@ -34,11 +45,13 @@
 <script>
 	import Qs from 'qs'
 	import {mapState} from 'vuex'
+	import {userAddress} from '@/util/constants/contract'
 	export default {
 		props:['BreadTitle'],
 		data(){
 			return{
 				bSearch:'',
+				userAddress:'',
 				businessList:{
 					rows:[
 						{
@@ -84,6 +97,15 @@
 						title:'投票时间',
 						vals: ''
 					},
+				],
+				userMsgList:[
+					{
+						title:'持有Token数量',
+						vals: ''
+					},{
+						title:'持有Token比例',
+						vals: ''
+					}
 				]
 			}
 		},
@@ -126,23 +148,31 @@
 			},
 			mountedRefreshTokenMsg(){
 				let data = {
-					"only":this.$route.query.only
+					"only":this.$route.query.only,
+					"address": this.Address
 				};
 				this.$axios({
 					method: 'post',
-					url: '/index.php/cn/home/node_se/company',
+					url: '/index.php/cn/home/node_se/company_individual',
 					data: Qs.stringify(data)
 				}).then((response) => {
 					if(response.data.state == 0){
-						let userList = response.data.info
-						let userListArr = [userList.token_name,userList.token_symbol,userList.token_number,userList.support,userList.quorum,userList.duration + 'H']
+						let userMsg = response.data.info.chain
+						let companyMsg = response.data.info.company
+						let userListArr = [userMsg.token_number,userMsg.token_proportion]
+						let companyArr = [companyMsg.token_name,companyMsg.token_symbol,companyMsg.token_number,companyMsg.support,companyMsg.quorum,companyMsg.duration + 'H']
+						
 						for(let i=0;i<this.tokenList.length;i++){
 							if(i == 4 || i == 3){
-								this.tokenList[i].vals = userListArr[i] + '%'
+								this.tokenList[i].vals = companyArr[i] + '%'
 							}else{
-								this.tokenList[i].vals = userListArr[i]
+								this.tokenList[i].vals = companyArr[i]
 							}
 						}
+						for(let i=0;i<this.userMsgList.length;i++){
+							this.userMsgList[i].vals = userListArr[i]
+						}
+						this.userMsgList[1].vals = this.userMsgList[1].vals + '%' 
 						return true;
 					}else{
 						this.$Notice.warning({
@@ -159,6 +189,7 @@
 		mounted(){
 			this.mountedRefreshListMsg()
 			this.mountedRefreshTokenMsg()
+			this.userAddress = userAddress;
 		}
 	}
 </script>
@@ -178,6 +209,17 @@
 			padding: 14px 16px;
 	
 	.tokenBoard
+		.msgBoard
+			padding: 14px 16px;
+			p
+				margin-top: 14px
+				b
+					margin-right: 16px
+				&:first-child
+					margin-top: 0
+	
+	.userBoard
+		margin-top: 30px
 		.msgBoard
 			padding: 14px 16px;
 			p

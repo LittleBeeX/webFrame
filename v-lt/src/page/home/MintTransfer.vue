@@ -13,6 +13,7 @@
 						<p><b>转让数量</b><InputNumber v-model="mintNumber" placeholder="请输入增发数量"  style="width: 500px"></InputNumber></p>
 						<div class="btn">
 							<Button type="primary" size="large" icon="md-git-compare" @click="mint(mintAddress,mintNumber)">生成决议</Button>
+							<Button type="primary" size="large" icon="md-git-compare" @click="balanceof()">查询</Button>
 						</div>
 					</div>
 				</Card>
@@ -52,49 +53,46 @@
 			})
 		},
 		methods:{
+			balanceof(){
+				this.$store.state.userInstance().methods.totalSupply().call({
+					from: this.Address
+				}).then(result => {
+					console.log(result)
+				})
+			},
 			mint(address,nums){
-				if(address != '' && nums != ''){
-					let _this = this;
-					this.$store.state.contractInstance().methods._mint(this.$route.query.only, address, nums).send({
-						from: this.Address
-					}).on('transactionHash',function(number, receipt){
-						_this.$Spin.show();
-					}).on('error',function(number, receipt){
-						this.$Notice.info({
-							title: '填写失败，请重新填写！'
-						})
-					}).then(result => {
-						this.$Spin.hide();
-						this.takeVote(1,address,1,nums,'给'+address+'增发'+nums+'枚Token')
-					})
-				}
+				let _this = this;
+				this.$store.state.userInstance().methods.addVoteList(1,this.Address,address,nums,'给'+address+'增发'+nums+'枚Token').send({
+					from: this.Address
+				}).on('transactionHash',function( receipt){
+					 _this.$Spin.show()
+				}).then(result => {
+					let codes = result.events.createVote.returnValues.codes
+					this.$Spin.hide()
+					this.takeVote(address,1,nums,'给'+address+'增发'+nums+'枚Token',codes)
+				})
 			},
 			transfer(address,nums){
-				 if(address != '' && nums != ''){
-				 	let _this = this;
-				 	this.$store.state.contractInstance().methods._transfer(this.$route.query.only, address, nums).send({
-				 		from: this.Address
-				 	}).on('transactionHash',function(number, receipt){
-				 		_this.$Spin.show();
-				 	}).on('error',function(number, receipt){
-				 		this.$Notice.info({
-				 			title: '填写失败，请重新填写！'
-				 		})
-				 	}).then(result => {
-				 		this.$Spin.hide();
-				 		this.takeVote(2,address,2,nums,'给'+address+'转让'+nums+'枚Token')
-				 	})
-				 }
+				let _this = this;
+				this.$store.state.userInstance().methods.addVoteList(2,this.Address,address,nums,'给'+address+'转让'+nums+'枚Token').send({
+					from: this.Address
+				}).on('transactionHash',function( receipt){
+					 _this.$Spin.show();
+				}).then(result => {
+					let codes = result.events.createVote.returnValues.codes
+					this.$Spin.hide();
+			 		this.takeVote(address,2,nums,'给'+address+'转让'+nums+'枚Token',codes)
+				})
 			},
-			takeVote(state,address,type,nums,content){
+			takeVote(address,type,nums,content,codes){
 				let data = {
 					"only":this.$route.query.only,
-					"state": state,
 					"type": type,
 					"content": content,
 					"address": this.Address,
 					"target": address,
-					"number": nums
+					"number": nums,
+					"keyname": codes
 				};
 				this.$axios({
 					method: 'post',

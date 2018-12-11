@@ -16,11 +16,11 @@
 					</div>
 				</div>
 				<div class="addVote">
-					<Button type="primary" size="large" @click="addVote()" icon="md-barcode" >发起决议</Button>
+					<Button type="primary" size="large" @click="isAddDrawer = !isAddDrawer" icon="md-barcode" >发起决议</Button>
 				</div>
 			</div>
 		</Breadcrumb>
-		<Row v-if="this.voteList.length > 0">
+		<Row v-if="voteList.length > 0">
 			<Col  :xs="24" :sm="12" :lg="8" v-for="item in voteList">
 				<Card :bordered="false" class="voteItem">
 					<p slot="title">
@@ -35,7 +35,7 @@
 						<p><b>同意<span>(50%可通过审核)</span></b> <Progress :percent="item.yes_proportion" status="active" /></p>
 						<p><b>否决</b> <Progress :percent="item.no_proportion" class="warningProgress"/></p>
 						<div class="btn" v-if="item.btn_show">
-							<Button type="success" size="large" icon="md-albums" @click="userVote(1,item.id)">同意</Button>
+							<Button type="success" size="large" icon="md-albums" @click="userVote(1,item.id,item.keyname)">同意{{item.keyname}}</Button>
 							<Button type="info" size="large" icon="md-albums" @click="userVote(2,item.id)">否决</Button>
 						</div>
 					</div>
@@ -58,7 +58,6 @@
 				<Input v-model="addVoteInput" placeholder="Enter something..." />
 				<div class="btn">
 					<Button type="success" long @click="takeVote">开始投票</Button>
-					<p class="hint">发起投票的者默认选择同意</p>
 				</div>
 			</div>
 		</Drawer>
@@ -106,31 +105,75 @@
 			})
 		},	
 		methods:{
-			addVote(){
-				console.log('添加一个');
-				this.isAddDrawer = !this.isAddDrawer
-			},
-			detailDrawer(){
-				this.isShowDrawer = !this.isShowDrawer
-			},
 			takeVote(){
 				if(this.addVoteInput != ''){
+					let _this = this;
+					this.$store.state.userInstance().methods.addVoteList(0,this.Address,this.Address,0, this.addVoteInput).send({
+						from: this.Address
+					}).on('transactionHash',function( receipt){
+						_this.$Spin.show()
+					}).then(result => {
+						let codes = result.events.createVote.returnValues.codes
+						this.$Spin.hide()
+						let data = {
+							"only":this.$route.query.only,
+							"type": 0,
+							"content": this.addVoteInput,
+							"address": this.Address,
+							"keyname": codes
+						};
+						this.$axios({
+							method: 'post',
+							url: '/index.php/cn/home/node_su/meeting',
+							data: Qs.stringify(data)
+						}).then((response) => {
+							if(response.data.state == 0){
+								this.$Notice.info({
+									title: '会议提交成功！'
+								})
+								this.mountedRefreshList()
+								this.isAddDrawer = !this.isAddDrawer
+								return true
+							}else{
+								this.$Notice.warning({
+									title: '无该成员信息！'
+								});
+								this.$router.push({
+									path:'/'
+								})
+								return false
+							}
+						})
+					})
+				}else{
+					this.$Notice.warning({
+						title: '表决内容不能为空！'
+					});
+				}
+			},
+			userVote(state,id,codes){
+				let _this = this;
+				let flag = state == 1 ? true : false
+				this.$store.state.userInstance().methods.setVoteList(codes,flag).send({
+					from: this.Address
+				}).on('transactionHash',function( receipt){
+					_this.$Spin.show()
+				}).then(result => {
 					let data = {
 						"only":this.$route.query.only,
-						"state": 0,
-						"content": this.addVoteInput,
+						"state": state,
+						"id": id,
 						"address": this.Address
 					};
 					this.$axios({
 						method: 'post',
-						url: '/index.php/cn/home/node_su/meeting',
+						url: '/index.php/cn/home/node_su/vote',
 						data: Qs.stringify(data)
 					}).then((response) => {
 						if(response.data.state == 0){
 							this.$Notice.info({
-								title: '会议提交成功！'
+								title: '投票成功！'
 							});
-							this.isAddDrawer = !this.isAddDrawer
 							this.changeSearchType(this.searchType)
 							return true
 						}else{
@@ -143,35 +186,6 @@
 							return false
 						}
 					})
-				}
-			},
-			userVote(state,id){
-				let data = {
-					"only":this.$route.query.only,
-					"state": state,
-					"id": id,
-					"address": this.Address
-				};
-				this.$axios({
-					method: 'post',
-					url: '/index.php/cn/home/node_su/vote',
-					data: Qs.stringify(data)
-				}).then((response) => {
-					if(response.data.state == 0){
-						this.$Notice.info({
-							title: '投票成功！'
-						});
-						this.changeSearchType(this.searchType)
-						return true
-					}else{
-						this.$Notice.warning({
-							title: '无该成员信息！'
-						});
-						this.$router.push({
-							path:'/'
-						})
-						return false
-					}
 				})
 			},
 			searchVote(){
@@ -211,6 +225,7 @@
 								list[i].btn_show = true
 							}
 							list[i].state = returnTypeMsg(list[i].state)
+							list[i].keyname = list[i].keyname
 						}
 						
 						this.voteList = list
@@ -314,16 +329,17 @@
 		flexs()
 		justify-content: center
 		.mouldItem
-			width: 250px
+			width: 350px
 			height: 300px
 			flexs()
 			.msgBoard
-				width: 250px
+				width: 350px
 				padding: 0 20px
 				text-align:center
 				p
 					color: #9ea7b4
-					margin-bottom: 20px
+					margin-bottom: 30px
+					font-size: 18px
 	
 	.newVoteBoard
 		h4

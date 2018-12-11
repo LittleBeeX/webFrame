@@ -117,7 +117,10 @@
 							data: Qs.stringify(data)
 						}).then((response) => {
 							if(response.data.state == 0){
-								this.$router.push({path:'TokenPayment'})
+								this.$router.push({
+									path:'TokenPayment',
+									query:{only:this.$route.query.only}
+								})
 							}
 						}) 
 					} else {
