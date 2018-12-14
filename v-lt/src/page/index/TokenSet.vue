@@ -98,10 +98,7 @@
 			goTokenPayment(name){
 				//this.$router.push({path:'TokenPayment'})
 				this.$refs[name].validate((valid) => {
-					console.log(valid);
 					if (valid) {
-						
-						console.log('data');
 						 let data = {
 							"only": this.$route.query.only,
 							"support": this.tokenIdent.support,

@@ -158,6 +158,18 @@
 					})
 				}
 			})
+			this.$axios({
+				method: 'post',
+				url: '/index.php/cn/home/node_se/company',
+				data: Qs.stringify({"only": this.$route.query.only})
+			}).then((response) => {
+				if (response.data.state == 0) {
+					this.$store.dispatch('getUserContract',{
+					  //contract: response.data.info.contract
+					  contract: response.data.info.contract
+					})
+				}
+			})
 		}
 	}
 </script>

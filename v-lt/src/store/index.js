@@ -3,9 +3,13 @@ import Vuex from 'vuex'
 
 Vue.use(Vuex);
 
+import Web3 from 'web3'
+import { userABI } from '@/util/constants/contract'
+
 import state from './state'
 import getWeb3 from '@/util/getWeb'
 import getContract from '@/util/getContract'
+
 
 export const store = new Vuex.Store({
 	strict: true,
@@ -20,9 +24,10 @@ export const store = new Vuex.Store({
 			web3Copy.web3Instance = result.web3
 			state.web3 = web3Copy
 		},
-		registerContractInstance(state, payload) {
-			state.contractInstance = () => payload.adminContractInstance
+		registerAdminContractInstance(state, payload) {
 			state.tokenInstance = () => payload.tokenContractInstance
+		},
+		registerUserContractInstance(state, payload) {
 			state.userInstance = () => payload.userContractInstance
 		},
 		refreshCoinbase(state,payload){
@@ -43,8 +48,19 @@ export const store = new Vuex.Store({
 			commit
 		}) {
 			getContract.then(result => {
-				commit('registerContractInstance', result)
+				commit('registerAdminContractInstance', result)
 			}).catch(e => console.log(e))
+		},
+		getUserContract({
+			commit
+		},payload){
+			let getContract = new Promise(function(resolve, reject) {
+				let web3 = new Web3(window.web3.currentProvider)
+				let userContractInstance = new web3.eth.Contract(userABI,payload)
+				resolve({userContractInstance})
+			}).then(result => {
+				commit('registerUserContractInstance',result)
+			}).catch(console.log)
 		}
 	}
 })
