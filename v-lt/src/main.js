@@ -27,7 +27,7 @@ import mutil from '@/util/mutil'
 import axios from 'axios'
 Vue.prototype.$axios = axios
 
-axios.defaults.timeout = 5000
+axios.defaults.timeout = 15000
 
 axios.interceptors.request.use(request => {
 		iView.LoadingBar.start();

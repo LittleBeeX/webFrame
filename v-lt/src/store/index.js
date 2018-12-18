@@ -56,7 +56,7 @@ export const store = new Vuex.Store({
 		},payload){
 			let getContract = new Promise(function(resolve, reject) {
 				let web3 = new Web3(window.web3.currentProvider)
-				let userContractInstance = new web3.eth.Contract(userABI,payload)
+				let userContractInstance = new web3.eth.Contract(userABI,payload.contract)
 				resolve({userContractInstance})
 			}).then(result => {
 				commit('registerUserContractInstance',result)

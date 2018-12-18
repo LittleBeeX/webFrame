@@ -729,6 +729,20 @@ const tokenABI = [
 
 const userABI = [
 	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "_userA",
+				"type": "address"
+			}
+		],
+		"name": "addKycList",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
 		"constant": true,
 		"inputs": [],
 		"name": "name",
@@ -863,6 +877,25 @@ const userABI = [
 			{
 				"name": "",
 				"type": "uint8"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"name": "_userA",
+				"type": "address"
+			}
+		],
+		"name": "isKyc",
+		"outputs": [
+			{
+				"name": "",
+				"type": "bool"
 			}
 		],
 		"payable": false,
@@ -1282,6 +1315,7 @@ const userABI = [
 		"type": "event"
 	}
 ]
+
 export {
 	tokenABI,
 	tokenAddress,

@@ -18,7 +18,8 @@
 				现在需要您支付{{orderNum}}LT，<br/>我们将审核您已提交的信息，审核通过后，<br/>您将在LittleBeeX上治理您的公司！
 			</div>
 			<div class="btn-con">
-				<Button type="primary" size="large" @click="goPay">支付LT</Button>
+				<Button type="primary" size="large" v-if="isClick" @click="goPay">支付LT</Button>
+				<Button type="primary" size="large" :disabled="true" v-else>已支付</Button>
 			</div>
 		</div>
 	</div>
@@ -33,7 +34,8 @@
 				balanceOf: 0,
 				approveGetVal: 0,
 				approveSetVal: 0,
-				orderNum: 0
+				orderNum: 0,
+				isClick: true
 			}
 		},
 		computed: {
@@ -43,7 +45,7 @@
 		},	
 		methods:{
 			goPay(){
-				if(this.approveGetVal > this.orderNum){
+				if(this.approveGetVal >= this.orderNum){
 					let _this = this;
 					const paycode = "" + this.orderNum + String(10 ** 18).split("").slice(1).join("")
 					let masterAddress = "0xDBD4c2a85423124a2Da3A656A455df4D6C873979"
@@ -68,7 +70,9 @@
 							this.$Notice.warning({
 								title: '操作成功！等待人员审核'
 							});
+							this.isClick = false
 							this.allowance()
+							this.balanceof()
 						}) 
 					})
 				}else{

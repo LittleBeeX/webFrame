@@ -99,7 +99,7 @@
 					title: 'English',
 					type: 'en-US',
 					goType: 'ko-KR'
-				}, {
+				}/*, {
 					title: '한글',
 					type: 'ko-KR',
 					goType: 'it-JP'
@@ -107,7 +107,7 @@
 					title: '日本語',
 					type: 'it-JP',
 					goType: 'zh-CN'
-				}]
+				}*/]
 			}
 		},
 		computed: {

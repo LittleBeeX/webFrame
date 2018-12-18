@@ -9,7 +9,7 @@
 					</RadioGroup>
 					<div>
 						<Input  placeholder="会议查询" v-model="searchInput"  style="width:300px">
-							<Button slot="append" @click="searchVote(searchInput)">
+							<Button slot="append" @click="searchVote()">
 								<Icon type="ios-search" size="16"/>
 							</Button>
 						</Input>
@@ -29,14 +29,14 @@
 						</Tooltip>
 					</p>
 					<div class="msgBoard">
-						<p><b>时间</b>{{item.start_time}}</p>
-						<p><b>状态</b>{{item.state}}</p>
-						<p><b>发起人</b>{{item.name}}</p>
-						<p><b>同意<span>(50%可通过审核)</span></b> <Progress :percent="item.yes_proportion" status="active" /></p>
+						<p><b>发起时间</b>{{item.start_time}}</p>
+						<p><b>表决状态</b>{{item.state}}</p>
+						<p><b>决议发起人</b>{{item.name}}</p>
+						<p><b>同意<span>({{item.quorum}}%可通过审核)</span></b> <Progress :percent="item.yes_proportion" status="active" /></p>
 						<p><b>否决</b> <Progress :percent="item.no_proportion" class="warningProgress"/></p>
 						<div class="btn" v-if="item.btn_show">
-							<Button type="success" size="large" icon="md-albums" @click="userVote(1,item.id,item.keyname)">同意{{item.keyname}}</Button>
-							<Button type="info" size="large" icon="md-albums" @click="userVote(2,item.id)">否决</Button>
+							<Button type="success" size="large" icon="md-albums" @click="userVote(1,item.id,item.keyname)">同意</Button>
+							<Button type="info" size="large" icon="md-albums" @click="userVote(2,item.id,item.keyname)">否决</Button>
 						</div>
 					</div>
 				</Card>
@@ -53,11 +53,11 @@
 		</div>
 		<Drawer title="新的表决" width="350" :closable="false" v-model="isAddDrawer" class="newVoteBoard">
 			<div>
-				<h4>新的表决</h4>
-				<p>问题</p>
-				<Input v-model="addVoteInput" placeholder="Enter something..." />
+				<!--<h4>新的表决</h4>-->
+				<p>决议内容</p>
+				<Input v-model="addVoteInput" type="textarea" :autosize="{minRows: 3,maxRows: 5}" placeholder="请填写决议内容" />
 				<div class="btn">
-					<Button type="success" long @click="takeVote">开始投票</Button>
+					<Button type="success" long @click="takeVote">发起决议</Button>
 				</div>
 			</div>
 		</Drawer>
@@ -79,6 +79,9 @@
 				isAddDrawer: false,
 				typeList:[
 					{
+						title:'全部',
+						vals: 4
+					},{
 						title:'表决中',
 						vals: 0
 					},{
@@ -133,6 +136,7 @@
 								})
 								this.mountedRefreshList()
 								this.isAddDrawer = !this.isAddDrawer
+								this.addVoteInput = ''
 								return true
 							}else{
 								this.$Notice.warning({
@@ -154,11 +158,13 @@
 			userVote(state,id,codes){
 				let _this = this;
 				let flag = state == 1 ? true : false
+				console.log(codes,flag)
 				this.$store.state.userInstance().methods.setVoteList(codes,flag).send({
 					from: this.Address
 				}).on('transactionHash',function( receipt){
 					_this.$Spin.show()
 				}).then(result => {
+					this.$Spin.hide()
 					let data = {
 						"only":this.$route.query.only,
 						"state": state,
@@ -189,19 +195,23 @@
 				})
 			},
 			searchVote(){
+				let condition = returnTypeMsg(title) == 4 ? 0 : 1
 				let data = {
 					"only":this.$route.query.only,
 					"address": this.Address,
 					"search": this.searchInput,
-					"state": returnTypeMsg(this.searchType)
+					"state": returnTypeMsg(this.searchType),
+					"condition": condition
 				};
 				this.searchList(data)
 			},
 			changeSearchType(title){
+				let condition = returnTypeMsg(title) == 4 ? 0 : 1
 				let data = {
 					"only":this.$route.query.only,
 					"address": this.Address,
-					"state": returnTypeMsg(title)
+					"state": returnTypeMsg(title),
+					"condition": condition
 				};
 				this.searchList(data)
 			},
@@ -215,8 +225,9 @@
 					if(response.data.state == 0){
 						let list = response.data.info
 						for(let i=0; i<list.length;i++){
-							list[i].start_time =  mutil.timestampToTime(list[i].start_time)
-							list[i].name =  list[i].surname + list[i].name 
+							//let lastTimeHint = new Date(timestamp * 1000).get;
+							list[i].start_time =  mutil.timestampToTime(list[i].start_time) + '(剩余约'+ list[i].remnant.toFixed(2) +'个小时)'
+							list[i].F =  list[i].surname + list[i].name 
 							list[i].id =  list[i].id 
 							list[i].no_proportion =  Number(list[i].no_proportion )
 							list[i].yes_proportion =  Number(list[i].yes_proportion )
@@ -226,6 +237,10 @@
 							}
 							list[i].state = returnTypeMsg(list[i].state)
 							list[i].keyname = list[i].keyname
+							if(list[i].type != 0){
+								let msg = list[i].type == 1 ? '增发' : '转账'
+								list[i].content = '给' + list[i].surname_t + list[i].name_t  + msg + list[i].yes_number + '枚Token'
+							}
 						}
 						
 						this.voteList = list
@@ -266,6 +281,9 @@
 			case '未通过':
 				msg = 2
 				break;
+			case '全部':
+				msg = 4
+				break;
 			case '0':
 				msg = '表决中'
 				break;
@@ -274,6 +292,9 @@
 				break;
 			case '2':
 				msg = '未通过'
+				break;
+			case '4':
+				msg = '全部'
 				break;
 		}
 		return msg
@@ -317,6 +338,7 @@
 					margin-right: 16px
 					display: inline-block
 					min-width: 100px
+					font-weight: 400
 				&:first-child
 					margin-top: 0
 			
@@ -352,4 +374,9 @@
 		.btn
 			margin-top: 50px
 			
+</style>
+<style>
+	.ivu-tooltip p.tooltip-msg{
+		
+	}
 </style>

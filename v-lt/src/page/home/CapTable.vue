@@ -45,7 +45,6 @@
 <script>
 	import Qs from 'qs'
 	import {mapState} from 'vuex'
-	import {userAddress} from '@/util/constants/contract'
 	export default {
 		props:['BreadTitle'],
 		data(){
@@ -173,6 +172,7 @@
 							this.userMsgList[i].vals = userListArr[i]
 						}
 						this.userMsgList[1].vals = this.userMsgList[1].vals + '%' 
+						this.userAddress = companyMsg.contract;
 						return true;
 					}else{
 						this.$Notice.warning({
@@ -189,7 +189,6 @@
 		mounted(){
 			this.mountedRefreshListMsg()
 			this.mountedRefreshTokenMsg()
-			this.userAddress = userAddress;
 		}
 	}
 </script>

@@ -3,7 +3,7 @@
 		<Layout>
 			<Header>
 				<nav class="navbar navbar-default">
-					<a class="float-left navbar-brand"></a>
+					<a href="/governance" class="float-left navbar-brand"></a>
 					<div class="funcall">
 						<ul class="float-left nav-fnc" >
 							<li><a href="/">首页</a></li>

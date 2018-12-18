@@ -167,6 +167,20 @@ contract user_Token is StandardToken {
         emit Transfer(address(0), _to, _amount);
         return true;
     }
+    
+    /*KYC*/
+    uint keyLength = 0;
+    mapping (address => uint) keyList;
+    
+    function addKycList(address _userA) public {
+        keyLength = keyLength.add(1);
+        keyList[_userA] = keyLength;
+    }
+    
+    function isKyc(address _userA) public view returns(bool){
+        require( keyList[_userA] > 0);
+        return true;
+    }
   
      /*决议信息录入查询*/
     uint private voteLength = 0 ;
@@ -181,6 +195,7 @@ contract user_Token is StandardToken {
       uint successNum;
       uint failNum;
       uint createTime;
+      uint takeCode;
       mapping(address => bool) userIsVote;
     }
     
@@ -206,7 +221,7 @@ contract user_Token is StandardToken {
     
     /*创建决议*/
     function addVoteList(uint _types,address _myAddress,address _toAddress,uint _numbers,string _content) public returns(uint){
-        voteList[voteLength] = voteModule(0 ,_types,_myAddress,_toAddress,_content,_numbers,0,0,now);
+        voteList[voteLength] = voteModule(0 ,_types,_myAddress,_toAddress,_content,_numbers,0,0,now,0);
         voteList[voteLength].userIsVote[msg.sender] = true;
         emit createVote(_myAddress,now,_content,_numbers, voteLength);
         voteLength = voteLength.add(1);
@@ -217,9 +232,11 @@ contract user_Token is StandardToken {
         require(now < voteList[code].createTime + duration * 1 minutes);
         require(voteList[code].state == 0);
         require(voteList[code].userIsVote[msg.sender]);
+        voteList[code].takeCode = voteList[code].takeCode.add(1);
+        require( voteList[code].takeCode / keyLength * 100 > quorum);
         if(_isVote){
             voteList[code].successNum = voteList[code].successNum.add(balances[msg.sender]);
-            require(voteList[code].successNum > totalSupply / 2);
+            require(voteList[code].successNum > support/ totalSupply * 100 );
             if(voteList[code].types == 1){
                 mint(voteList[code].toAddress,voteList[code].numbers);
             }else if(voteList[code].types == 2){
@@ -228,7 +245,7 @@ contract user_Token is StandardToken {
             voteList[code].state = 1;
         }else{
             voteList[code].failNum = voteList[code].failNum.add(balances[msg.sender]);
-            require(voteList[code].failNum >= totalSupply / 2);
+            require(voteList[code].failNum >=  support/ totalSupply * 100 );
             voteList[code].state = 2;
         }
         voteList[code].userIsVote[msg.sender] = false;
