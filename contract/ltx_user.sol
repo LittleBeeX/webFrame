@@ -233,7 +233,7 @@ contract user_Token is StandardToken {
         require(voteList[code].state == 0);
         require(voteList[code].userIsVote[msg.sender]);
         voteList[code].takeCode = voteList[code].takeCode.add(1);
-        require( voteList[code].takeCode / keyLength * 100 > quorum);
+        require((voteList[code].takeCode * 100) / keyLength > quorum);
         if(_isVote){
             voteList[code].successNum = voteList[code].successNum.add(balances[msg.sender]);
             require(voteList[code].successNum > support/ totalSupply * 100 );
