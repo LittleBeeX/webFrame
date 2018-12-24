@@ -1,196 +1,4 @@
-const address = '0xee06a32d3e8ab57b3f4b6e3fd21122d06149b87b'
-const ABI = [
-	{
-		"constant": false,
-		"inputs": [
-			{
-				"name": "_name",
-				"type": "string"
-			},
-			{
-				"name": "_code",
-				"type": "uint256"
-			},
-			{
-				"name": "_site",
-				"type": "string"
-			},
-			{
-				"name": "_capital",
-				"type": "uint256"
-			},
-			{
-				"name": "_birDate",
-				"type": "string"
-			},
-			{
-				"name": "_only",
-				"type": "string"
-			},
-			{
-				"name": "_tokenAddress",
-				"type": "address"
-			}
-		],
-		"name": "setCompanyList",
-		"outputs": [
-			{
-				"name": "",
-				"type": "bool"
-			}
-		],
-		"payable": false,
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"constant": true,
-		"inputs": [],
-		"name": "owner",
-		"outputs": [
-			{
-				"name": "",
-				"type": "address"
-			}
-		],
-		"payable": false,
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"constant": true,
-		"inputs": [
-			{
-				"name": "_only",
-				"type": "string"
-			}
-		],
-		"name": "getCompanyList",
-		"outputs": [
-			{
-				"name": "",
-				"type": "string"
-			},
-			{
-				"name": "",
-				"type": "uint256"
-			},
-			{
-				"name": "",
-				"type": "string"
-			},
-			{
-				"name": "",
-				"type": "uint256"
-			},
-			{
-				"name": "",
-				"type": "string"
-			},
-			{
-				"name": "",
-				"type": "string"
-			},
-			{
-				"name": "",
-				"type": "address"
-			}
-		],
-		"payable": false,
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"constant": true,
-		"inputs": [
-			{
-				"name": "_only",
-				"type": "string"
-			}
-		],
-		"name": "getCompanyAddress",
-		"outputs": [
-			{
-				"name": "",
-				"type": "address"
-			}
-		],
-		"payable": false,
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"constant": false,
-		"inputs": [
-			{
-				"name": "newOwner",
-				"type": "address"
-			}
-		],
-		"name": "transferOwnership",
-		"outputs": [],
-		"payable": false,
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"payable": true,
-		"stateMutability": "payable",
-		"type": "fallback"
-	},
-	{
-		"anonymous": false,
-		"inputs": [
-			{
-				"indexed": true,
-				"name": "tokenAddress",
-				"type": "address"
-			},
-			{
-				"indexed": true,
-				"name": "only",
-				"type": "string"
-			},
-			{
-				"indexed": true,
-				"name": "creater",
-				"type": "address"
-			}
-		],
-		"name": "createCompany",
-		"type": "event"
-	},
-	{
-		"anonymous": false,
-		"inputs": [
-			{
-				"indexed": true,
-				"name": "previousOwner",
-				"type": "address"
-			}
-		],
-		"name": "OwnershipRenounced",
-		"type": "event"
-	},
-	{
-		"anonymous": false,
-		"inputs": [
-			{
-				"indexed": true,
-				"name": "previousOwner",
-				"type": "address"
-			},
-			{
-				"indexed": true,
-				"name": "newOwner",
-				"type": "address"
-			}
-		],
-		"name": "OwnershipTransferred",
-		"type": "event"
-	}
-]
-const tokenAddress = '0x74ad2543a3debb3a17de99b3ffb26b43162bc245'
+const tokenAddress = '0xae792de9e5500380231c85d0e983f7006c05b28a'
 const tokenABI = [
 	{
 		"constant": true,
@@ -918,27 +726,30 @@ const tokenABI = [
 		"type": "event"
 	}
 ]
-let userAddress = '0x9f74703235739aaa0c436856060753597355ce0c'
+
 const userABI = [
 	{
-		"constant": true,
-		"inputs": [],
-		"name": "name",
-		"outputs": [
+		"anonymous": false,
+		"inputs": [
 			{
-				"name": "",
-				"type": "string"
+				"indexed": true,
+				"name": "previousOwner",
+				"type": "address"
+			},
+			{
+				"indexed": true,
+				"name": "newOwner",
+				"type": "address"
 			}
 		],
-		"payable": false,
-		"stateMutability": "view",
-		"type": "function"
+		"name": "OwnershipTransferred",
+		"type": "event"
 	},
 	{
 		"constant": false,
 		"inputs": [
 			{
-				"name": "_spender",
+				"name": "_to",
 				"type": "address"
 			},
 			{
@@ -946,13 +757,30 @@ const userABI = [
 				"type": "uint256"
 			}
 		],
-		"name": "approve",
-		"outputs": [
+		"name": "_transfer",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
 			{
-				"name": "",
-				"type": "bool"
+				"name": "_from",
+				"type": "address"
+			},
+			{
+				"name": "_to",
+				"type": "address"
+			},
+			{
+				"name": "_value",
+				"type": "uint256"
 			}
 		],
+		"name": "_transferFrom",
+		"outputs": [],
 		"payable": false,
 		"stateMutability": "nonpayable",
 		"type": "function"
@@ -993,28 +821,10 @@ const userABI = [
 		"type": "function"
 	},
 	{
-		"constant": true,
-		"inputs": [],
-		"name": "totalSupply",
-		"outputs": [
-			{
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"payable": false,
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
 		"constant": false,
 		"inputs": [
 			{
-				"name": "_from",
-				"type": "address"
-			},
-			{
-				"name": "_to",
+				"name": "_spender",
 				"type": "address"
 			},
 			{
@@ -1022,7 +832,7 @@ const userABI = [
 				"type": "uint256"
 			}
 		],
-		"name": "transferFrom",
+		"name": "approve",
 		"outputs": [
 			{
 				"name": "",
@@ -1031,164 +841,6 @@ const userABI = [
 		],
 		"payable": false,
 		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"constant": true,
-		"inputs": [],
-		"name": "INITIAL_SUPPLY",
-		"outputs": [
-			{
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"payable": false,
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"constant": true,
-		"inputs": [],
-		"name": "decimals",
-		"outputs": [
-			{
-				"name": "",
-				"type": "uint8"
-			}
-		],
-		"payable": false,
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"constant": false,
-		"inputs": [
-			{
-				"name": "_to",
-				"type": "address"
-			},
-			{
-				"name": "_amount",
-				"type": "uint256"
-			}
-		],
-		"name": "mint",
-		"outputs": [
-			{
-				"name": "",
-				"type": "bool"
-			}
-		],
-		"payable": false,
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"constant": false,
-		"inputs": [
-			{
-				"name": "_to",
-				"type": "address"
-			},
-			{
-				"name": "_value",
-				"type": "uint256"
-			}
-		],
-		"name": "_transfer",
-		"outputs": [],
-		"payable": false,
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"constant": true,
-		"inputs": [
-			{
-				"name": "_owner",
-				"type": "address"
-			}
-		],
-		"name": "balanceOf",
-		"outputs": [
-			{
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"payable": false,
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"constant": true,
-		"inputs": [],
-		"name": "owner",
-		"outputs": [
-			{
-				"name": "",
-				"type": "address"
-			}
-		],
-		"payable": false,
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"constant": true,
-		"inputs": [],
-		"name": "symbol",
-		"outputs": [
-			{
-				"name": "",
-				"type": "string"
-			}
-		],
-		"payable": false,
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"constant": false,
-		"inputs": [
-			{
-				"name": "_to",
-				"type": "address"
-			},
-			{
-				"name": "_value",
-				"type": "uint256"
-			}
-		],
-		"name": "transfer",
-		"outputs": [
-			{
-				"name": "",
-				"type": "bool"
-			}
-		],
-		"payable": false,
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"constant": true,
-		"inputs": [
-			{
-				"name": "",
-				"type": "address"
-			}
-		],
-		"name": "frozenAccount",
-		"outputs": [
-			{
-				"name": "",
-				"type": "bool"
-			}
-		],
-		"payable": false,
-		"stateMutability": "view",
 		"type": "function"
 	},
 	{
@@ -1215,98 +867,18 @@ const userABI = [
 		"type": "function"
 	},
 	{
-		"constant": true,
-		"inputs": [
-			{
-				"name": "",
-				"type": "address"
-			}
-		],
-		"name": "frozenTimestamp",
-		"outputs": [
-			{
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"payable": false,
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
 		"constant": false,
 		"inputs": [
-			{
-				"name": "_from",
-				"type": "address"
-			},
 			{
 				"name": "_to",
 				"type": "address"
 			},
 			{
-				"name": "_value",
+				"name": "_amount",
 				"type": "uint256"
 			}
 		],
-		"name": "_transferFrom",
-		"outputs": [],
-		"payable": false,
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"constant": true,
-		"inputs": [
-			{
-				"name": "_owner",
-				"type": "address"
-			},
-			{
-				"name": "_spender",
-				"type": "address"
-			}
-		],
-		"name": "allowance",
-		"outputs": [
-			{
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"payable": false,
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"constant": false,
-		"inputs": [
-			{
-				"name": "_name",
-				"type": "string"
-			},
-			{
-				"name": "_symbol",
-				"type": "string"
-			},
-			{
-				"name": "_totalSupply",
-				"type": "uint256"
-			},
-			{
-				"name": "_support",
-				"type": "uint8"
-			},
-			{
-				"name": "_quorum",
-				"type": "uint8"
-			},
-			{
-				"name": "_duration",
-				"type": "uint8"
-			}
-		],
-		"name": "initialization",
+		"name": "mint",
 		"outputs": [
 			{
 				"name": "",
@@ -1316,74 +888,27 @@ const userABI = [
 		"payable": false,
 		"stateMutability": "nonpayable",
 		"type": "function"
-	},
-	{
-		"constant": false,
-		"inputs": [
-			{
-				"name": "newOwner",
-				"type": "address"
-			}
-		],
-		"name": "transferOwnership",
-		"outputs": [],
-		"payable": false,
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"constant": false,
-		"inputs": [
-			{
-				"name": "code",
-				"type": "uint256"
-			},
-			{
-				"name": "_isVote",
-				"type": "bool"
-			}
-		],
-		"name": "setVoteList",
-		"outputs": [
-			{
-				"name": "",
-				"type": "bool"
-			}
-		],
-		"payable": false,
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"payable": true,
-		"stateMutability": "payable",
-		"type": "fallback"
 	},
 	{
 		"anonymous": false,
 		"inputs": [
 			{
-				"indexed": false,
-				"name": "myAddress",
+				"indexed": true,
+				"name": "from",
 				"type": "address"
 			},
 			{
 				"indexed": true,
-				"name": "createTime",
-				"type": "uint256"
+				"name": "to",
+				"type": "address"
 			},
 			{
-				"indexed": true,
-				"name": "content",
-				"type": "string"
-			},
-			{
-				"indexed": true,
-				"name": "numbers",
+				"indexed": false,
+				"name": "value",
 				"type": "uint256"
 			}
 		],
-		"name": "createVote",
+		"name": "Transfer",
 		"type": "event"
 	},
 	{
@@ -1429,22 +954,32 @@ const userABI = [
 		"anonymous": false,
 		"inputs": [
 			{
-				"indexed": true,
-				"name": "from",
+				"indexed": false,
+				"name": "myAddress",
 				"type": "address"
 			},
 			{
 				"indexed": true,
-				"name": "to",
-				"type": "address"
+				"name": "createTime",
+				"type": "uint256"
+			},
+			{
+				"indexed": true,
+				"name": "content",
+				"type": "string"
+			},
+			{
+				"indexed": true,
+				"name": "numbers",
+				"type": "uint256"
 			},
 			{
 				"indexed": false,
-				"name": "value",
+				"name": "codes",
 				"type": "uint256"
 			}
 		],
-		"name": "Transfer",
+		"name": "createVote",
 		"type": "event"
 	},
 	{
@@ -1460,29 +995,370 @@ const userABI = [
 		"type": "event"
 	},
 	{
-		"anonymous": false,
+		"constant": false,
 		"inputs": [
 			{
-				"indexed": true,
-				"name": "previousOwner",
+				"name": "_name",
+				"type": "string"
+			},
+			{
+				"name": "_surname",
+				"type": "string"
+			},
+			{
+				"name": "_sex",
+				"type": "string"
+			},
+			{
+				"name": "_nationality",
+				"type": "string"
+			},
+			{
+				"name": "_birDate",
+				"type": "string"
+			},
+			{
+				"name": "_passports",
+				"type": "string"
+			},
+			{
+				"name": "_position",
+				"type": "uint256"
+			},
+			{
+				"name": "_userAddress",
+				"type": "address"
+			}
+		],
+		"name": "setKycUserMsg",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "code",
+				"type": "uint256"
+			},
+			{
+				"name": "_isVote",
+				"type": "bool"
+			}
+		],
+		"name": "setVoteList",
+		"outputs": [
+			{
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "code",
+				"type": "uint256"
+			}
+		],
+		"name": "successCode",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "_to",
 				"type": "address"
 			},
 			{
-				"indexed": true,
+				"name": "_value",
+				"type": "uint256"
+			}
+		],
+		"name": "transfer",
+		"outputs": [
+			{
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "_from",
+				"type": "address"
+			},
+			{
+				"name": "_to",
+				"type": "address"
+			},
+			{
+				"name": "_value",
+				"type": "uint256"
+			}
+		],
+		"name": "transferFrom",
+		"outputs": [
+			{
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
 				"name": "newOwner",
 				"type": "address"
 			}
 		],
-		"name": "OwnershipTransferred",
-		"type": "event"
+		"name": "transferOwnership",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"payable": true,
+		"stateMutability": "payable",
+		"type": "fallback"
+	},
+	{
+		"inputs": [
+			{
+				"name": "_name",
+				"type": "string"
+			},
+			{
+				"name": "_symbol",
+				"type": "string"
+			},
+			{
+				"name": "_totalSupply",
+				"type": "uint256"
+			},
+			{
+				"name": "_support",
+				"type": "uint8"
+			},
+			{
+				"name": "_quorum",
+				"type": "uint8"
+			},
+			{
+				"name": "_duration",
+				"type": "uint8"
+			}
+		],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "constructor"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"name": "_owner",
+				"type": "address"
+			},
+			{
+				"name": "_spender",
+				"type": "address"
+			}
+		],
+		"name": "allowance",
+		"outputs": [
+			{
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"name": "_owner",
+				"type": "address"
+			}
+		],
+		"name": "balanceOf",
+		"outputs": [
+			{
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "decimals",
+		"outputs": [
+			{
+				"name": "",
+				"type": "uint8"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"name": "",
+				"type": "address"
+			}
+		],
+		"name": "frozenAccount",
+		"outputs": [
+			{
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"name": "",
+				"type": "address"
+			}
+		],
+		"name": "frozenTimestamp",
+		"outputs": [
+			{
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"name": "_my",
+				"type": "address"
+			}
+		],
+		"name": "getPosition",
+		"outputs": [
+			{
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "INITIAL_SUPPLY",
+		"outputs": [
+			{
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "name",
+		"outputs": [
+			{
+				"name": "",
+				"type": "string"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "owner",
+		"outputs": [
+			{
+				"name": "",
+				"type": "address"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "symbol",
+		"outputs": [
+			{
+				"name": "",
+				"type": "string"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "totalSupply",
+		"outputs": [
+			{
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
 	}
 ]
-
 export {
-	address,
-	ABI,
 	tokenABI,
 	tokenAddress,
-	userABI,
-	userAddress
+	userABI
 }

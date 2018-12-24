@@ -3,13 +3,13 @@
 		<Layout>
 			<Header>
 				<nav class="navbar navbar-default">
-					<a class="float-left navbar-brand"></a>
+					<a href="/index.php/cn/home/index" class="float-left navbar-brand"></a>
 					<div class="funcall">
 						<ul class="float-left nav-fnc" >
 							<li><a href="/">首页</a></li>
 							<li><a href="/">公司注册</a></li>
 							<li><router-link to="config">在线治理</router-link></li>
-							<li><router-link to="config">资产交易</router-link></li>
+							<li><a  href="/index.php/cn/home/index">资产交易</a></li>
 						</ul>
 						<ul class="float-right nav-token">
 							<li v-if="isLogin"><span><a href="/index.php/cn/home/index/register">注册</a></span></li>
@@ -192,6 +192,9 @@
 				display: -webkit-flex;
 				flex-direction: column;
 				justify-content: space-between;
+			.float-right
+				li
+					list-style: none;
 	
 </style>
 <style>

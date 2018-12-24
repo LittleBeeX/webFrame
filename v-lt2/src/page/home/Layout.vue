@@ -99,7 +99,7 @@
 					title: 'English',
 					type: 'en-US',
 					goType: 'ko-KR'
-				}, {
+				}/*, {
 					title: '한글',
 					type: 'ko-KR',
 					goType: 'it-JP'
@@ -107,7 +107,7 @@
 					title: '日本語',
 					type: 'it-JP',
 					goType: 'zh-CN'
-				}]
+				}*/]
 			}
 		},
 		computed: {
@@ -155,6 +155,18 @@
 					});
 					this.$router.push({
 						path: '/'
+					})
+				}
+			})
+			this.$axios({
+				method: 'post',
+				url: '/index.php/cn/home/node_se/company',
+				data: Qs.stringify({"only": this.$route.query.only})
+			}).then((response) => {
+				if (response.data.state == 0) {
+					this.$store.dispatch('getUserContract',{
+					  //contract: response.data.info.contract
+					  contract: response.data.info.contract
 					})
 				}
 			})

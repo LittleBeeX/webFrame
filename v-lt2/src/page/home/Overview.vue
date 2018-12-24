@@ -20,6 +20,7 @@
 						<div class="btn">
 							<Upload
 								ref="upload"
+								v-if="isCreator" 
 								:show-upload-list="false"
 								:on-success="companyUpSuccess"
 								:format="['jpg','jpeg','png']"
@@ -32,7 +33,7 @@
 								multiple
 								name="logo" 
 								action="/index.php/cn/home/node_su/company_logo">
-								<Button type="primary" icon="ios-cloud-upload-outline">提交公司logo</Button>
+								<Button type="primary" icon="ios-cloud-upload-outline">上传公司logo</Button>
 							</Upload> 
 							<Upload
 								v-if="isCreator" 
@@ -46,7 +47,7 @@
 								:format="['doc','docx','xls','xlsx','ppt','pptx','pdf','pdfx']"
 								name="zhangcheng" 
 								action="/index.php/cn/home/node_su/company_zhangcheng">
-								<Button type="primary" icon="ios-cloud-upload-outline">提交公司章程</Button>
+								<Button type="primary" icon="ios-cloud-upload-outline">上传公司章程</Button>
 							</Upload>
 						</div>
 					</Card>
@@ -92,7 +93,7 @@
 								multiple
 								name="portrait" 
 								action="/index.php/cn/home/node_su/chain_portrait">
-								<Button type="primary" icon="ios-cloud-upload-outline">提交个人头像</Button>
+								<Button type="primary" icon="ios-cloud-upload-outline">上传个人头像</Button>
 							</Upload> 
 						</div>
 					</Card>
@@ -142,7 +143,7 @@
 						label:'公司名称',
 						vals:''
 					},{
-						label:'注册地',
+						label:'注册编号',
 						vals:''
 					},{
 						label:'注册资本',
@@ -151,7 +152,7 @@
 						label:'注册日期',
 						vals:''
 					},{
-						label:'公司地址',
+						label:'注册地',
 						vals:''
 					}
 				],
@@ -163,10 +164,10 @@
 						label:'国籍',
 						vals:''
 					},{
-						label:'护照',
+						label:'护照号码',
 						vals:''
 					},{
-						label:'注册日期',
+						label:'出生日期',
 						vals:''
 					},{
 						label:'身份',

@@ -18,7 +18,8 @@
 				现在需要您支付{{orderNum}}LT，<br/>我们将审核您已提交的信息，审核通过后，<br/>您将在LittleBeeX上治理您的公司！
 			</div>
 			<div class="btn-con">
-				<Button type="primary" size="large" @click="goPay">支付LT</Button>
+				<Button type="primary" size="large" v-if="isClick" @click="goPay">支付LT</Button>
+				<Button type="primary" size="large" :disabled="true" v-else>已支付</Button>
 			</div>
 		</div>
 	</div>
@@ -26,7 +27,6 @@
 
 <script>
 	import {mapState} from 'vuex'
-	import {tokenAddress} from '@/util/constants/contract'
 	import Qs from 'qs'
 	export default {
 		data(){
@@ -34,7 +34,8 @@
 				balanceOf: 0,
 				approveGetVal: 0,
 				approveSetVal: 0,
-				orderNum: 0
+				orderNum: 0,
+				isClick: true
 			}
 		},
 		computed: {
@@ -44,35 +45,52 @@
 		},	
 		methods:{
 			goPay(){
-				let _this = this;
-				const paycode = "" + this.orderNum + String(10 ** 18).split("").slice(1).join("")
-				let masterAddress = "0x79793BE2287e05490058acb17513B2BfAcdfe070"
-				this.$store.state.tokenInstance().methods.transferFrom(this.Address, masterAddress, paycode).send({
-					from: this.Address
-				}).on('transactionHash',function( receipt){
-					 _this.$Spin.show();
-				}).then(result => {
-					this.$Spin.hide();
-					let data = {
-						"address": this.Address,
-						"only": this.$route.query.only,
-						"jiaoyi_address":result.transactionHash
-					};
-					this.$axios({
-						method: 'post',
-						url: '/index.php/cn/home/node_su/order',
-						data: Qs.stringify(data)
-					}).then((response) => {
+				if(this.approveGetVal >= this.orderNum){
+					if(this.balanceOf >= this.orderNum){
+						let _this = this;
+						const paycode = "" + this.orderNum + String(10 ** 18).split("").slice(1).join("")
+						let masterAddress = "0xDBD4c2a85423124a2Da3A656A455df4D6C873979"
+						this.$store.state.tokenInstance().methods.transferFrom(this.Address,masterAddress, paycode).send({
+							from: this.Address
+						}).on('transactionHash',function( receipt){
+							_this.$Spin.show();
+						}).then(result => {
+							this.$Spin.hide();
+							console.log(result.transactionHash)
+							this.$Spin.hide();
+							let data = {
+								"address": this.Address,
+								"only": this.$route.query.only,
+								"jiaoyi_address":result.transactionHash
+							};
+							this.$axios({
+								method: 'post',
+								url: '/index.php/cn/home/node_su/order',
+								data: Qs.stringify(data)
+							}).then((response) => {
+								this.$Notice.warning({
+									title: '操作成功！等待人员审核'
+								});
+								this.isClick = false
+								this.allowance()
+								this.balanceof()
+							}) 
+						})
+					}else{
 						this.$Notice.warning({
-							title: '操作成功！等待人员审核'
+							title: '没有足够的Token用来支付！'
 						});
-					}) 
-				})
+					}
+				}else{
+					this.$Notice.warning({
+						title: '请增加授权额度！'
+					});
+				}
 			},
 			goApprove(){
 				let _this = this;
 				const paycode = this.approveSetVal == 0 ? 0 : "" + this.approveSetVal + String(10 ** 18).split("").slice(1).join("")
-				this.$store.state.tokenInstance().methods.mint(tokenAddress, "2000000000000000000000").send({
+				this.$store.state.tokenInstance().methods.approve(this.Address, paycode).send({
 					from: this.Address
 				}).on('transactionHash',function(number, receipt){
 					_this.$Spin.show();
@@ -82,10 +100,11 @@
 					});
 					this.$Spin.hide();
 					this.approveGetVal = this.approveSetVal
+					this.approveSetVal = 0
 				})
 			},
 			allowance(){
-				this.$store.state.tokenInstance().methods.allowance(this.Address, tokenAddress).call({
+				this.$store.state.tokenInstance().methods.allowance(this.Address, this.Address).call({
 					from: this.Address
 				}).then(result => {
 					this.approveGetVal = result / 10 ** 18

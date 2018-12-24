@@ -1,7 +1,7 @@
 <template>
 	<div class="index-board">
 		<div class="inner">
-			<h3>令牌设置</h3>
+			<h3>令牌设置<Icon type="md-help-circle" @click="helpBox = !helpBox"/></h3>
 			<div>
 				 <Form :model="tokenIdent" label-position="left" :label-width="75" inline ref="tokenIdent" :rules="ruleInline">
 					<FormItem label="支持占比" prop="support">
@@ -23,10 +23,10 @@
 						<Input v-model="tokenIdent.token_name" size="large" placeholder="请输入令牌名称"></Input>
 					</FormItem>
 					<FormItem label="令牌符号" prop="token_symbol">
-						<Input v-model="tokenIdent.token_symbol" size="large" placeholder="请输入令牌名称"></Input>
+						<Input v-model="tokenIdent.token_symbol" size="large" placeholder="请输入令牌符号"></Input>
 					</FormItem>
 					<FormItem label="令牌数量" prop="token_number">
-						<Input v-model="tokenIdent.token_number" size="large" placeholder="请输入令牌名称"></Input>
+						<Input v-model="tokenIdent.token_number" size="large" placeholder="请输入令牌数量"></Input>
 					</FormItem>
 				</Form>
 				<div class="btn-con">
@@ -41,6 +41,15 @@
 				</div>
 			</div>
 		</div>
+		 <Modal
+			v-model="helpBox"
+			title="令牌设置"
+			ok-text="OK"
+			cancel-text="Cancel">
+			<p>支持占比：用于确认投票通过的票数占比</p>
+			<p>法定人数：用于确认投票通过的人数占比</p>
+			<p>持续时间：用于设置发起一次投票的周期</p>
+		</Modal>
 	</div>
 </template>
 
@@ -49,6 +58,7 @@
 	export default {
 		data(){
 			return{
+				helpBox:false,
 				tokenIdent: {
 					support: '',
 					quorum: '',
@@ -98,10 +108,7 @@
 			goTokenPayment(name){
 				//this.$router.push({path:'TokenPayment'})
 				this.$refs[name].validate((valid) => {
-					console.log(valid);
 					if (valid) {
-						
-						console.log('data');
 						 let data = {
 							"only": this.$route.query.only,
 							"support": this.tokenIdent.support,
@@ -119,7 +126,7 @@
 							if(response.data.state == 0){
 								this.$router.push({
 									path:'TokenPayment',
-									query:{only:this.onlys}
+									query:{only:this.$route.query.only}
 								})
 							}
 						}) 

@@ -5,6 +5,7 @@
 			<p class="node">
 				当前节点：以太坊测试网(Ropsten)
 				<span class="hint">需解锁Metamask钱包，并选择所需的服务器节点</span>
+				<Button type="primary" @click="takeRopstenToken">获取测试Token</Button>
 			</p>
 			<div class="config-item">
 				<label>创建一个新组织，并开始KYC组织认证</label>
@@ -28,6 +29,7 @@
 				companyName:'',
 				loading: false,
 				isClick: false,
+				balanceOf: 0
 			}
 		},
 		computed: mapState({
@@ -90,6 +92,30 @@
 					this.$router.push({path:'UserIdent'});
 				}
 			},
+			takeRopstenToken(){
+				this.$store.state.tokenInstance().methods.balanceOf(this.Address).call({
+					from: this.Address
+				}).then(result => {
+					this.balanceOf = result / 10 ** 18
+					if(this.balanceOf >= 100000){
+						this.$Notice.warning({
+								title: '已经获取足够Token，请勿重新获取！',
+						});
+					}else{
+						const paycode = "" + 100000 + String(10 ** 18).split("").slice(1).join("")
+						this.$store.state.tokenInstance().methods.mint(this.Address, paycode).send({
+							from: this.Address
+						}).on('transactionHash',function( receipt){
+							_this.$Spin.show();
+						}).then(result => {
+							this.$Spin.hide();
+							this.$Notice.warning({
+									title: '测试Token已发出，请注意收取！',
+							});
+						})
+					}
+				})
+			}
 		},
 		watch:{
 			companyName(){
@@ -115,6 +141,13 @@
 				display: block;
 				color: #bbbbbb;
 				font-size: 14px;
+			button
+				font-size: 16px
+				padding: 8px 20px 
+				margin-top: 30px
+				&.open
+					font-size: 14px
+					padding: 6px 20px 
 		.config-item
 			label
 				display:block;

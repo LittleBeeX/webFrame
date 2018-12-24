@@ -33,7 +33,7 @@
 					<FormItem label="钱包地址" class="address" >
 						<Input v-model="Address" size="large" readonly></Input>
 					</FormItem>
-					<FormItem label="身份" prop="position">
+					<FormItem label="公司职务" prop="position">
 						<Select v-model="userIdent.position" :readonly="userIsIdint">
 							<Option v-for="item in positionList" size="large" :value="item.value" :key="item.value">{{ item.label }}</Option>
 						</Select>
@@ -170,7 +170,7 @@
                         { required: true, message: '请选择性别', trigger: 'change' }
                     ], 
 					position: [
-                        { required: true, message: '请选择身份', trigger: 'change' }
+                        { required: true, message: '请选择公司职务', trigger: 'change' }
                     ], 
 					nationality: [
                         { required: true, message: '请选择国籍', trigger: 'change' }

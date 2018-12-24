@@ -32,7 +32,13 @@
 					<br>
 					<FormItem label="钱包地址" class="address" >
 						<Input v-model="Address" size="large" readonly></Input>
-					</FormItem><br>
+					</FormItem>
+					<FormItem label="公司职务" prop="position">
+						<Select v-model="userIdent.position" :readonly="userIsIdint">
+							<Option v-for="item in positionList" size="large" :value="item.value" :key="item.value">{{ item.label }}</Option>
+						</Select>
+					</FormItem>
+					<br>
 					<FormItem label="护照上传">
 						<Upload
 							ref="upload"
@@ -43,6 +49,7 @@
 								surname:userIdent.surname,
 								passports:userIdent.passports,
 								sex:userIdent.sex,
+								position: userIdent.position,
 								nationality:userIdent.nationality,
 								birthtime:userIdent.birDate,
 								only: onlys
@@ -117,6 +124,7 @@
                     surname: '',
                     passports: '',
                     sex: '',
+					position:'',
 					nationality:'',
 					birDate:''
                 },
@@ -127,6 +135,21 @@
 					},{
 						value:'2',
 						label:'女'
+					},
+				],
+				positionList:[
+					{
+						value:'1',
+						label:'董事'
+					},{
+						value:'2',
+						label:'股东'
+					},{
+						value:'3',
+						label:'董事兼股东'
+					},{
+						value:'4',
+						label:'员工'
 					},
 				],
 				nationalityList:[{country: "中国", en: "China", code: "86"},{country: "中国香港", en: "Hong Kong", code: "852"}],
@@ -146,6 +169,9 @@
                     sex: [
                         { required: true, message: '请选择性别', trigger: 'change' }
                     ], 
+					position: [
+                        { required: true, message: '请选择公司职务', trigger: 'change' }
+                    ], 
 					nationality: [
                         { required: true, message: '请选择国籍', trigger: 'change' }
                     ],
@@ -153,7 +179,7 @@
 				 defaultList: [
                     {
                         'name': 'a42bdcc1178e62b4694c830f028db5c0',
-                        'url': 'https://o5wwk8baw.qnssl.com/a42bdcc1178e62b4694c830f028db5c0/avatar'
+                        'url': require('../../assets/images/hzzm.png')
                     }
                 ],
 				imgUrl: '',
@@ -180,6 +206,7 @@
 								"surname":this.userIdent.surname,
 								"passports":this.userIdent.passports,
 								"sex":this.userIdent.sex,
+								"position":this.userIdent.position,
 								"nationality":this.userIdent.nationality,
 								"birthtime":this.userIdent.birDate,
 								"only": this.onlys

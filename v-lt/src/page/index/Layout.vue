@@ -192,6 +192,9 @@
 				display: -webkit-flex;
 				flex-direction: column;
 				justify-content: space-between;
+			.float-right
+				li
+					list-style: none;
 	
 </style>
 <style>

@@ -239,7 +239,8 @@
 							list[i].keyname = list[i].keyname
 							if(list[i].type != 0){
 								let msg = list[i].type == 1 ? '增发' : '转账'
-								list[i].content = '给' + list[i].surname_t + list[i].name_t  + msg + list[i].yes_number + '枚Token'
+								console.log(list[i].number)
+								list[i].content = '给' + list[i].surname_t + list[i].name_t  + msg + list[i].number + '枚Token'
 							}
 						}
 						

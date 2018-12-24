@@ -46,35 +46,41 @@
 		methods:{
 			goPay(){
 				if(this.approveGetVal >= this.orderNum){
-					let _this = this;
-					const paycode = "" + this.orderNum + String(10 ** 18).split("").slice(1).join("")
-					let masterAddress = "0xDBD4c2a85423124a2Da3A656A455df4D6C873979"
-					this.$store.state.tokenInstance().methods.transferFrom(this.Address,masterAddress, paycode).send({
-						from: this.Address
-					}).on('transactionHash',function( receipt){
-						_this.$Spin.show();
-					}).then(result => {
-						this.$Spin.hide();
-						console.log(result.transactionHash)
-						this.$Spin.hide();
-						let data = {
-							"address": this.Address,
-							"only": this.$route.query.only,
-							"jiaoyi_address":result.transactionHash
-						};
-						this.$axios({
-							method: 'post',
-							url: '/index.php/cn/home/node_su/order',
-							data: Qs.stringify(data)
-						}).then((response) => {
-							this.$Notice.warning({
-								title: '操作成功！等待人员审核'
-							});
-							this.isClick = false
-							this.allowance()
-							this.balanceof()
-						}) 
-					})
+					if(this.balanceOf >= this.orderNum){
+						let _this = this;
+						const paycode = "" + this.orderNum + String(10 ** 18).split("").slice(1).join("")
+						let masterAddress = "0xDBD4c2a85423124a2Da3A656A455df4D6C873979"
+						this.$store.state.tokenInstance().methods.transferFrom(this.Address,masterAddress, paycode).send({
+							from: this.Address
+						}).on('transactionHash',function( receipt){
+							_this.$Spin.show();
+						}).then(result => {
+							this.$Spin.hide();
+							console.log(result.transactionHash)
+							this.$Spin.hide();
+							let data = {
+								"address": this.Address,
+								"only": this.$route.query.only,
+								"jiaoyi_address":result.transactionHash
+							};
+							this.$axios({
+								method: 'post',
+								url: '/index.php/cn/home/node_su/order',
+								data: Qs.stringify(data)
+							}).then((response) => {
+								this.$Notice.warning({
+									title: '操作成功！等待人员审核'
+								});
+								this.isClick = false
+								this.allowance()
+								this.balanceof()
+							}) 
+						})
+					}else{
+						this.$Notice.warning({
+							title: '没有足够的Token用来支付！'
+						});
+					}
 				}else{
 					this.$Notice.warning({
 						title: '请增加授权额度！'

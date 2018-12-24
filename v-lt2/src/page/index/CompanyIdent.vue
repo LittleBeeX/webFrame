@@ -10,11 +10,18 @@
 					<FormItem label="注册号码" prop="Number">
 						<Input v-model="companyIdent.Number" size="large" placeholder="请输入注册号码" :readonly="companyIsIdint"></Input>
 					</FormItem>
-					<FormItem label="注册地点" prop="Site">
-						<Input v-model="companyIdent.Site" size="large" placeholder="请输入注册地点" :readonly="companyIsIdint"></Input>
+					<FormItem label="注册国家" prop="Site">
+						<Select v-model="companyIdent.Site" :readonly="companyIsIdint" size="large">
+							<Option v-for="(item,index) in nationalityList" :value="index" :key="index" :label="item.country">
+								<span>{{ item.country }}</span>
+								<span style="float:right;color:#ccc">{{item.en}}</span>
+							</Option>
+						</Select> 
 					</FormItem>
 					<FormItem label="注册资本" prop="Fund"  >
-						<Input v-model="companyIdent.Fund" size="large" placeholder="请输入注册资本" :readonly="companyIsIdint"></Input>
+						<Input v-model="companyIdent.Fund" size="large" placeholder="请输入注册资本" :readonly="companyIsIdint">
+							 <span slot="append">USD$</span>
+						</Input>
 					</FormItem>
 					<FormItem label="成立日期" prop="BirDate" >
 						<DatePicker style="width:100%" size="large" type="date" placeholder="成立日期" v-model="companyIdent.BirDate" :readonly="companyIsIdint"></DatePicker>
@@ -68,6 +75,7 @@
 					setMes: '',
 					type:'info'
 				},
+				nationalityList:[{country: "中国", en: "China", code: "86"},{country: "中国香港", en: "Hong Kong", code: "852"}],
 				companyIsIdint: false,
 				ruleInline:{
 					Name:[
@@ -77,7 +85,7 @@
 						{required:true, message:'请输入注册号码', trigger:'blur'}
 					],
 					Site:[
-						{required:true, message:'请输入注册地点', trigger:'blur'}
+						{required:true, message:'请选择注册地点', trigger:'change'}
 					],
 					Fund:[
 						{required:true, message:'请输入注册资本', trigger:'blur'}
@@ -181,7 +189,11 @@
 				}
 			}
 		},
-		mounted(){
+		created(){
+			this.$axios.post('/index.php/cn/home/node_se/nationality')
+				.then((response) => {
+					this.nationalityList = response.data.info;
+				})
 			if(this.$route.query.only != undefined){
 				let data = {
 					"address": this.Address,
