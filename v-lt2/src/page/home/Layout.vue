@@ -133,7 +133,6 @@
 				}
 			},
 			goIndex(){
-				console.log(987);
 				this.$router.push({
 					path:'/'
 				})

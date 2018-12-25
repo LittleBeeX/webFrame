@@ -14,6 +14,11 @@ export default {
 	beforeCreate(){
 		pollWeb3()
 		this.$store.dispatch('registerWeb3');
+	},
+	created(){
+		this.$Notice.config({
+	    duration: 10
+	});
 	}
 }
 </script>

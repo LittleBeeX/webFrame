@@ -156,27 +156,10 @@
 			}
 		},
 		created(){
-			let data = {
-				"only":this.$route.query.only
-			};
-			this.$axios({
-				method: 'post',
-				url: '/index.php/cn/home/node_se/company',
-				data: Qs.stringify(data)
-			}).then((response) => {
-				if(response.data.state == 0){
-					this.allTokenNum = response.data.info.token_number
-					return true
-				}else{
-					this.$Notice.warning({
-						title: '无当前组织信息！'
-					})
-					this.$router.push({
-						path:'/'
-					})
-					return false
-				}
-			})
+			this.$store.state.userInstance().methods.totalSupply().call()
+				.then(result => {
+					this.allTokenNum = result / 10 ** 18
+				})
 		}
 	}
 </script>

@@ -9,7 +9,9 @@
 			</p>
 			<div class="config-item">
 				<label>创建一个新组织，并开始KYC组织认证</label>
-				<Button type="primary" @click="createOrganization">开始创建</Button>
+				<Button type="primary" @click="createOrganization" :disabled="isHaveETH">开始创建</Button>
+				<br />
+				<p v-if="isHaveETH">你的ETH余额为0，请先获取不少于0.1ETH</p>
 			</div>
 			<div class="config-item">
 				<label>打开现有组织</label>
@@ -23,12 +25,14 @@
 <script>
 	import Qs from 'qs'
 	import {mapState} from 'vuex'
+	import Web3 from 'web3'
 	export default {
 		data(){
 			return {
 				companyName:'',
 				loading: false,
 				isClick: false,
+				isHaveETH: true,
 				balanceOf: 0
 			}
 		},
@@ -65,10 +69,17 @@
 								}) 
 							}	
 						}else{
-							this.$router.push({
-								path:'UserIdent',
-								query:{only:this.companyName}
-							}) 
+							if(response.data.info.chain.state == 2){
+								this.$router.push({
+									path:'../home/Overview',
+									query:{only:this.companyName}
+								})
+							}else{
+								this.$router.push({
+									path:'UserIdent',
+									query:{only:this.companyName}
+								}) 
+							}
 						}
 						
 					}else if(response.data.state == 2){
@@ -84,33 +95,29 @@
 				})
 			},
 			createOrganization(){
-				if(this.Address  == null || this.Address  == ''){
-					this.$Notice.warning({
-							title: '请先登录metamask钱包，刷新后进行操作！',
-					});
-				}else{
-					this.$router.push({path:'UserIdent'});
-				}
+				this.$router.push({path:'UserIdent'});
 			},
 			takeRopstenToken(){
 				this.$store.state.tokenInstance().methods.balanceOf(this.Address).call({
 					from: this.Address
 				}).then(result => {
 					this.balanceOf = result / 10 ** 18
+					console.log(this.balanceOf,this.balanceOf >= 100000)
 					if(this.balanceOf >= 100000){
 						this.$Notice.warning({
-								title: '已经获取足够Token，请勿重新获取！',
+							title: '已经获取足够Token，请勿重新获取！'
 						});
 					}else{
+						const _this = this
 						const paycode = "" + 100000 + String(10 ** 18).split("").slice(1).join("")
-						this.$store.state.tokenInstance().methods.mint(this.Address, paycode).send({
+						this.$store.state.tokenInstance().methods.airdropNum(this.Address).send({
 							from: this.Address
 						}).on('transactionHash',function( receipt){
 							_this.$Spin.show();
 						}).then(result => {
 							this.$Spin.hide();
-							this.$Notice.warning({
-									title: '测试Token已发出，请注意收取！',
+							this.$Notice.info({
+								title: '您的测试Token已获取成功，请进入Metamask钱包查看！'
 							});
 						})
 					}
@@ -121,6 +128,12 @@
 			companyName(){
 				this.isClick = this.companyName == ''? false : true;
 			}
+		},
+		created(){
+			let web3 = new Web3(window.web3.currentProvider)
+			web3.eth.getBalance(this.Address).then(result => {
+				this.isHaveETH = result > 0 ? false : true
+			});
 		}
 	}
 </script>
@@ -148,20 +161,29 @@
 				&.open
 					font-size: 14px
 					padding: 6px 20px 
+					margin-bottom: 0px
 		.config-item
+			font-size: 14px
 			label
 				display:block;
 				margin: 30px 0;
 				font-size: 20px;
 			button
 				font-size: 16px
-				padding: 8px 20px 
+				padding: 8px 20px
+				margin-bottom: 5px 
 				&.open
 					font-size: 14px
 					padding: 6px 20px 
 			p
-				display: inline-block;
+				display: inline-block
+				color: #bbb
 				
 				
+</style>
+<style>
+	.index-board .config-item button.open{
+		margin-bottom: 0;
+	}
 </style>
 

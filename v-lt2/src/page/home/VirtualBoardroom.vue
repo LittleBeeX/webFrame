@@ -9,7 +9,7 @@
 					</RadioGroup>
 					<div>
 						<Input  placeholder="会议查询" v-model="searchInput"  style="width:300px">
-							<Button slot="append" @click="searchVote()">
+							<Button slot="append" @click="searchVote(searchType)">
 								<Icon type="ios-search" size="16"/>
 							</Button>
 						</Input>
@@ -72,7 +72,7 @@
 		data(){
 			return{
 				searchInput: '',
-				searchType: '表决中',
+				searchType: '全部',
 				addVoteInput: '',
 				isShowDrawer: false,
 				isAddDrawer: false,
@@ -98,7 +98,8 @@
                     display: 'block',
                     marginBottom: '16px'
                 },
-				voteList:[]
+				voteList:[],
+				tokenAll:0
 			}
 		},
 		computed: {
@@ -192,7 +193,7 @@
 					})
 				})
 			},
-			searchVote(){
+			searchVote(title){
 				let condition = returnTypeMsg(title) == 4 ? 0 : 1
 				let data = {
 					"only":this.$route.query.only,
@@ -201,7 +202,7 @@
 					"state": returnTypeMsg(this.searchType),
 					"condition": condition
 				};
-				this.searchList(data)
+				//this.searchList(data)
 			},
 			changeSearchType(title){
 				let condition = returnTypeMsg(title) == 4 ? 0 : 1
@@ -235,8 +236,10 @@
 							list[i].state = returnTypeMsg(list[i].state)
 							list[i].keyname = list[i].keyname
 							if(list[i].type != 0){
-								let msg = list[i].type == 1 ? '增发' : '转账'
-								list[i].content = '给' + list[i].surname_t + list[i].name_t  + msg + list[i].number + '枚Token'
+								let msg = list[i].type == 1 ? '增发' : '转让'
+								list[i].content = '给' + list[i].surname_t + list[i].name_t  + msg + list[i].number + '枚Token,占比为'+ list[i].number * 100 / Number(this.tokenAll).toFixed(2) +'%股权'
+								
+								
 							}
 						}
 						
@@ -263,6 +266,11 @@
 			}
 		},
 		created(){
+			this.$store.state.userInstance().methods.totalSupply().call()
+				.then(result => {
+					this.tokenAll = result / 10 ** 18
+					console.log(TokenAll)
+				})
 			this.mountedRefreshList()
 		}
 	}

@@ -13,9 +13,13 @@
 			</div>
 		</div>
 		<div class="payment">
-			<div class="content-describe">
-				您的自治组织准备好了！<br/>
-				现在需要您支付{{orderNum}}LT，<br/>我们将审核您已提交的信息，审核通过后，<br/>您将在LittleBeeX上治理您的公司！
+			<div class="content-describe" v-if="tipMsg == 1">
+				您的自治组织准备好了<br/>
+				现在需要您支付{{orderNum}}LT，<br/>LittleBeeX将审核您已提交的信息，审核通过后，<br/>您将在LittleBeeX上治理您的公司！
+			</div>
+			<div class="content-describe" v-else>
+				您的个人认证信息已提交！<br/>
+				现在需要您支付{{orderNum}}LT，<br/>LittleBeeX将审核您已提交的信息，审核通过后，<br/>您将成功加入该组织并进行在线治理！
 			</div>
 			<div class="btn-con">
 				<Button type="primary" size="large" v-if="isClick" @click="goPay">支付LT</Button>
@@ -31,6 +35,7 @@
 	export default {
 		data(){
 			return{
+				tipMsg: 2,
 				balanceOf: 0,
 				approveGetVal: 0,
 				approveSetVal: 0,
@@ -74,6 +79,9 @@
 								this.isClick = false
 								this.allowance()
 								this.balanceof()
+								this.$router.push({
+									path:'/'
+								})
 							}) 
 						})
 					}else{
@@ -114,7 +122,7 @@
 				this.$store.state.tokenInstance().methods.balanceOf(this.Address).call({
 					from: this.Address
 				}).then(result => {
-					this.balanceOf = result / 10 ** 18
+					this.balanceOf = (result / 10 ** 18).toFixed(0)
 				})
 			},
 			getOrderNum(){
@@ -128,6 +136,7 @@
 					data: Qs.stringify(data)
 				}).then((response) => {
 					if(response.data.state == 0){
+						this.tipMsg = response.data.info.type 
 						this.orderNum = response.data.info.money
 					}else{
 						this.$Notice.warning({

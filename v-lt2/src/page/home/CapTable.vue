@@ -130,7 +130,7 @@
 								address:userList[i].address,
 								name: userList[i].surname + userList[i].name,
 								tokenNum: userList[i].token_number,
-								ratio: userList[i].token_proportion
+								ratio: userList[i].token_proportion + '%'
 							})
 						}
 						return true;

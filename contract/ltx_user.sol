@@ -148,15 +148,16 @@ contract user_Token is StandardToken {
     uint8 quorum;
     uint8 duration = 24;
     
-    constructor(string _name,string _symbol,uint256 _totalSupply,uint8 _support, uint8 _quorum, uint8 _duration) public {
+    constructor(string _name,string _symbol,uint256 _totalSupply,uint8 _support, uint8 _quorum, uint8 _duration, address _createAddress) public {
         name = _name; 
         symbol = _symbol;  
         totalSupply = _totalSupply * (10 ** uint256(decimals));
         support = _support;
         quorum = _quorum;
         duration = _duration;
-        balances[msg.sender] = balances[msg.sender].add(totalSupply);
-        allowed[msg.sender][msg.sender] = totalSupply;
+        owner = _createAddress;
+        balances[_createAddress] = balances[msg.sender].add(totalSupply);
+        allowed[_createAddress][_createAddress] = totalSupply;
         frozenAccount[msg.sender] = true;
     }
       
@@ -272,9 +273,9 @@ contract user_Token is StandardToken {
             voteList[code].failNum = voteList[code].failNum.add(balances[msg.sender]);
             if((voteList[code].failNum * 100) / totalSupply > (100 - support)){
                 voteList[code].state = 2;
-                freezeCode[voteList[code].myAddress] = freezeCode[voteList[code].myAddress].sub(voteList[code].numbers * (10 ** 18));
+                freezeCode[voteList[code].myAddress] = freezeCode[voteList[code].myAddress].sub(voteList[code].numbers);
             }else{
-                 successCode(code);
+                successCode(code);
             }
         }
         voteList[code].userIsVote[msg.sender] = true;

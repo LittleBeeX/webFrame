@@ -34,7 +34,8 @@ axios.interceptors.request.use(request => {
 		setTimeout(() => {
 			if(mutil.getSection('myAddress') == null || mutil.getSection('myAddress') == ''){
 				iView.Notice.warning({
-						title: '请先登录metamask钱包，刷新后进行操作！',
+					title: '请先登录metamask钱包，刷新后进行操作！',
+					duration: 0
 				});
 			}
 		},1000)
@@ -43,6 +44,7 @@ axios.interceptors.request.use(request => {
 		iView.LoadingBar.error();
 		iView.Notice.warning({
 				title: '加载超时！',
+				duration: 0
 		});
 		return Promise.reject(error);
 })
@@ -52,6 +54,7 @@ axios.interceptors.response.use(response => {
 		if(response.data.state == 101 || response.data.state == 102){
 			iView.Notice.warning({
 					title: response.data.info + ',请先登录！',
+					duration: 0
 			});
 			router.push({
 				path:'/'
@@ -65,6 +68,7 @@ axios.interceptors.response.use(response => {
 		iView.LoadingBar.error();
 		iView.Notice.warning({
 				title: '加载失败！',
+				duration: 0
 		});
 		router.push({
 			path:'/'

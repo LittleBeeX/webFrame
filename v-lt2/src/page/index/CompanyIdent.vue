@@ -129,10 +129,22 @@
 							data: Qs.stringify(data)
 						}).then((response) => {
 							if(response.data.state == 0){
-								if(this.companyType.type == 'error'){
-									this.$router.push({
-										path:'/'
-									})
+								if(this.$route.query.only != undefined){
+									if(this.userType.type == 'error'){
+										this.$Notice.info({
+											title: '公司信息已重新提交，请等待审核通过！'
+										});
+										this.$router.push({
+											path:'/'
+										})
+									}else{
+										this.$router.push({
+											path:'TokenSet',
+											query:{
+												"only":this.companyIdent.IdentCode
+											}
+										})
+									}
 								}else{
 									this.$router.push({
 										path:'TokenSet',
@@ -143,13 +155,13 @@
 								}
 							}else{
 								this.$Notice.warning({
-									title: '该组织名称已被占用！',
+									title: '该组织名称已被占用！'
 								});
 							}
 						})
 					} else {
 						this.$Notice.warning({
-							title: '请正确输入表单信息！',
+							title: '请正确输入表单信息！'
 						});
 					}
 				})
@@ -169,7 +181,7 @@
 							let state = response.data.state;
 							if(state == 2){
 								this.$Notice.info({
-									title: '该组织名称暂无占用！'
+									title: '该组织名称暂未被占用！'
 								});
 							}else{
 								this.$Notice.warning({
@@ -179,7 +191,7 @@
 						})
 					}else{
 						this.$Notice.info({
-							title: '该组织名称暂无占用！'
+							title: '该组织名称暂未被占用！'
 						});
 					}
 				}else{

@@ -218,26 +218,29 @@
 							}).then((response) => {
 								if(response.data.state == 0){
 									if(this.$route.query.only != undefined){
-										this.$router.push({
-											path:'TokenPayment',
-											query:{only:this.onlys}
-										})
-									}else{
 										if(this.userType.type == 'error'){
+											this.$Notice.info({
+												title: '个人信息已重新提交，请等待审核通过！'
+											});
 											this.$router.push({
 												path:'/'
 											})
 										}else{
 											this.$router.push({
-												path:'companyIdent'
+												path:'TokenPayment',
+												query:{only:this.onlys}
 											})
 										}
+									}else{
+										this.$router.push({
+											path:'companyIdent'
+										})
 									}
 								}
 							}) 
 						} else {
 							 this.$Notice.warning({
-									title: '请正确输入表单信息！',
+									title: '请正确输入表单信息！'
 							 });
 						}
 				})
@@ -252,7 +255,7 @@
             },
             handleFormatError (file) {
                 this.$Notice.warning({
-                    title: '文件提交错误！',
+                    title: '文件提交错误！'
                 });
             },
             handleBeforeUpload (file) {
@@ -278,28 +281,30 @@
 					data: Qs.stringify(data)
 				}).then((response) => {
 					let info = response.data.info.chain;
-					if(response.data.state == 0){
-						this.userIdent.surname = info.surname
-						this.userIdent.passports = info.passports
-						this.userIdent.name = info.name
-						this.userIdent.sex = info.sex
-						this.userIdent.nationality = info.nationality
-						this.userIdent.birDate = mutil.timestampToTime(info.birthtime)
-						this.defaultList[0].url = info.picture
-						
-						if(info.state == 1){
-							this.userType.isShow = true
-							this.userType.setMes = '个人认证正在加速审核中，请耐心等耐！'
-							this.userIsIdint = true
-						}else if(info.state == 3){
-							this.userType.isShow = true
-							this.userType.type = 'error'
-							this.userType.setMes =  info.remarks
-							this.nextBtn = true
-						}else if(info.state == 2){
-							this.userType.isShow = true
-							this.userType.setMes = '个人认证审核已经通过！'
-						}	
+					if(response.data.state == 0 ){
+						if(info.state != 0){
+							this.userIdent.surname = info.surname
+							this.userIdent.passports = info.passports
+							this.userIdent.name = info.name
+							this.userIdent.sex = info.sex
+							this.userIdent.nationality = info.nationality
+							this.userIdent.birDate = mutil.timestampToTime(info.birthtime)
+							this.defaultList[0].url = info.picture
+							
+							if(info.state == 1){
+								this.userType.isShow = true
+								this.userType.setMes = '个人认证正在加速审核中，请耐心等耐！'
+								this.userIsIdint = true
+							}else if(info.state == 3){
+								this.userType.isShow = true
+								this.userType.type = 'error'
+								this.userType.setMes = '个人认证审核未通过，请核对信息后重新提交'
+								this.nextBtn = true
+							}else if(info.state == 2){
+								this.userType.isShow = true
+								this.userType.setMes = '个人认证审核已经通过！'
+							}	
+						}
 					}
 				})
 			}else{
