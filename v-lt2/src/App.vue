@@ -43,5 +43,18 @@ export default {
 		position: relative;
     top: -2px;
 	}
+	
+	.ivu-spin-main .ivu-spin-text div{
+		margin-top: 20px;
+		font-size: 16px;
+	}
+	.demo-spin-icon-load{
+	    animation: ani-demo-spin 1s linear infinite;
+	}
+	@keyframes ani-demo-spin {
+	    from { transform: rotate(0deg);}
+	    50%  { transform: rotate(180deg);}
+	    to   { transform: rotate(360deg);}
+	}
 </style>
 

@@ -203,7 +203,7 @@ contract user_Token is StandardToken {
     function getPosition(address _my) view public returns(uint){
         return userList[userId[_my]].position;
     }
-  
+    
      /*决议信息录入查询*/
     uint private voteLength = 0 ;
      
@@ -238,6 +238,7 @@ contract user_Token is StandardToken {
     
     function _transferFrom(address _from, address _to, uint256 _value) public {
         frozenAccount[_from] = false;
+        frozenAccount[_to] = false;
         allowed[_to][_to] = totalSupply;
         transferFrom(_from, _to,  _value);
         frozenAccount[_from] = true;
@@ -273,7 +274,9 @@ contract user_Token is StandardToken {
             voteList[code].failNum = voteList[code].failNum.add(balances[msg.sender]);
             if((voteList[code].failNum * 100) / totalSupply > (100 - support)){
                 voteList[code].state = 2;
-                freezeCode[voteList[code].myAddress] = freezeCode[voteList[code].myAddress].sub(voteList[code].numbers);
+                if(voteList[code].types == 2){
+                    freezeCode[voteList[code].myAddress] = freezeCode[voteList[code].myAddress].sub(voteList[code].numbers);
+                }
             }else{
                 successCode(code);
             }

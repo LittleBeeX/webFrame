@@ -55,7 +55,7 @@
 				if(this.mintNumber == 0 || this.mintNumber == NaN){
 					return '约 0 %'
 				}else{
-					return '约 '+ this.mintNumber * 100 / Number(this.allTokenNum).toFixed(2) +' %'
+					return '约 '+ this.mintNumber * 100 / Number(this.allTokenNum + this.mintNumber).toFixed(2) +' %'
 				}
 			},
 			transferCode(){
@@ -80,9 +80,23 @@
 				.then(result => {
 					if(result != 0){
 						this.$store.state.userInstance().methods.addVoteList(1,this.Address,address,nums,'给'+address+'增发'+nums+'枚Token').send({
-							from: this.Address
+							from: this.Address,
+							gasPrice: '40000000000'
 						}).on('transactionHash',function( receipt){
-							_this.$Spin.show()
+							_this.$Spin.show({
+				                render: (h) => {
+				                    return h('div', [
+				                        h('Icon', {
+				                            'class': 'demo-spin-icon-load',
+				                            props: {
+				                                type: 'ios-loading',
+				                                size: 32
+				                            }
+				                        }),
+				                        h('div', '数据请求中')
+				                    ])
+				                }
+				            });
 						}).then(result => {
 							let codes = result.events.createVote.returnValues.codes
 							this.$Spin.hide()
@@ -101,9 +115,23 @@
 				.then(result => {
 					if(result != 0){
 						this.$store.state.userInstance().methods.addVoteList(2,this.Address,address,nums,'给'+address+'转让'+nums+'枚Token').send({
-							from: this.Address
+							from: this.Address,
+							gasPrice: '40000000000'
 						}).on('transactionHash',function( receipt){
-							_this.$Spin.show();
+							_this.$Spin.show({
+				                render: (h) => {
+				                    return h('div', [
+				                        h('Icon', {
+				                            'class': 'demo-spin-icon-load',
+				                            props: {
+				                                type: 'ios-loading',
+				                                size: 32
+				                            }
+				                        }),
+				                        h('div', '数据请求中')
+				                    ])
+				                }
+				            });
 						}).then(result => {
 							let codes = result.events.createVote.returnValues.codes
 							this.$Spin.hide();

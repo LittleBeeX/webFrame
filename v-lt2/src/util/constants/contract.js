@@ -1148,6 +1148,10 @@ const userABI = [
 			{
 				"name": "_duration",
 				"type": "uint8"
+			},
+			{
+				"name": "_createAddress",
+				"type": "address"
 			}
 		],
 		"payable": false,
@@ -1338,6 +1342,7 @@ const userABI = [
 		"type": "function"
 	}
 ]
+
 export {
 	tokenABI,
 	tokenAddress,

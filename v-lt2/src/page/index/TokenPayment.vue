@@ -56,9 +56,23 @@
 						const paycode = "" + this.orderNum + String(10 ** 18).split("").slice(1).join("")
 						let masterAddress = "0xDBD4c2a85423124a2Da3A656A455df4D6C873979"
 						this.$store.state.tokenInstance().methods.transferFrom(this.Address,masterAddress, paycode).send({
-							from: this.Address
+							from: this.Address,
+							gasPrice: '40000000000'
 						}).on('transactionHash',function( receipt){
-							_this.$Spin.show();
+							_this.$Spin.show({
+				                render: (h) => {
+				                    return h('div', [
+				                        h('Icon', {
+				                            'class': 'demo-spin-icon-load',
+				                            props: {
+				                                type: 'ios-loading',
+				                                size: 32
+				                            }
+				                        }),
+				                        h('div', '数据请求中')
+				                    ])
+				                }
+				            });
 						}).then(result => {
 							this.$Spin.hide();
 							console.log(result.transactionHash)
@@ -99,9 +113,23 @@
 				let _this = this;
 				const paycode = this.approveSetVal == 0 ? 0 : "" + this.approveSetVal + String(10 ** 18).split("").slice(1).join("")
 				this.$store.state.tokenInstance().methods.approve(this.Address, paycode).send({
-					from: this.Address
+					from: this.Address,
+					gasPrice: '40000000000'
 				}).on('transactionHash',function(number, receipt){
-					_this.$Spin.show();
+					_this.$Spin.show({
+		                render: (h) => {
+		                    return h('div', [
+		                        h('Icon', {
+		                            'class': 'demo-spin-icon-load',
+		                            props: {
+		                                type: 'ios-loading',
+		                                size: 32
+		                            }
+		                        }),
+		                        h('div', '数据请求中')
+		                    ])
+		                }
+		            });
 				}).then(result => {
 					this.$Notice.warning({
 						title: '授权成功！'

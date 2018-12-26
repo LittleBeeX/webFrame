@@ -59,6 +59,7 @@
 <script>
 	import Qs from 'qs'
 	import {mapState} from 'vuex'
+	import mutil from '@/util/mutil'
 	export default {
 		data(){
 			return{
@@ -205,42 +206,42 @@
 			this.$axios.post('/index.php/cn/home/node_se/nationality')
 				.then((response) => {
 					this.nationalityList = response.data.info;
-				})
-			if(this.$route.query.only != undefined){
-				let data = {
-					"address": this.Address,
-					"only": this.$route.query.only
-				};
-				this.$axios({
-					method: 'post',
-					url: '/index.php/cn/home/node_se/company_individual',
-					data: Qs.stringify(data)
-				}).then((response) => {
-					let company = response.data.info.company;
-					if(response.data.state == 0){
-						this.companyIdent.Number = company.code
-						this.companyIdent.Name = company.name
-						this.companyIdent.Site = company.address
-						this.companyIdent.BirDate = company.establish
-						this.companyIdent.Fund = company.capital
-						this.companyIdent.IdentCode = company.only
+					if(this.$route.query.only != undefined){
+						let data = {
+							"address": this.Address,
+							"only": this.$route.query.only
+						};
+						this.$axios({
+							method: 'post',
+							url: '/index.php/cn/home/node_se/company_individual',
+							data: Qs.stringify(data)
+						}).then((response) => {
+							let company = response.data.info.company;
+							if(response.data.state == 0){
+								this.companyIdent.Number = company.code
+								this.companyIdent.Name = company.name
+								this.companyIdent.Site = company.address
+								this.companyIdent.BirDate = mutil.timestampToTime(company.establish)
+								this.companyIdent.Fund = company.capital
+								this.companyIdent.IdentCode = company.only
+							}
+							if(company.state == 1){
+								this.companyType.isShow = true
+								this.companyType.setMes = '公司认证正在加速审核中，请耐心等耐！'
+								this.companyIsIdint = true
+							}else if(company.state == 3){
+								this.companyType.isShow = true
+								this.companyType.type = 'error'
+								this.companyType.setMes = company.remarks
+								this.companyIsIdint = false
+							}else if(company.state == 2){
+								this.companyType.isShow = true
+								this.companyType.setMes = '公司认证审核已经通过！'
+								this.companyIsIdint = true
+							}	
+						})
 					}
-					if(company.state == 1){
-						this.companyType.isShow = true
-						this.companyType.setMes = '公司认证正在加速审核中，请耐心等耐！'
-						this.companyIsIdint = true
-					}else if(company.state == 3){
-						this.companyType.isShow = true
-						this.companyType.type = 'error'
-						this.companyType.setMes = company.remarks
-						this.companyIsIdint = false
-					}else if(company.state == 2){
-						this.companyType.isShow = true
-						this.companyType.setMes = '公司认证审核已经通过！'
-						this.companyIsIdint = true
-					}	
 				})
-			}
 			
 		}
 	}

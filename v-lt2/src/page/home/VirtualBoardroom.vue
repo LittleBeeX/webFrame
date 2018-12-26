@@ -112,9 +112,23 @@
 				if(this.addVoteInput != ''){
 					let _this = this;
 					this.$store.state.userInstance().methods.addVoteList(0,this.Address,this.Address,0, this.addVoteInput).send({
-						from: this.Address
+						from: this.Address,
+						gasPrice: '40000000000'
 					}).on('transactionHash',function( receipt){
-						_this.$Spin.show()
+						_this.$Spin.show({
+			                render: (h) => {
+			                    return h('div', [
+			                        h('Icon', {
+			                            'class': 'demo-spin-icon-load',
+			                            props: {
+			                                type: 'ios-loading',
+			                                size: 32
+			                            }
+			                        }),
+			                        h('div', '数据请求中')
+			                    ])
+			                }
+			            });
 					}).then(result => {
 						let codes = result.events.createVote.returnValues.codes
 						this.$Spin.hide()
@@ -159,7 +173,8 @@
 				let _this = this;
 				let flag = state == 1 ? true : false
 				this.$store.state.userInstance().methods.setVoteList(codes,flag).send({
-					from: this.Address
+					from: this.Address,
+					gasPrice: '40000000000'
 				}).on('transactionHash',function( receipt){
 					_this.$Spin.show()
 				}).then(result => {
@@ -225,7 +240,7 @@
 						let list = response.data.info
 						for(let i=0; i<list.length;i++){
 							list[i].start_time =  mutil.timestampToTime(list[i].start_time) + '(剩余约'+ list[i].remnant.toFixed(2) +'个小时)'
-							list[i].F =  list[i].surname + list[i].name 
+							list[i].name =  list[i].surname + list[i].name 
 							list[i].id =  list[i].id 
 							list[i].no_proportion =  Number(list[i].no_proportion )
 							list[i].yes_proportion =  Number(list[i].yes_proportion )
@@ -237,9 +252,8 @@
 							list[i].keyname = list[i].keyname
 							if(list[i].type != 0){
 								let msg = list[i].type == 1 ? '增发' : '转让'
-								list[i].content = '给' + list[i].surname_t + list[i].name_t  + msg + list[i].number + '枚Token,占比为'+ list[i].number * 100 / Number(this.tokenAll).toFixed(2) +'%股权'
-								
-								
+								let code = list[i].type == 1 ? Math.round(list[i].number * 100 / (this.tokenAll + parseInt(list[i].number))) : Math.round(list[i].number * 100 / this.tokenAll)
+								list[i].content = '给' + list[i].surname_t + list[i].name_t  + msg + list[i].number + '枚Token,占比为'+ code +'%股权'
 							}
 						}
 						
@@ -269,9 +283,8 @@
 			this.$store.state.userInstance().methods.totalSupply().call()
 				.then(result => {
 					this.tokenAll = result / 10 ** 18
-					console.log(TokenAll)
+					this.mountedRefreshList()
 				})
-			this.mountedRefreshList()
 		}
 	}
 	

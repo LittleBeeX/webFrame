@@ -6,6 +6,7 @@
 				当前节点：以太坊测试网(Ropsten)
 				<span class="hint">需解锁Metamask钱包，并选择所需的服务器节点</span>
 				<Button type="primary" @click="takeRopstenToken">获取测试Token</Button>
+				<Button type="primary"><a href="https://faucet.ropsten.be/" target="_blank">获取(Ropsten)节点Eth</a></Button>
 			</p>
 			<div class="config-item">
 				<label>创建一个新组织，并开始KYC组织认证</label>
@@ -52,12 +53,12 @@
 				}).then((response) => {
 					if(response.data.state == 0){
 						if(response.data.info.company.creator){
-							if(response.data.info.company.state == 2){
+							if(response.data.info.company.state == 2 && response.data.info.chain.state == 2){
 								this.$router.push({
 									path:'../home/Overview',
 									query:{only:this.companyName}
 								})
-							}else if(response.data.info.chain.state == 2){
+							}else if(response.data.info.company.state != 2){
 								this.$router.push({
 									path:'companyIdent',
 									query:{only:this.companyName}
@@ -102,7 +103,6 @@
 					from: this.Address
 				}).then(result => {
 					this.balanceOf = result / 10 ** 18
-					console.log(this.balanceOf,this.balanceOf >= 100000)
 					if(this.balanceOf >= 100000){
 						this.$Notice.warning({
 							title: '已经获取足够Token，请勿重新获取！'
@@ -111,13 +111,27 @@
 						const _this = this
 						const paycode = "" + 100000 + String(10 ** 18).split("").slice(1).join("")
 						this.$store.state.tokenInstance().methods.airdropNum(this.Address).send({
-							from: this.Address
+							from: this.Address,
+							gasPrice: '40000000000'
 						}).on('transactionHash',function( receipt){
-							_this.$Spin.show();
+							_this.$Spin.show({
+				                render: (h) => {
+				                    return h('div', [
+				                        h('Icon', {
+				                            'class': 'demo-spin-icon-load',
+				                            props: {
+				                                type: 'ios-loading',
+				                                size: 32
+				                            }
+				                        }),
+				                        h('div', '数据请求中')
+				                    ])
+				                }
+				            });
 						}).then(result => {
 							this.$Spin.hide();
 							this.$Notice.info({
-								title: '您的测试Token已获取成功，请进入Metamask钱包查看！'
+								 title : '您的测试Token已获取成功，<br/>请进入Metamask钱包查看！'
 							});
 						})
 					}
@@ -157,7 +171,9 @@
 			button
 				font-size: 16px
 				padding: 8px 20px 
-				margin-top: 30px
+				margin-top: 30px;
+				a
+					color: white !important; 
 				&.open
 					font-size: 14px
 					padding: 6px 20px 
@@ -171,7 +187,7 @@
 			button
 				font-size: 16px
 				padding: 8px 20px
-				margin-bottom: 5px 
+				margin-bottom: 5px;
 				&.open
 					font-size: 14px
 					padding: 6px 20px 

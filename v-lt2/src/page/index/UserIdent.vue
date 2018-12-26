@@ -146,10 +146,13 @@
 						label:'股东'
 					},{
 						value:'3',
-						label:'董事兼股东'
+						label:'股东兼董事'
 					},{
 						value:'4',
 						label:'员工'
+					},{
+						value:'5',
+						label:'股东兼员工'
 					},
 				],
 				nationalityList:[{country: "中国", en: "China", code: "86"},{country: "中国香港", en: "Hong Kong", code: "852"}],
@@ -200,7 +203,12 @@
 			goCompany(name){
 				this.$refs[name].validate((valid) => {
 						if (valid) {
-							let data = {
+							if(this.uploadList[0] == this.defaultList[0]){
+								this.$Notice.warning({
+									title: '请上传护照信息！'
+							 	});
+							}else{
+								let data = {
 								"address":this.Address,
 								"name":this.userIdent.name,
 								"surname":this.userIdent.surname,
@@ -238,6 +246,7 @@
 									}
 								}
 							}) 
+							}
 						} else {
 							 this.$Notice.warning({
 									title: '请正确输入表单信息！'
@@ -288,6 +297,7 @@
 							this.userIdent.name = info.name
 							this.userIdent.sex = info.sex
 							this.userIdent.nationality = info.nationality
+							this.userIdent.position = info.position
 							this.userIdent.birDate = mutil.timestampToTime(info.birthtime)
 							this.defaultList[0].url = info.picture
 							
@@ -303,6 +313,7 @@
 							}else if(info.state == 2){
 								this.userType.isShow = true
 								this.userType.setMes = '个人认证审核已经通过！'
+								this.userIsIdint = true
 							}	
 						}
 					}

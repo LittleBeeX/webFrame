@@ -317,10 +317,10 @@
 			this.$axios.post('/index.php/cn/home/node_se/nationality')
 				.then((response) => {
 					this.nationalityList = response.data.info;
+					this.mountedRefreshCompanyList()
+					this.mountedRefreshMsg()
+					this.mountedRefreshList() 
 				})
-			this.mountedRefreshCompanyList()
-			this.mountedRefreshMsg()
-			this.mountedRefreshList() 
 		}
 	}
 	
