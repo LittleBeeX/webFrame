@@ -48,6 +48,9 @@ export default {
 		margin-top: 20px;
 		font-size: 16px;
 	}
+	.ivu-table-wrapper .ivu-table:after{
+		background-color: transparent
+	}
 	.demo-spin-icon-load{
 	    animation: ani-demo-spin 1s linear infinite;
 	}

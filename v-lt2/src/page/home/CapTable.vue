@@ -7,7 +7,7 @@
 			<Row>
 				<Col span="18">
 					<Card :bordered="false" class="capTable">
-						<p slot="title">股权信息</p>
+						<p slot="title">人员信息</p>
 						<div class="tabBoard">
 							<Table height="700" :columns="businessList.rows" :data="businessList.cols"></Table>
 						</div>
@@ -54,17 +54,17 @@
 				businessList:{
 					rows:[
 						{
-							title: '钱包地址',
-							key: 'address',
-							tooltip:true
-						},
-						{
 							title: '姓名',
 							key: 'name',
 							tooltip:true
 						},
 						{
-							title: '持有Token数',
+							title: '职务',
+							key: 'position',
+							tooltip:true
+						},
+						{
+							title: '持有TOKEN数',
 							key: 'tokenNum',
 							tooltip:true
 						},
@@ -72,6 +72,12 @@
 							title: '持有比例',
 							key: 'ratio',
 							tooltip:true
+						},
+						{
+							title: '钱包地址',
+							key: 'address',
+							tooltip:true,
+							minWidth: 300
 						}
 					],
 					cols:[]
@@ -99,10 +105,10 @@
 				],
 				userMsgList:[
 					{
-						title:'持有Token数量',
+						title:'持有TOKEN数量',
 						vals: ''
 					},{
-						title:'持有Token比例',
+						title:'持有TOKEN比例',
 						vals: ''
 					}
 				]
@@ -125,18 +131,22 @@
 				}).then((response) => {
 					if(response.data.state == 0){
 						let userList = response.data.info
+						let arr = []
 						for(let i=0;i<userList.length;i++){
-							this.businessList.cols.push({
+							console.log(userList[i].position)
+							arr.push({
 								address:userList[i].address,
 								name: userList[i].surname + userList[i].name,
 								tokenNum: userList[i].token_number,
+								position: returnTypeUser(userList[i].position),
 								ratio: userList[i].token_proportion + '%'
 							})
 						}
+						this.businessList.cols = arr
 						return true;
 					}else{
 						this.$Notice.warning({
-							title: '无当前组织信息！'
+							title: '暂无当前组织信息！'
 						});
 						this.$router.push({
 							path:'/'
@@ -176,7 +186,7 @@
 						return true;
 					}else{
 						this.$Notice.warning({
-							title: '无当前组织信息！'
+							title: '暂无当前组织信息！'
 						});
 						this.$router.push({
 							path:'/'
@@ -190,6 +200,26 @@
 			this.mountedRefreshListMsg()
 			this.mountedRefreshTokenMsg()
 		}
+	}
+	function returnTypeUser(msg){
+		switch(msg){
+			case '1':
+				msg = '董事'
+				break;
+			case '2':
+				msg = '股东'
+				break;
+			case '3':
+				msg = '股东兼董事'
+				break;
+			case '4':
+				msg = '员工'
+				break;
+			case '5':
+				msg = '股东兼员工'
+				break;
+		}
+		return msg
 	}
 </script>
 <style scoped lang="stylus">
@@ -205,7 +235,12 @@
 		background: white
 		margin-right: 30px;
 		.tabBoard
-			padding: 14px 16px;
+			.ivu-table-wrapper
+				border: 0;
+				.ivu-table:after{
+					background-color: transparent
+				}
+				    
 	
 	.tokenBoard
 		.msgBoard

@@ -1,219 +1,76 @@
 const messages={
 	en: {
-		locale:"ÖĞ",
-		tech: {
-			title: 'Highlights',
-			titleT:"20+ crucial innovations 3+ patent applied covering consensus distributed ledger and smart contract architecture",
-			one:'NO.1',
-			oneContent:'A new generation block chain platform architecture based on business and trust separation collaboration, as community IaaS, supports "one key" implementation of community chain platforms and applications of different security levels, different performance indicators, and different trusted levels, and supports the harmonious coexistence of community chain platforms and applications for different security, performance and trusted levels.',
-			two:'NO.2',
-			twoContent:'Support the implementation of fully private exclusive block chain community platforms and community applications to achieve complete control of data, code, and software and hardware operating environment for community and community applications. In the platform, the resilient to failure and hostility is built for the system error and the hostile attack, and the production level security measures such as reliable self-examination and cross validation are built to support the running environment, and the platform level security is realized.',
-			three:'NO.3',
-			threeContent:'The high performance consensus algorithm based on patent protection improves the performance index of block chain creatively, and supports the free expansion of super large scale, ultra-low delay, ultra high throughput, ultra high concurrency and block chain cluster, and meets the demanding requirements of the performance of the real application to the platform.',
-			// dlklTitle:'¶àÁ´¿çÁ´',
-			// dlklContent:'×Ô¶¯¶àÁ´¡¢×Ô¶¯¿çÁ´£¬×Ô¶¯ÊÊÅäÎ´À´µÄÇø¿éÁ´Ğ­ÒéÕ»ÒıÇæ',
-			// dgsTitle:'¶à¹²Ê¶',
-			// dgsContent:'Ö§³ÖÈ«Á´¹²Ê¶¡¢Ó¦ÓÃ¼¶¹²Ê¶¡¢½»Ò×¼¶¹²Ê¶',
-			four:'NO.4',
-			fourContent:'Extending block chaining and intelligent contract to smart phone, tablet PC and IoT device terminal, supporting the realization of end-to-end automatic trust.',
-			five:'NO.5',
-			fiveContent:'Support the use of a variety of mainstream programming languages to create community applications (Java, go, JavaScript, c/c++, etc.), and help form the application ecosystem quickly.',
-			six:'NO.6',
-			sixContent:'A transparent incentive model (PDX Incentivization Model) based on activity proof (PoA:Proof-of-Activeness) and contribution proof (PoC:Proof-of-Contribution) is built to motivate all the stakeholders of the ecosystem and help the ecosystem to grow and live through the virtual currency (PDX Incentivization Model) built in the ERC20 standard. All activities of leaping (activity)',
-		},
-		home:{
-			home:"Home",
-			tech:"Highlights",
-			prod:"Roadmap",
-			scene:"Major Use Cases",
-			// news:"ĞÂÎÅÖĞĞÄ",
-			// recr:"ÕĞÏÍÄÉÊ¿",
-			// about:"¹ØÓÚÎÒÃÇ",
-			team:"Team",
-			contactUs:"Investment",
-			// follow:"¹Ø×¢PDX",
-			// whitepaper:"PDX°×Æ¤Êé",
-			// mission:"ÎÒÃÇµÄÊ¹Ãü",
-			companyName:"WING CHUN FANS"
-		},
-		homePage:{
-			paper:"White Paper",
-			bigTitle:"a public content delivery ecosystem",
-			smallTitle:"Token sale information coming soon"
-		},
-		aboutUs:{
-			title:"About Us",
-			concent:"WING CHUN FANS is a blockchain platform around content's self-motivation, efficient distribution, rights verification and protection, fans interaction, and derivative business , etc. It uses PDX's public blockchain technology and ecological self-motivation to connect participants in all ecosystems such as creators, consumers, advertisers, brand owners, etc., so as to form an ecological network of organic growth."
-		},
-		design:{
-			title:"Design Goals",
-			iaas:"It supports 'one click' to create exclusive cultural and creative product ecosystem chain. Each product creation chain can be completely different from its content form, market orientation, target customer group and geographical coverage. Each product creation chain is running and coexisting harmoniously in PDX Wing Chun square, and has a truly full chain level of credibility.",
-			net:"It supports any content's affirming power, giving evidence and distributing efficiently, and its social interaction and derivative business, and provides easy-to-use tools to help achieve efficient management.",
-			safe:"Zero distance butt creators, owners, user fans and contracted businesses to achieve an efficient content based ecosystem."
-		},
-		develop:{
-			title:"Roadmap",
-			timeBaap:"June 2016",
-			timeBps:"March 2018",
-			timeCs:"September 2018",
-			timeZw:"December 2018",
-			timeLd:"March 2019",
-			Baap:"Release BaaP platform",
-			Bps:"Release white paper",
-			Cs:"TestNET online",
-			Zw:"MainNET online",
-			Ld:"application up to 30+ on chain",
-			Ld_p:"applications"
-		},
-		invest:{
-			title:"Investment Institution"
-		},
-		contact:{
-			title:"Contact Us",
-			content:"With regard to our latest news, please pay attention to our official channels"
-		},
-		coin:{
-			title:"Major Use Cases",
-			first:"Creators, owners, agents, and so on, through the PDX Wing Chun Fang's creation of the ecological service chain interface, based on the Web, can one key type of deployment of their own creative ecological service chain, so that the low cost of rapid online development of their own culture.",
-			last:"Through the recommendation of robot built in the platform, or through fans' social recommendation and forwarding, consumers (users and fans) get the content they are interested in. The platform pushes content to consumers effectively according to QoS and regional preferences. In the process of content push, the platform automatically implanted 'distributing' fingerprints as evidence for future rights protection.",
-			three:"Because the platform has no dead angle, it records the chain evidence and chain evidence. Given a circulated text, picture, voice, or video clip, if it is out of the platform, the platform can provide a complete chain of evidence to prove the source of the infringement."
-		},
-		team:{
-			title:"Team",
-			Jgz:"Jiangang Zhang",
-			Jgz_info:"Jiangang Zhang £¨aka JZ£©¡¤ PDX blockchain founder£¬ Bachelor¡¯s degree from Huazhong University of Science & Technology of China and Master¡¯s degree from Automation Research Institute of Ministry of Metallurgical Industry of China. As the chief architect of PDX blockchain and PDX BaaP, Mr. Zhang has 20+ years leadership experiences with multinational companies across the globe, responsible for strategic technical initiatives and its execution. Before founding PDX, Mr. Zhang held multiple high-profile positions in a wide spectrum of multinational companies, e.g. as a director-level Principal Engineer at Cisco in its enterprise SDN organization, as the Distinguished Security Architect at Yahoo, and expert member of Yahoo! TechCouncil, as a staff architect at PayPal and founder the PayPal Java Infrastructure team, as one of the highest ranking architects at Cingular Wireless (now AT&T) and member of the corporate Architecture Review Board (ARB). Mr. Zhang held one information security patent, three crucial blockchain patents applied on massively scalable and low latency consensus algorithm, massively scalable blockchain ledger and flexible smart contract deployment respectively. Mr.Zhang was invited by People¡¯s Bank of China & Payment and Clearing Association of China to conduct a research project on digital currency (topic:fundamental infrastructure of digital legal tender)",
-			Tl:"Ting Liu",
-			Tl_info:"Ting Liu ¡¤ business and operations director Bachelor in computer science, 15+ years leadership experiences in Internet software sales, business development and operations, e.g. vice president of Beijing SkyForm technologies Limited,sales director of Primeton software company Limited ",
-			Dms:"Dongmei Shang",
-			Dms_info:"Dongmei Shang ¡¤ human resource and back office director Bachelor in Chemistry science from Jiangsu University with 10+ years leadership experiences in human resource and back office administrations",
-			Pe:"Peter Ellehauge",
-			Pe_info:"Peter Ellehauge ¡¤ PDX blockchain senior architect and senior director of information security£¬ Master¡¯s degree in electrical engineering from Technical University of Denmark. He has extensive technical leadership experiences on information security and cloud operations, e.g. at Yahoo! as a director of information security, as senior production engineer at Groupon etc",
-			Wh:"William Huang",
-			Wh_info:"William Huang ¡¤ PDX blockchain senior architect and senior director of engineering£¬ Computer Science Ph.D. from Florida State University. He has extensive technical architecture experiences, e.g. at PayPal as a principle architect and senior manager, at Reuters/Tibco as principle architect. He¡¯s very experienced on massively scalable payment systems, big data and machine learning",
-			Tc:"Tina Chen",
-			Tc_info:"Tina Chen ¡¤ PDX blockchain architect and director of engineering, Bachelor¡¯s degree in computer science from York University of Canada. She worked as senior engineer and architect from IIX £¨Verisk Analytics£©¡¢ JP Morgan¡¢ Chase¡¢ Shell Trading¡¢ BP America¡¢ MCI etc ",
-			Ns:"Nawien Sharma",
-			Ns_info:"Nawien Sharma ¡¤ PDX blockchain architect and major code contributor£¬Bachelor¡¯s degree in electrical engineering from University of Windsor in Canada. He has extensive technical leadership experiences on software engineering, e.g. as a principal engineer at Yahoo!, as a systems architect at CenturyLink, as software development engineer II at Microsoft etc",
-			Az:"Andy Zhang",
-			Az_info:"Andy Zhang ¡¤ PDX blockchain senior engineer and major code contributor.Majoring computer science at Cornell University, he was an intern at Stanford Research Institute (SRI) and got rewarded for the excellent work and co-authored a paper on deep learning. He¡¯s accepted by Google as an intern and has led or participated various AI/deep learning projects, e.g. Modemo: political bias analyzer, baeML: personalized content platform, fmxnet:deep face analysis platform."
-		},
-		consultant:{
-			title:"Advisor",
-			Zwn:"Weining Zhang",
-			Zwn_info:"Weining Zhang ¡¤ Dr. Zhang is currently associated professor at Cheung Kong Graduate School of Business (CKGSB) and holds Ph. D from University of Texas Dallas.Dr. Zhang Dr. Zhang was faculty at National University of Singapore.",
-			Jl:"Jack Liang",
-			Jl_info:"Jack Liang ¡¤ Partner and co-founder of Kinzon Capital with 15+ years of investment and business operations experience. Jack holds an MBA from Yale University, an MA in computer and electrical engineering from Iowa State University and a BS in electrical engineering from Tsinghua University.",
-			Gz:"Guang Zhao",
-			Gz_info:"Guang Zhao ¡¤ Currently CEO of Haier Digital. Dr. Zhang held many high profile positions during his 20+ years experiences, e.g. senior partner at Gartner, Registrar and CIO at the state of South Carolina. Dr. Zhao holds Ph.D degree from University of Michigan and master¡¯s degree from Chinese Academy of Sciences."
-		}
+		locale:"ä¸­",
+		
 	},
 	zh: {
 		locale:"EN",
-		tech: {
-			title: '¼¼ÊõÌØµã',
-			titleT:"20¶àÏî¹Ø¼üĞÔ´´ĞÂ£¬×¨Àû±£»¤º­¸Ç¹²Ê¶Ëã·¨£¬·Ö²¼Ê½ÕË±¾¡¢ÖÇÄÜºÏÔ¼µÈÈ«Ğ­ÒéÕ»",
-			one:'NO.1',
-			oneContent:'»ùÓÚÒµÎñºÍĞÅÈÎ·ÖÀëĞ­×÷µÄĞÂÒ»´úÇø¿éÁ´Æ½Ì¨¼Ü¹¹£¬×÷ÎªÉçÈºIaaS£¬Ö§³Ö¡°Ò»¼üÊ½¡±ÊµÏÖ²»Í¬°²È«µÈ¼¶¡¢²»Í¬ĞÔÄÜÖ¸±êºÍ²»Í¬¿ÉĞÅµÈ¼¶µÄÉçÈºÁ´Æ½Ì¨ºÍÓ¦ÓÃ£¬ Ö§³Ö²»Í¬°²È«¡¢ĞÔÄÜºÍ¿ÉĞÅµÈ¼¶È¡ÉáµÄÉçÈºÁ´Æ½Ì¨ºÍÓ¦ÓÃµÄºÍĞ³¹²´æ',
-			two:'NO.2',
-			twoContent:'Ö§³ÖÊµÏÖÍêÈ«Ë½ÃÜµÄ×¨ÊôÇø¿éÁ´ÉçÈºÆ½Ì¨ºÍÉçÈºÓ¦ÓÃ£¬×öµ½Ïà¹Ø·½¶ÔÉçÈººÍÉçÈºÓ¦ÓÃµÄÊı¾İ¡¢´úÂëºÍÈíÓ²¼şÔËÓª»·¾³µÄÍêÈ«¿ØÖÆ¡£Æ½Ì¨ÄÚ½¨¶ÔÏµÍ³´íÎóºÍµĞ¶Ô¹¥»÷µÄ×Ô¶¯ÏìÓ¦£¨resilient to failure and hostility£©£¬²¢ÄÚÖÃÖ§³ÖÔËĞĞ»·¾³µÄ¿É¿¿×Ô¼ì¡¢½»²æÑéÖ¤µÈÉú²ú¼¶°²È«´ëÊ©£¬ÊµÏÖÆ½Ì¨¼¶°²È«',
-			three:'NO.3',
-			threeContent:'»ùÓÚ×¨Àû±£»¤µÄ¸ßĞÔÄÜ¹²Ê¶Ëã·¨£¬´´ÔìĞÔµÄ´ó·ù¶È¸ÄÉÆÇø¿éÁ´µÄĞÔÄÜÖ¸±ê£¬Í¬Ê±Ö§³Ö³¬´ó¹æÄ£¡¢³¬µÍÑÓ³Ù¡¢³¬¸ßÍÌÍÂ¡¢³¬¸ß²¢·¢ºÍÇø¿éÁ´¼¯ÈºµÄ×ÔÓÉÉìËõ£¬Âú×ãÏÖÊµÓ¦ÓÃ¶ÔÆ½Ì¨ĞÔÄÜµÄ¿Á¿ÌÒªÇó',
-			// dlklTitle:'¶àÁ´¿çÁ´',
-			// dlklContent:'×Ô¶¯¶àÁ´¡¢×Ô¶¯¿çÁ´£¬×Ô¶¯ÊÊÅäÎ´À´µÄÇø¿éÁ´Ğ­ÒéÕ»ÒıÇæ',
-			// dgsTitle:'¶à¹²Ê¶',
-			// dgsContent:'Ö§³ÖÈ«Á´¹²Ê¶¡¢Ó¦ÓÃ¼¶¹²Ê¶¡¢½»Ò×¼¶¹²Ê¶',
-			four:'NO.4',
-			fourContent:'ÑÓÉìÇø¿éÁ´ºÍÖÇÄÜºÏÔ¼µ½ÖÇÄÜÊÖ»ú¡¢Æ½°åµçÄÔºÍIoTÉè±¸¶Ë£¬Ö§³ÖÊµÏÖ¶Ëµ½¶ËµÄ×Ô¶¯ĞÅÈÎ',
-			five:'NO.5',
-			fiveContent:'Ö§³ÖÊ¹ÓÃ¶àÖÖÖ÷Á÷±à³ÌÓïÑÔ´´½¨ÉçÈºÓ¦ÓÃ£¨java£¬go£¬javascript£¬c/c++µÈ£©£¬ÖúÁ¦¿ìËÙĞÎ³ÉÓ¦ÓÃÉúÌ¬',
-			six:'NO.6',
-			sixContent:'ÄÚ½¨»ùÓÚ»îÔ¾¶ÈÖ¤Ã÷¡¢¹±Ï×Ö¤Ã÷µÄÍ¸Ã÷¼¤ÀøÄ£ĞÍ£¨PDX Incentivization Model£©£¬Í¨¹ıÄÚÖÃ·ûºÏERC20±ê×¼µÄĞéÄâ»õ±Ò£¨·ä³²±Ò£¬ HCC£©£¬¼¤ÀøÉúÌ¬ÌåÏµµÄËùÓĞ²ÎÓëÕßºÍ°ïÖúÉúÌ¬ÌåÏµÔö³¤ºÍ»îÔ¾µÄËùÓĞ»î¶¯',
+		tipMsg1:'æ•°æ®è¯·æ±‚ä¸­',
+		errorMsg1:'æš‚æ— å½“å‰ç»„ç»‡ï¼',
+		errorMsg2:'è¯·å…ˆç™»å½•metamaské’±åŒ…ï¼Œåˆ·æ–°åè¿›è¡Œæ“ä½œï¼',
+		errorMsg3:'åŠ è½½è¶…æ—¶ï¼',
+		errorMsg4:'ç™»å½•è¶…æ—¶,è¯·ä»æ–°ç™»å½•ï¼',
+		btn1:'ä¸Šä¸€æ­¥',
+		btn2:'ä¸‹ä¸€æ­¥',
+		btn3:'æäº¤',
+		index:{
+			msg1:'LittleBeeX æ˜¯ä¸€ä¸ªæ—¨åœ¨é€šè¿‡ä½¿ç”¨åŒºå—é“¾æŠ€æœ¯å¸®åŠ©å®ç°å…¬å¸åˆ›å»ºã€<br>æ²»ç†ä»¥åŠèµ„äº§æµé€šã€‚æˆ‘ä»¬æƒè¡¡äº†ä¸­å¿ƒåŒ–å’Œéä¸­å¿ƒåŒ–çš„ä¼˜åŠ¿ï¼Œåœ¨ä¿<br>è¯æ•ˆç‡å’Œå¿«é€Ÿå†³ç­–çš„åŒæ—¶ï¼Œæ˜¯å…¬å¸æ²»ç†é€æ˜åŒ–ã€è‡ªåŠ¨åŒ–ã€‚',
+			msg2:'@2018 LittleBeeX ç‰ˆæƒæ‰€æœ‰',
+			tipMsg1:'æ‚¨çš„æµ‹è¯•TOKENå·²è·å–æˆåŠŸï¼Œ<br/>è¯·è¿›å…¥Metamaské’±åŒ…æŸ¥çœ‹ï¼',
+			errorMsg1:'å·²ç»è·å–è¶³å¤ŸTokenï¼Œè¯·å‹¿é‡æ–°è·å–ï¼',
+			btn1: 'é¦–é¡µ',
+			btn2: 'å…¬å¸æ³¨å†Œ',
+			btn3: 'åœ¨çº¿æ²»ç†',
+			btn4: 'èµ„äº§äº¤æ˜“',
+			btn5: 'æ³¨å†Œ',
+			btn6: 'ç™»å½•',
+			btn7: 'é€€å‡º',
+			btn8: 'æ³¨å†Œ'
 		},
-		home:{
-			home:"Ê×Ò³",
-			tech:"¼¼ÊõÌØµã",
-			prod:"·¢Õ¹¹æ»®",
-			scene:"Ó¦ÓÃ³¡¾°",
-			// news:"ĞÂÎÅÖĞĞÄ",
-			// recr:"ÕĞÏÍÄÉÊ¿",
-			// about:"¹ØÓÚÎÒÃÇ",
-			team:"ºËĞÄÍÅ¶Ó",
-			contactUs:"Í¶×Ê»ú¹¹",
-			// follow:"¹Ø×¢PDX",
-			// whitepaper:"PDX°×Æ¤Êé",
-			// mission:"ÎÒÃÇµÄÊ¹Ãü",
-			companyName:"WING CHUN FANS"
+		indexConfig:{
+			msg1:'æ¬¢è¿æ¥åˆ°LittleBeeX',
+			msg2:'å½“å‰èŠ‚ç‚¹ï¼šä»¥å¤ªåŠæµ‹è¯•ç½‘(Ropsten)',
+			msg3:'è¯·å…ˆè§£é”Metamaské’±åŒ…ï¼Œå¹¶é€‰æ‹©æ‰€éœ€çš„æœåŠ¡å™¨èŠ‚ç‚¹',
+			msg4:'åˆ›å»ºä¸€ä¸ªæ–°ç»„ç»‡ï¼Œå¹¶å¼€å§‹KYCç»„ç»‡è®¤è¯',
+			msg5:'ä½ çš„ETHä½™é¢ä¸º0ï¼Œè¯·å…ˆè·å–ä¸å°‘äº0.1ETH',
+			msg6:'æˆ–æ‰“å¼€ç°æœ‰ç»„ç»‡',
+			tipMsg1:'æ‚¨çš„æµ‹è¯•TOKENå·²è·å–æˆåŠŸï¼Œ<br/>è¯·è¿›å…¥Metamaské’±åŒ…æŸ¥çœ‹ï¼',
+			errorMsg1:'å·²ç»è·å–è¶³å¤ŸTokenï¼Œè¯·å‹¿é‡æ–°è·å–ï¼',
+			btn1: 'è·å–æµ‹è¯•Token',
+			btn2: 'è·å–(Ropsten)èŠ‚ç‚¹Eth',
+			btn3: 'å¼€å§‹åˆ›å»º',
+			btn4: 'æ‰“å¼€ç»„ç»‡'
 		},
-		homePage:{
-			paper:"ÏÂÔØ°×Æ¤Êé",
-			bigTitle:"¹«¹²µÄÄÚÈİ·Ö·¢ÉúÌ¬",
-			smallTitle:"·¢ÊÛĞÅÏ¢¼´½«¹«²¼"
-		},
-		aboutUs:{
-			title:"¹ØÓÚÎÒÃÇ",
-			concent:"Ó½´º·»(WING CHUN FANS)£¬ÊÇÒ»¸öÎ§ÈÆÄÚÈİµÄ×ÔÖ÷¼¤Àø¡¢¸ßĞ§·Ö·¢¡¢È·È¨Î¬È¨¡¢·ÛË¿»¥¶¯ºÍÑÜÉúÉÌÒµÇø¿éÁ´Æ½Ì¨£¬ÊÇÀûÓÃPDX¹«ÓĞÇø¿éÁ´µ×²ã¼¼ÊõºÍÉúÌ¬×Ô¼¤Àø»úÖÆÁ¬½Ó´´×÷Õß¡¢Ïû·ÑÕß¡¢¹ã¸æÖ÷¡¢Æ·ÅÆÉÌµÈËùÓĞÉúÌ¬ÌåÏµµÄ²ÎÓëÕß£¬ĞÎ³ÉÓĞ»úÔö³¤µÄÉúÌ¬ÍøÂç¡£"
-		},
-		design:{
-			title:"Éè¼ÆÄ¿±ê",
-			iaas:"Ö§³Ö¡°Ò»¼üÊ½¡±´´½¨×¨ÊôµÄÎÄ´´²úÆ·ÉúÌ¬Á´¡£¸÷¸öÎÄ´´²úÆ·ÉúÌ¬Á´£¬ÆäÄÚÈİĞÎÊ½¡¢ÊĞ³¡¶¨Î»¡¢Ä¿±ê¿Í»§Èº¡¢µØÓò¸²¸ÇµÈ£¬¿ÉÒÔÍêÈ«²»Í¬¡£¸÷¸öÎÄ´´²úÆ·ÉúÌ¬Á´£¬ÔÚPDXÓ½´º·»ÉÏÍ¬Ê±ÔËĞĞ¡¢ºÍĞ³¹²´æ£¬ ²¢¾ßÓĞÕæÕıµÄÈ«Á´¼¶µÄ¿ÉĞÅÇ¿¶È¡£",
-			net:"Ö§³ÖÈÎÒâÄÚÈİµÄÈ·È¨¾ÙÖ¤¡¢¸ßĞ§·Ö·¢£¬¼°ÆäÉçÈº»¥¶¯ºÍÑÜÉúÉÌÒµ£¬²¢Ìá¹©Ò×ÓÃµÄ¹¤¾ß£¬ÒÔ°ïÖúÊµÏÖ¸ßĞ§¹ÜÀí¡£",
-			safe:"Áã¾àÀë¶Ô½ÓÎÄ´´×÷Õß¡¢ËùÓĞÈ¨ÈË¡¢ÓÃ»§·ÛË¿ºÍÇ©Ô¼ÉÌ¼Ò£¬ÊµÏÖ¸ßĞ§µÄ»ùÓÚÄÚÈİµÄÉúÌ¬¡£"
-		},
-		develop:{
-			title:"·¢Õ¹¹æ»®",
-			timeBaap:"2016Äê06ÔÂ",
-			timeBps:"2018Äê03ÔÂ",
-			timeCs:"2018Äê09ÔÂ",
-			timeZw:"2018Äê12ÔÂ",
-			timeLd:"2019Äê03ÔÂ",
-			Baap:"BaaPÆ½Ì¨ÉÏÏß",
-			Bps:"·¢²¼°×Æ¤Êé",
-			Cs:"²âÊÔÍøÂçÉÏÏß",
-			Zw:"Ö÷ÍøÂçÉÏÏß",
-			Ld:"Á´ÉÏÓ¦ÓÃ´ïµ½30+",
-		},
-		invest:{
-			title:"Í¶×Ê»ú¹¹"
-		},
-		contact:{
-			title:"ÁªÏµÎÒÃÇ",
-			content:"¹ØÓÚÎÒÃÇµÄ×îĞÂÏûÏ¢£¬Çë¹Ø×¢ÎÒÃÇµÄ¹Ù·½ÇşµÀ"
-		},
-		coin:{
-			title:"Ó¦ÓÃ³¡¾°",
-			first:"´´×÷Õß¡¢ËùÓĞÈ¨ÈË¡¢´úÀíÈËµÈ£¬Í¨¹ıPDXÓ½´º·»µÄÎÄ´´ÉúÌ¬·şÎñÁ´´´½¨½Ó¿Ú£¬»ùÓÚWeb£¬¿ÉÒÔÒ»¼üÊ½µÄ²¿Êğ×Ô¼ºµÄÎÄ´´ÉúÌ¬·şÎñÁ´£¬ÒÔ±ãµÍ³É±¾µÄ¿ìËÙÉÏÏß×Ô¼ºµÄÎÄ´´ÉúÌ¬",
-			last:"Í¨¹ıÆ½Ì¨ÄÚÖÃµÄ»úÆ÷ÈËÍÆ¼ö£¬»òÕß¾­ÓÉ·ÛË¿Éç½»ÍÆ¼ö¡¢×ª·¢£¬Ïû·ÑÕß£¨ÓÃ»§¡¢·ÛË¿£©»ñÖª¸ĞĞËÈ¤µÄÄÚÈİ¡£Æ½Ì¨°´QoSºÍµØÓòÆ«ºÃ£¬¸ßĞ§µÄÍÆËÍÄÚÈİ¸øÏû·ÑÕß¡£ÔÚÄÚÈİÍÆËÍµÄ¹ı³ÌÖĞ£¬Æ½Ì¨×Ô¶¯Ö²Èë¡°·Ö·¢¡±Ö¸ÎÆ£¬ÒÔ×÷Îª½«À´Î¬È¨¾ÙÖ¤µÄÖ¤¾İ",
-			three:"ÓÉÓÚÆ½Ì¨ÎŞËÀ½ÇµÄ¼ÇÂ¼×÷Æ·ÉÏÁ´¡¢·Ö·¢µÄÈ«Á´ÌõÖ¤¾İ¡£ ¸ø¶¨Ò»¸öÁ÷Í¨µÄÎÄ×Ö¡¢Í¼Æ¬¡¢ÓïÒô»òÊÓÆµÆ¬¶Î£¬Èç¹ûÊÇ´ÓÆ½Ì¨Á÷³öµÄ»°£¬Æ½Ì¨ÄÜ¹»Ìá¹©ÍêÕûµÄÖ¤¾İÁ´Ìõ£¬¾ÙÖ¤ÇÖÈ¨Ô´Í·"
-		},
-		team:{
-			title:"ºËĞÄÍÅ¶Ó",
-			Jgz:"ÕÅ½¨¸Ö",
-			Jgz_info:"ÕÅ½¨¸Ö ¡¤ PDX ¹«ÓĞÁ´·¢ÆğÈË£¬»ªÖĞ¿Æ¼¼´óÑ§Ñ§Ê¿¡¢ÖĞ¹úÒ±½ğ²¿×Ô¶¯»¯ÑĞ¾¿ÔºË¶Ê¿¡£PDX ¹«ÓĞÁ´ºÍ PDX BaaP µÄÊ×Ï¯¼Ü¹¹Ê¦¡£¾ßÓĞ 20 ÄêÒÔÉÏµÄ¸ß¼¶¼¼Êõ¼Ü¹¹ºÍÁìµ¼Ö´ĞĞ¾­Ñé£¬ÔÚ¾ŞĞÍ¿ç¹ú¹«Ë¾Áìµ¼ºÍ¾ö¶¨Õ½ÂÔĞÔµÄ¼¼Êõ¼Ü¹¹¼°ÆäÊµÊ©, ÔøÈÎË¼¿ÆÃÀ¹ú£¨CISCO£©ÆóÒµ SDN ²¿ÃÅ×Ü¼à¼¶¼Ü¹¹Ê¦ºÍ²¿ÃÅÖ÷¹Ü¡¢ÑÅ»¢È«ÇòµÄÊ×Ï¯°²È«¼Ü¹¹Ê¦ºÍÑÅ»¢¹«Ë¾¼¼ÊõÀíÊÂ»á(Tech Council)µÄ¸ß¼¶×¨¼Ò³ÉÔ±¡¢PayPalÖ÷¹Ü¼Ü¹¹Ê¦²¢´´½¨ PayPal Java »ù´¡ÉèÊ©ÍÅ¶Ó¡¢Cingular Wireless (ÏÖ AT&T)×î¸ß¼¶±ğµÄ¼Ü¹¹Ê¦ºÍ¹«Ë¾¼Ü¹¹ÆÀÉóÎ¯Ô±»áµÄ×¨¼Ò³ÉÔ±¡£",
-			Tl:"ÁõÍ¦",
-			Tl_info:"ÁõÍ¦ ¡¤ ÒµÎñºÍÔËÓª×Ü¼à£¬¼ÆËã»ú¿ÆÑ§Ñ§Ê¿£¬15+ Äê»¥ÁªÍøÈí¼şÏúÊÛ¡¢ÒµÎñÍØÕ¹ºÍÔËÓª¾­Ñé£¬ÔøÈÎ±±¾©ÌìÔÆÈÚ´´¿Æ¼¼ÓĞÏŞ¹«Ë¾¸±¾­Àí£¬ÆÕÔªĞÅÏ¢¼¼Êõ¹É·İÓĞÏŞ¹«Ë¾ÏúÊÛ×Ü¼à¡¢±±¾©Èğ²®Í¼¿Æ¼¼ÓĞÏŞ¹«Ë¾×Ü¾­Àí¡¢ÖĞÀ¶Í¶×Ê£¨ÉîÛÚ£©¹ÜÀíÓĞÏŞ¹«Ë¾Í¶×Ê¹ËÎÊµÈÖ°Îñ¡£",
-			Dms:"ÉĞ¶¬Ã·",
-			Dms_info:"ÉĞ¶¬Ã· ¡¤ ÈËÁ¦ĞĞÕş×Ü¼à£¬½­ËÕ´óÑ§Ñ§Ê¿Ñ§Î»£¬¾ßÓĞ 10 ÄêÒÔÉÏµÄÈËÁ¦×ÊÔ´ºÍĞĞÕş¹ÜÀí¾­Ñé¡£",
-			Pe:"Peter Ellehauge",
-			Pe_info:"Peter Ellehauge ¡¤  PDX ¹«ÓĞÁ´¼Ü¹¹Ê¦ºÍ°²È«×Ü¼à£¬ µ¤Âó¼¼Êõ´óÑ§µç×Ó¹¤³ÌÑ§Ê¿Ñ§Î»¡£ÔÚĞÅÏ¢°²È«ºÍÔÆÔËÓª·½Ãæ£¬ÓĞ·Ç³£·á¸»µÄ¼¼ÊõÁìµ¼¾­Ñé¡£ÔøÈÎÑÅ»¢µÄĞÅÏ¢°²È«×Ü¼à¡¢Groupon µÄ¸ß¼¶²úÆ·¹¤³ÌÊ¦µÈ¡£",
-			Wh:"William Huang",
-			Wh_info:"William Huang ¡¤ PDX ¹«ÓĞÁ´¼Ü¹¹Ê¦ºÍÑĞ·¢×Ü¼à£¬·ğÂŞÀï´ïÖİÁ¢´óÑ§¼ÆËã»ú²©Ê¿¡£Ôøµ£ÈÎ PayPal Ö÷¹Ü¼Ü¹¹Ê¦ºÍ¸ß¼¶ÑĞ·¢¾­Àí£¬Reuters/Tibco µÄÖ÷¹Ü¼Ü¹¹Ê¦£¬ÔÚ³¬´ó¹æÄ£Ö§¸¶ÏµÍ³¡¢´óÊı¾İºÍ»úÆ÷Ñ§Ï°ÁìÓòÓĞ·Ç³£·á¸»µÄ¾­Ñé¡£",
-			Tc:"Tina Chen",
-			Tc_info:"Tina Chen ¡¤ PDX ¹«ÓĞÁ´¼Ü¹¹Ê¦ºÍÑĞ·¢×Ü¼à£¬¼ÓÄÃ´óÔ¼¿Ë´óÑ§¼ÆËã»úÑ§Ê¿¡£³ÂÅ®Ê¿ÔøÈÎ IIX £¨Verisk Analytics£©¡¢JP Morgan Chase¡¢Shell Trading¡¢BPAmerica¡¢MCI µÄ¸ß¼¶Èí¼ş¹¤³ÌÊ¦ºÍ¼Ü¹¹Ê¦¡£",
-			Ns:"Nawien Sharma",
-			Ns_info:"Nawien Sharma ¡¤ PDX ¹«ÓĞÁ´¼Ü¹¹Ê¦ºÍÖ÷Òª´úÂë¹±Ï×Õß£¬¼ÓÄÃ´óÎÂÔó´óÑ§µç×Ó¹¤³ÌÑ§Ê¿Ñ§Î»¡£¾ßÓĞ·á¸»µÄ¼¼ÊõÁìµ¼¾­Ñé£¬ÔøÈÎÑÅ»¢Ö÷¹Ü¼¶¹¤³ÌÊ¦¡¢CenturyLink µÄÏµÍ³¼Ü¹¹Ê¦¡¢ÒÔ¼°Î¢ÈíµÄ¸ß¼¶Èí¼ş¹¤³ÌÊ¦µÈ¡£",
-			Az:"Andy Zhang",
-			Az_info:"Andy Zhang ¡¤ PDX ¹«ÓĞÁ´×ÊÉî¹¤³ÌÊ¦ºÍÖ÷Òª´úÂë¹±Ï×Õß£¬ÃÀ¹ú¿µÄÎ¶û´óÑ§¼ÆËã»ú¿ÆÑ§Ïµ±¾¿Æ£¬ÔøÔÚË¹Ì¹¸£ÑĞ¾¿ÔºÊµÏ°¡¢»ñ½±²¢ºÏ×÷·¢±íÎÄÕÂ£¬½«ÔÚ¹È¸èÊµÏ°£¬Ôø¾­²ÎÓë»òÖ÷µ¼²ÎÓë¶à¸öÈË¹¤ÖÇÄÜ/Éî¶ÈÑ§Ï°ÏîÄ¿(Modemo: political bias analyzer,baeML: personalized content platform, fmxnet: deep face analysis platform)¡£"
-		},
-		consultant:{
-			title:"¹ËÎÊÍÅ¶Ó",
-			Zwn:"ÕÅÎ¬Äş",
-			Zwn_info:"ÕÅÎ¬Äş ¡¤ PDX ¹ËÎÊ¡£ÕÅÎ¬Äş½ÌÊÚÏÖÈÎ³¤½­ÉÌÑ§Ôº»á¼ÆÑ§¸±½ÌÊÚ£¬³¤½­´´´´ÉçÇøÑ§ÊõÖ÷ÈÎ£¬ÓÚ 2010 ÄêÔÚÃÀ¹úµÂ¿ËÈøË¹´óÑ§´ïÀ­Ë¹·ÖĞ£»ñµÃ»á¼ÆÑ§²©Ê¿Ñ§Î»£¬ÔøÈÎ½ÌÓÚĞÂ¼ÓÆÂ¹úÁ¢´óÑ§ÉÌÑ§Ôº¡£",
-			Jl:"ÁºöÁÕÁ",
-			Jl_info:"ÁºöÁÕÁ ¡¤ PDX ¹ËÎÊ¡£ÁºöÁÕÁÏÈÉúÓµÓĞÒ®Â³´óÑ§µÄ MBA Ñ§Î»£¬°®ºÉ»ªÖİÁ¢´óÑ§µÄ¼ÆËã»úºÍµç×Ó¹¤³ÌË¶Ê¿Ñ§Î»ºÍÇå»ª´óÑ§µÄµç×Ó¹¤³ÌÑ§Ê¿Ñ§Î»¡£ÓµÓĞ³¬¹ı 13ÄêµÄ·çÏÕÍ¶×Ê¡¢Í¶×ÊÒøĞĞºÍÆóÒµ¹ÜÀí¾­Ñé£¬ÓÚ 2016 Äê 6 ÔÂ¹²Í¬´´Á¢À¥ÖÙ×Ê±¾¡£´ËÇ°£¬ÁºöÁÕÁÏÈÉúµ£ÈÎ¸´ĞÇÀ¥ÖÙ×Ê±¾×Ü²Ã£¬ÈÎÖ°ÆÚ¼äÖ÷µ¼Í¶×ÊÁËºÍ´´¿Æ¼¼¡¢Á¿»¯ÅÉ¡¢×ÅÃÔÍø¡¢áãÄ¾½ğÈÚ¡¢²©³µÍø¡¢°ËÌìÔÚÏßµÈÓÅÖÊÏîÄ¿¡£ÔÚ¸´ĞÇÀ¥ÖÙ×Ê±¾Ç°£¬ÁºöÁÕÁÏÈÉúµ£ÈÎ½­Í­×Ê±¾µÄºÏ»ïÈË¡£ÁºöÁÕÁÏÈÉúÒàÔø¾ÍÖ°ÓÚ¶¦êÍ´´Í¶£¬Ö÷µ¼ÁË¶ÔÓÚ°ÙÊÀ»ãÍ¨¡¢ASP Solar ¼°°®¹úÕßµç×ÓµÈÓÅÖÊÏîÄ¿¡£ÔÚÖ°ÒµÉúÑÄµÄÔçÆÚ£¬ÁºöÁÕÁÏÈÉúÔø¾­¾ÍÖ°ÓÚÀ×ÂüĞÖµÜ¡¢ÆôÃ÷ĞÇ³½ºÍ EMC¡£",
-			Gz:"ÕÔ¹â",
-			Gz_info:"ÕÔ¹â ¡¤ PDX ¹ËÎÊ¡£ÕÔ¹â²©Ê¿ÓµÓĞÃÜĞª¸ùÀí¹¤´óÑ§²©Ê¿Ñ§Î»¡¢ÖĞ¹ú¿ÆÑ§ÔºË¶Ê¿Ñ§Î»¡£ÕÔ¹â²©Ê¿ÏÖÈÎº£¶ûÊı×Ö CEO£¬ÔøÈÎ Gartner ¸ß¼¶ºÏ»ïÈË¡¢×¨Ö°Îª³¬¹ı 60 ¼Ò¹úÄÚÍâÕş¸®»ú¹¹ºÍÁì¾üÆóÒµ£¨°üÀ¨ÖĞ¹úÆóÒµºÍÕş¸®¸ß¹Ü£©Ìá¹©Õ½ÂÔ¹ËÎÊ·şÎñ¡£ÕÔ¹â²©Ê¿ÔÚÃÀ¹úÕş¸®»ú¹¹¹¤×÷³¤´ï 18 Äê£¬ÔøÈÎÄÏ¿¨ÂŞÁÕÄÈÖİ³£Îñ×¢²á³¤¡¢²¿Ê×Ï¯ĞÅÏ¢¹Ù¡¢¾Ö³¤¡¢ÄÚ²¿Éó²é¶­ÊÂ»áÖ÷Ï¯µÈ¡£"
+		indexUser:{
+			msg1:'å',
+			msg1_1:'è¯·è¾“å…¥å',
+			msg2:'å§“',
+			msg2_1:'è¯·è¾“å…¥å§“',
+			msg3:'æ€§åˆ«',
+			msg3_1:'è¯·é€‰æ‹©æ€§åˆ«',
+			msg4:'å›½ç±',
+			msg4_1:'è¯·é€‰æ‹©å›½ç±',
+			msg5:'å‡ºç”Ÿæ—¥æœŸ',
+			msg5_1:'è¯·è¾“å…¥å‡ºç”Ÿæ—¥æœŸ',
+			msg6:'æŠ¤ç…§å·ç ',
+			msg6_1:'è¯·è¾“å…¥æŠ¤ç…§å·ç ',
+			msg7:'é’±åŒ…åœ°å€',
+			msg7_1:'è¯·è¾“å…¥é’±åŒ…åœ°å€',
+			msg8:'å…¬å¸èŒåŠ¡',
+			msg8_1:'è¯·é€‰æ‹©å…¬å¸èŒåŠ¡',
+			msg9:'æŠ¤ç…§ä¸Šä¼ ',
+			msg10:'æŸ¥çœ‹å›¾ç‰‡',
+			tipMsg1:'é’±åŒ…åœ°å€',
+			tipMsg2:'ä¸ªäººä¿¡æ¯å·²é‡æ–°æäº¤ï¼Œè¯·ç­‰å¾…å®¡æ ¸é€šè¿‡ï¼',
+			tipMsg3:'ä¸ªäººè®¤è¯æ­£åœ¨åŠ é€Ÿå®¡æ ¸ä¸­ï¼Œè¯·è€å¿ƒç­‰è€ï¼',
+			tipMsg4:'ä¸ªäººè®¤è¯å®¡æ ¸æœªé€šè¿‡ï¼Œè¯·æ ¸å¯¹ä¿¡æ¯åé‡æ–°æäº¤',
+			tipMsg5:'ä¸ªäººè®¤è¯å®¡æ ¸å·²ç»é€šè¿‡',
+			errorMsg1:'è¯·å®Œå–„ä½ çš„ä¸ªäººè®¤è¯ä¿¡æ¯',
+			errorMsg2:'æ–‡ä»¶æäº¤é”™è¯¯',
+			errorMsg3:'è¯·ä¸Šä¼ æŠ¤ç…§ä¿¡æ¯',
+			btn1: 'ç¡®å®š',
 		}
 	}
 }
 
-	export default messages;
+export default messages;

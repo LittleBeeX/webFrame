@@ -15,13 +15,13 @@
 							<li v-if="isLogin"><span><a href="/index.php/cn/home/index/register">注册</a></span></li>
 							<li v-if="isLogin"><span><a href="/index.php/cn/home/index/login">登录</a></span></li>
 							<li v-else><span><a href="javascript:void(0)" @click="closeLogin">退出</a></span></li>
-							<Dropdown trigger="click">
+							<Dropdown trigger="click" @on-click="changeLanguage()">
 								<a href="javascript:void(0)">
-									简体中文
+									{{language}}
 									<Icon type="ios-arrow-down"></Icon>
 								</a>
-								<DropdownMenu slot="list">
-									<DropdownItem v-for="item in lang" @click="changeLanguage(item.type,item.name)">{{item.name}}</DropdownItem>
+								<DropdownMenu slot="list" >
+									<DropdownItem v-for="item in lang" >{{item.name}}</DropdownItem>
 								</DropdownMenu>
 							</Dropdown>
 						</ul>
@@ -58,6 +58,7 @@
 </template>
 <script>
 	import {mapState} from 'vuex'
+	import mutil from '@/util/mutil'
 	export default {
 		data(){
 			return{
@@ -78,7 +79,7 @@
 			closeLogin(){
 				this.$axios.post('/index.php/cn/home/index/exit_ajax')
 					.then(() => {
-						this.$Notice.info({
+						this.$Notice.success({
 							title: '已成功退出！',
 						});
 						this.isLogin = true
@@ -86,12 +87,23 @@
 							path:'/'
 						})
 					})
+			},
+			changeLanguage(){
+				console.log(333)
+			},
+			refreshLang(){
+				if(mutil.getSection('lang')&&mutil.getSection('lang')=="en"){
+			      this.$i18n.locale="en";
+			    }else{
+			      this.$i18n.locale="zh";
+			    }
 			}
 		},
 		computed:mapState({
 			Address: state => state.web3.coinbase
 		}),
-		mounted(){
+		created(){
+			this.refreshLang()
 			this.$axios.post('/index.php/cn/home/node_se/session_user')
 				.then(response => {
 					if(response){

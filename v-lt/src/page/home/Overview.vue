@@ -17,7 +17,7 @@
 								<p ><b>公司章程</b><a :href="constitution.src">{{constitution.title}}</a></p>
 							</div>
 						</div>
-						<div class="btn">
+						<div class="btn" v-if="isCreator">
 							<Upload
 								ref="upload"
 								:show-upload-list="false"
@@ -35,7 +35,6 @@
 								<Button type="primary" icon="ios-cloud-upload-outline">上传公司logo</Button>
 							</Upload> 
 							<Upload
-								v-if="isCreator" 
 								:on-success="fileUpSuccess"
 								:show-upload-list="false" 
 								:on-format-error="handleFormatError"
@@ -55,7 +54,7 @@
 					<Card :bordered="false" class="world">
 						 <Dropdown class="world-dropdown" @on-click="goCompanyList">
 							<Button type="primary">
-								公司跳转
+								选择我的公司
 								<Icon type="ios-arrow-down"></Icon>
 							</Button>
 							<DropdownMenu slot="list" >
@@ -98,7 +97,7 @@
 					</Card>
 				</Col>
 				<Col span="14">
-					<Card :bordered="false" class="companyBusiness">
+					<Card :bordered="false" class="companyBusiness" no-data-text="暂无动态">
 						<p slot="title">公司动态</p>
 						<Table height="300" :columns="businessList.rows" :data="businessList.cols"></Table>
 					</Card>
@@ -118,20 +117,25 @@
 		data(){
 			return{
 				companyLogoSrc: require('../../assets/images/fiveReason.png'),
-				userSrc: require('../../assets/images/Yiming Wang.jpg'),
+				userSrc: require('../../assets/images/example.jpg'),
+				nationalityList:[],
 				businessList:{
 					rows:[
 						 {
-							title: '日期',
-							key: 'date'
+							title: '发起日期',
+							key: 'date',
+							align:'center',
+							maxWidth: 150
 						},
 						{
-							title: '决议',
+							title: '决议事项',
 							key: 'campaign'
 						},
 						{
-							title: '状态',
-							key: 'type'
+							title: '决议状态',
+							key: 'type',
+							align:'center',
+							maxWidth: 100
 						}
 					],
 					cols:[],
@@ -142,16 +146,16 @@
 						label:'公司名称',
 						vals:''
 					},{
-						label:'注册编号',
+						label:'注册号码',
 						vals:''
 					},{
 						label:'注册资本',
 						vals:''
 					},{
-						label:'注册日期',
+						label:'成立日期',
 						vals:''
 					},{
-						label:'注册地',
+						label:'注册国家',
 						vals:''
 					}
 				],
@@ -169,7 +173,7 @@
 						label:'出生日期',
 						vals:''
 					},{
-						label:'身份',
+						label:'组织角色',
 						vals:''
 					},{
 						label:'持股比例',
@@ -179,7 +183,7 @@
 				isCreator: false,
 				constitution:{
 					src:'javascript:void(0)',
-					title:'暂无上传'
+					title:'暂无上传!'
 				}
 			}
 		},
@@ -246,8 +250,8 @@
 					if(response.data.state == 0){
 						let userMsg = response.data.info.chain
 						let companyMsg = response.data.info.company
-						let companyDataArr = [companyMsg.name,companyMsg.establish,companyMsg.capital,mutil.timestampToTime(companyMsg.establish),companyMsg.address]
-						let userDataArr = [userMsg.surname + userMsg.name,userMsg.country_cn,userMsg.passports,mutil.timestampToTime(userMsg.create_time),'董事',userMsg.token_proportion]
+						let companyDataArr = [companyMsg.name,companyMsg.code,companyMsg.capital + ' USD$',mutil.timestampToTime(companyMsg.establish),cityType(this.nationalityList,companyMsg.address)]
+						let userDataArr = [userMsg.surname + userMsg.name,userMsg.country_cn,userMsg.passports,mutil.timestampToTime(userMsg.create_time),returnTypeUser(userMsg.position),userMsg.token_proportion + '%']
 						
 						for(let i=0;i<this.userMsgList.length;i++){
 							this.userMsgList[i].vals = userDataArr[i]
@@ -293,13 +297,15 @@
 				}).then((response) => {
 					if(response.data.state == 0){
 						let list = response.data.info
+						let arr = []
 						for(let i=0;i<list.length;i++){
-							this.businessList.cols.push({
-								date: list[i].start_time,
+							arr.push({
+								date: mutil.timestampToTime(list[i].start_time),
 								campaign: list[i].content,
-								type: list[i].state
+								type: returnTypeMsg(list[i].state)
 							})
 						}
+						this.businessList.cols = arr
 						return true;
 					}else{
 						this.$Notice.warning({
@@ -314,10 +320,69 @@
 			}
 		},
 		mounted(){
-			this.mountedRefreshCompanyList()
-			this.mountedRefreshMsg()
-			this.mountedRefreshList() 
+			this.$axios.post('/index.php/cn/home/node_se/nationality')
+				.then((response) => {
+					this.nationalityList = response.data.info;
+					this.mountedRefreshCompanyList()
+					this.mountedRefreshMsg()
+					this.mountedRefreshList() 
+				})
 		}
+	}
+	
+	function returnTypeUser(msg){
+		switch(msg){
+			case '1':
+				msg = '董事'
+				break;
+			case '2':
+				msg = '股东'
+				break;
+			case '3':
+				msg = '股东兼董事'
+				break;
+			case '4':
+				msg = '员工'
+				break;
+			case '5':
+				msg = '股东兼员工'
+				break;
+		}
+		return msg
+	}
+	
+	function returnTypeMsg(msg){
+		switch(msg){
+			case '表决中':
+				msg = 0
+				break;
+			case '已通过':
+				msg = 1
+				break;
+			case '未通过':
+				msg = 2
+				break;
+			case '全部':
+				msg = 4
+				break;
+			case '0':
+				msg = '表决中'
+				break;
+			case '1':
+				msg = '已通过'
+				break;
+			case '2':
+				msg = '未通过'
+				break;
+			case '4':
+				msg = '全部'
+				break;
+		}
+		return msg
+	}
+	
+	function cityType(cityArr,indexs){
+		return cityArr[indexs].country
 	}
 </script>
 <style scoped  lang="stylus">
@@ -367,5 +432,12 @@
 			left: 15px
 			top: 15px
 		img
-			height: 350px
+			height: 343px
+			
+	.companyBusiness
+		.ivu-table-wrapper
+				border: 0;
+				.ivu-table:after{
+					background-color: transparent
+				}
 </style>

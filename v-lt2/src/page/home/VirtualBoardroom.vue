@@ -8,7 +8,7 @@
 						<Radio :label="item.title" v-for="item in typeList" :value="item.vals"></Radio>
 					</RadioGroup>
 					<div>
-						<Input  placeholder="会议查询" v-model="searchInput"  style="width:300px">
+						<Input  placeholder="决议查询" v-model="searchInput"  style="width:300px">
 							<Button slot="append" @click="searchVote(searchType)">
 								<Icon type="ios-search" size="16"/>
 							</Button>
@@ -24,19 +24,21 @@
 			<Col  :xs="24" :sm="12" :lg="8" v-for="item in voteList">
 				<Card :bordered="false" class="voteItem">
 					<p slot="title">
-						<Tooltip max-width="300" :content="item.content">
+						<Tooltip max-width="300" :content="item.content" placement="bottom-start">
 							<p class="tooltip-msg">{{item.content}}</p>
 						</Tooltip>
 					</p>
 					<div class="msgBoard">
-						<p><b>发起时间</b>{{item.start_time}}</p>
+						<p><b>发起日期</b>{{item.start_time}}</p>
+						<p><b>投票时间</b>{{item.last_time}}</p>
+						<p><b v-if="item.type == 1">发起代表人</b><b v-else>决议发起人</b>{{item.name}}</p>
 						<p><b>表决状态</b>{{item.state}}</p>
-						<p><b>决议发起人</b>{{item.name}}</p>
-						<p><b>同意<span>({{item.quorum}}%可通过审核)</span></b> <Progress :percent="item.yes_proportion" status="active" /></p>
+						<p><b>法定人数<span>（需高于{{item.quorum}}%）</span></b> <Progress :percent="item.cnt" status="active" /></p>
+						<p><b>同意<span>（高于{{item.support}}%，决议生效）</span></b> <Progress :percent="item.yes_proportion" status="active" /></p>
 						<p><b>否决</b> <Progress :percent="item.no_proportion" class="warningProgress"/></p>
 						<div class="btn" v-if="item.btn_show">
-							<Button type="success" size="large" icon="md-albums" @click="userVote(1,item.id,item.keyname)">同意</Button>
-							<Button type="info" size="large" icon="md-albums" @click="userVote(2,item.id,item.keyname)">否决</Button>
+							<Button type="success" size="large" icon="ios-checkmark-circle-outline" @click="userVote(1,item.id,item.keyname)">同意</Button>
+							<Button type="info" size="large" icon="ios-close-circle-outline" @click="userVote(2,item.id,item.keyname)">否决</Button>
 						</div>
 					</div>
 				</Card>
@@ -46,7 +48,7 @@
 		<div class="mouldBoard" v-else>
 			<Card :bordered="false" class="mouldItem">
 				<div class="msgBoard">
-					<p>暂无表决记录，立即发起表决</p>
+					<p>暂无决议记录，立即发起决议</p>
 					<Button type="primary" @click="addVote()" size="large" icon="md-barcode" >发起决议</Button>
 				</div>
 			</Card>
@@ -108,6 +110,15 @@
 			})
 		},	
 		methods:{
+			addVote(){
+				this.$router.push({
+					path:'MintTransfer',
+					query:{
+						"only":this.$route.query.only
+					}
+				})
+			    this.$emit('menuActiveName', 12)
+			},
 			takeVote(){
 				if(this.addVoteInput != ''){
 					let _this = this;
@@ -125,7 +136,7 @@
 			                                size: 32
 			                            }
 			                        }),
-			                        h('div', '数据请求中')
+			                        h('div', '正在处理')
 			                    ])
 			                }
 			            });
@@ -145,8 +156,8 @@
 							data: Qs.stringify(data)
 						}).then((response) => {
 							if(response.data.state == 0){
-								this.$Notice.info({
-									title: '会议提交成功！'
+								this.$Notice.success({
+									title: '决议发起成功！'
 								})
 								this.mountedRefreshList()
 								this.isAddDrawer = !this.isAddDrawer
@@ -165,7 +176,7 @@
 					})
 				}else{
 					this.$Notice.warning({
-						title: '表决内容不能为空！'
+						title: '决议内容不能为空！'
 					});
 				}
 			},
@@ -176,7 +187,20 @@
 					from: this.Address,
 					gasPrice: '40000000000'
 				}).on('transactionHash',function( receipt){
-					_this.$Spin.show()
+					_this.$Spin.show({
+		                render: (h) => {
+		                    return h('div', [
+		                        h('Icon', {
+		                            'class': 'demo-spin-icon-load',
+		                            props: {
+		                                type: 'ios-loading',
+		                                size: 32
+		                            }
+		                        }),
+		                        h('div', '正在处理')
+		                    ])
+		                }
+		            });
 				}).then(result => {
 					this.$Spin.hide()
 					let data = {
@@ -191,8 +215,8 @@
 						data: Qs.stringify(data)
 					}).then((response) => {
 						if(response.data.state == 0){
-							this.$Notice.info({
-								title: '投票成功！'
+							this.$Notice.success({
+								title: '表决成功！'
 							});
 							this.changeSearchType(this.searchType)
 							return true
@@ -239,7 +263,8 @@
 					if(response.data.state == 0){
 						let list = response.data.info
 						for(let i=0; i<list.length;i++){
-							list[i].start_time =  mutil.timestampToTime(list[i].start_time) + '(剩余约'+ list[i].remnant.toFixed(2) +'个小时)'
+							list[i].start_time =  mutil.timestampToTime(list[i].start_time) 
+							list[i].last_time = '剩余约'+ list[i].remnant.toFixed(1) +'小时'
 							list[i].name =  list[i].surname + list[i].name 
 							list[i].id =  list[i].id 
 							list[i].no_proportion =  Number(list[i].no_proportion )
@@ -249,12 +274,12 @@
 								list[i].btn_show = true
 							}
 							list[i].state = returnTypeMsg(list[i].state)
-							list[i].keyname = list[i].keyname
-							if(list[i].type != 0){
+							list[i].cnt = ((list[i].yes_cnt + list[i].no_cnt) * 100 / Number(list[i].quorum)).toFixed(2)
+/*							if(list[i].type != 0){
 								let msg = list[i].type == 1 ? '增发' : '转让'
 								let code = list[i].type == 1 ? Math.round(list[i].number * 100 / (this.tokenAll + parseInt(list[i].number))) : Math.round(list[i].number * 100 / this.tokenAll)
-								list[i].content = '给' + list[i].surname_t + list[i].name_t  + msg + list[i].number + '枚Token,占比为'+ code +'%股权'
-							}
+								list[i].content = list[i].name + '给' + list[i].surname_t + list[i].name_t  + msg + list[i].number + '枚TOKEN，占比为'+ code +'%股权'
+							}*/
 						}
 						
 						this.voteList = list
@@ -342,11 +367,13 @@
 				flexs()
 				.radio
 					margin-right: 30px
+				button:hover
+					color: #2d8cf0
 			.addVote
 				margin-right: 30px
 			
 	.voteItem
-		min-height: 350px
+		height: 440px
 		margin: 0 30px 30px 0
 		.msgBoard
 			padding: 20px 16px;
@@ -355,7 +382,7 @@
 				b
 					margin-right: 16px
 					display: inline-block
-					min-width: 100px
+					min-width: 85px
 					font-weight: 400
 				&:first-child
 					margin-top: 0
@@ -394,7 +421,5 @@
 			
 </style>
 <style>
-	.ivu-tooltip p.tooltip-msg{
-		
-	}
+	.ivu-tooltip{width: 100%;}
 </style>

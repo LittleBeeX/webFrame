@@ -8,15 +8,11 @@ import router from './router'
 
 import {store} from './store/'
 import VueI18n from 'vue-i18n'
+import messages from "./assets/data/language"
 Vue.use(VueI18n)
 const i18n = new VueI18n({
-    locale: 'zh-CN',    
-    messages: {
-      'zh-CN': require('@/assets/data/zh'),
-      'en-US': require('@/assets/data/en'),
-      'ko-KR': require('@/assets/data/kr'),
-      'it-JP': require('@/assets/data/jp')    
-    }
+    locale: 'zh',    
+    messages: messages
 })
 
 import iView from 'iview'
@@ -53,7 +49,7 @@ axios.interceptors.response.use(response => {
 	  	iView.LoadingBar.finish()
 		if(response.data.state == 101 || response.data.state == 102){
 			iView.Notice.warning({
-					title: response.data.info + ',请先登录！',
+					title: '登录超时,请从新登录！',
 					duration: 0
 			});
 			router.push({

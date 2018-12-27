@@ -18,87 +18,96 @@
 			<div class="page_logo">
 				<img src="../../assets/images/littlebeex-logo.png" mode="" @click="goIndex"/>
 			</div>
-			<Menu active-name="1-2" theme="dark" width="auto" :open-names="['1']" class="slider-menu" @on-select="changeBreadTitle">
+			<Menu :active-name="activeName" theme="dark" width="auto" :open-names="['1']" class="slider-menu" @on-select="changeBreadTitle">
 				<MenuItem :name="item.name" :itemName="item.title" v-for="item in slider" :title="item.urls">
 				<Icon :size="item.iconSize" :type="item.icon" />
-				{{item.name}}
+				{{item.label}}
 				</MenuItem>
 			</Menu>
 		</Sider>
 		<Layout class="board">
 			<Header class="header">
 				<div class="header-title"></div>
-				<Dropdown trigger="click">
+				<Dropdown trigger="click" @on-click="changeLangEvent">
 					<Button type="primary">
-						语言切换
+						{{language}}
 						<Icon type="ios-arrow-down"></Icon>
 					</Button>
 					<DropdownMenu slot="list">
-						<DropdownItem @click="changeLangEvent(item.goType)" :types="item.type" v-for="item in langList">{{item.title}}</DropdownItem>
+						<DropdownItem :name="item.type" :types="item.type" v-for="item in langList">{{item.title}}</DropdownItem>
 					</DropdownMenu>
 				</Dropdown>
 			</Header>
 			<Content class="content">
-				<router-view :BreadTitle="BreadTitle"></router-view>
+				<router-view @menuActiveName="menuActiveName" :BreadTitle="BreadTitle"></router-view>
 			</Content>
 		</Layout>
 	</div>
 </template>
 <script>
 	import Qs from 'qs'
+	import mutil from '@/util/mutil'
 	import {
 		mapState
 	} from 'vuex'
 	export default {
 		data() {
 			return {
-				slider: [{
-					title: 'Overview',
-					name: '主页',
-					urls: '../home/Overview?only',
-					icon: 'md-home',
-					iconSize: '16'
-				}, {
-					title: 'CapTable',
-					name: '组织结构',
-					urls: '../home/CapTable?only',
-					icon: 'ios-apps',
-					iconSize: '16'
-
-				}, {
-					title: 'MintTransfer',
-					name: '增发和转让',
-					urls: '../home/MintTransfer?only',
-					icon: 'md-repeat',
-					iconSize: '16'
-				}, {
-					title: 'VirtualBoardroom',
-					name: '虚拟会议室',
-					urls: '../home/VirtualBoardroom?only',
-					icon: 'logo-windows',
-					iconSize: '14'
-				}, {
-					title: 'ESOP',
-					name: '员工期权激励',
-					urls: '../home/ESOP?only',
-					icon: 'md-person',
-					iconSize: '16'
-				}, {
-					title: 'STO',
-					name: '证券代币发行',
-					urls: '../home/STO?only',
-					icon: 'md-star',
-					iconSize: '16'
-				}],
+				language:'简体中文',
+				activeName:"10",
+				slider: [
+					{
+						title: 'Overview',
+						name: '10',
+						label: '基本信息',
+						urls: '../home/Overview',
+						icon: 'md-home',
+						iconSize: '16'
+					}, {
+						title: 'CapTable',
+						name: '11',
+						label: '组织结构',
+						urls: '../home/CapTable',
+						icon: 'ios-apps',
+						iconSize: '16'
+	
+					}, {
+						title: 'MintTransfer',
+						name: '12',
+						label: '转让和增发',
+						urls: '../home/MintTransfer',
+						icon: 'md-repeat',
+						iconSize: '16'
+					}, {
+						title: 'VirtualBoardroom',
+						name: '13',
+						label: '虚拟会议室',
+						urls: '../home/VirtualBoardroom',
+						icon: 'logo-windows',
+						iconSize: '14'
+					}, {
+						title: 'ESOP',
+						name: '14',
+						label: '员工期权激励',
+						urls: '../home/ESOP',
+						icon: 'md-person',
+						iconSize: '16'
+					}, {
+						title: 'STO',
+						name: '15',
+						label: '证券代币发行',
+						urls: '../home/STO',
+						icon: 'md-star',
+						iconSize: '16'
+					}
+				],
 				BreadTitle: '主页',
 				langList: [{
 					title: '简体中文',
-					type: 'zh-CN',
-					goType: 'en-US'
+					type: 'zh'
 				}, {
 					title: 'English',
-					type: 'en-US',
-					goType: 'ko-KR'
+					type: 'en'
 				}/*, {
 					title: '한글',
 					type: 'ko-KR',
@@ -128,48 +137,70 @@
 				}
 			},
 			changeLangEvent(type) {
-				if (confirm('确定切换语言吗？')) {
-					this.$i18n.locale = type
-				}
+				if(type=="en"){
+			      this.$i18n.locale="en"
+			      this.language = "Englist"
+			    }else{
+			      this.$i18n.locale="zh"
+			      this.language = "简体中文"
+			    }
+            	this.$i18n.locale = type
+            	mutil.setSection('lang', type)
 			},
 			goIndex(){
-				console.log(987);
 				this.$router.push({
 					path:'/'
 				})
-			}
+			},
+			menuActiveName(val){
+				this.activeName = val
+			},
+			refreshLang(){
+				if(mutil.getSection('lang')&&mutil.getSection('lang')=="en"){
+			      this.$i18n.locale="en"
+			      this.language = "Englist"
+			    }else{
+			      this.$i18n.locale="zh"
+			      this.language = "简体中文"
+			    }
+			},
+			refreshAdmin(){
+				let data = {
+					"only": this.$route.query.only,
+					"address": this.Address
+				};
+				this.$axios({
+					method: 'post',
+					url: '/index.php/cn/home/node_se/chain_list',
+					data: Qs.stringify(data)
+				}).then((response) => {
+					if (response.data.state != 0) {
+						this.$Notice.warning({
+							title: '无该成员信息！'
+						});
+						this.$router.push({
+							path: '/'
+						})
+					}
+				})
+				this.$axios({
+					method: 'post',
+					url: '/index.php/cn/home/node_se/company',
+					data: Qs.stringify({"only": this.$route.query.only})
+				}).then((response) => {
+					if (response.data.state == 0) {
+						this.$store.dispatch('getUserContract',{
+						  //contract: response.data.info.contract
+						  contract: response.data.info.contract
+						})
+					}
+				})
+			},
+			
 		},
 		created() {
-			let data = {
-				"only": this.$route.query.only,
-				"address": this.Address
-			};
-			this.$axios({
-				method: 'post',
-				url: '/index.php/cn/home/node_se/chain_list',
-				data: Qs.stringify(data)
-			}).then((response) => {
-				if (response.data.state != 0) {
-					this.$Notice.warning({
-						title: '无该成员信息！'
-					});
-					this.$router.push({
-						path: '/'
-					})
-				}
-			})
-			this.$axios({
-				method: 'post',
-				url: '/index.php/cn/home/node_se/company',
-				data: Qs.stringify({"only": this.$route.query.only})
-			}).then((response) => {
-				if (response.data.state == 0) {
-					this.$store.dispatch('getUserContract',{
-					  //contract: response.data.info.contract
-					  contract: response.data.info.contract
-					})
-				}
-			})
+			this.refreshLang();
+			this.refreshAdmin();
 		}
 	}
 </script>

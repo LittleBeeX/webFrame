@@ -8,8 +8,8 @@
 						<Radio :label="item.title" v-for="item in typeList" :value="item.vals"></Radio>
 					</RadioGroup>
 					<div>
-						<Input  placeholder="会议查询" v-model="searchInput"  style="width:300px">
-							<Button slot="append" @click="searchVote()">
+						<Input  placeholder="决议查询" v-model="searchInput"  style="width:300px">
+							<Button slot="append" @click="searchVote(searchType)">
 								<Icon type="ios-search" size="16"/>
 							</Button>
 						</Input>
@@ -24,19 +24,21 @@
 			<Col  :xs="24" :sm="12" :lg="8" v-for="item in voteList">
 				<Card :bordered="false" class="voteItem">
 					<p slot="title">
-						<Tooltip max-width="300" :content="item.content">
+						<Tooltip max-width="300" :content="item.content" placement="bottom-start">
 							<p class="tooltip-msg">{{item.content}}</p>
 						</Tooltip>
 					</p>
 					<div class="msgBoard">
-						<p><b>发起时间</b>{{item.start_time}}</p>
-						<p><b>表决状态</b>{{item.state}}</p>
-						<p><b>决议发起人</b>{{item.name}}</p>
-						<p><b>同意<span>({{item.quorum}}%可通过审核)</span></b> <Progress :percent="item.yes_proportion" status="active" /></p>
+						<p><b>发起日期</b>{{item.start_time}}</p>
+						<p><b>投票时间</b>{{item.last_time}}</p>
+						<p><b v-if="item.type == 1">发起代表人</b><b v-else>决议发起人</b>{{item.name}}</p>
+						<p><b>决议状态</b>{{item.state}}</p>
+						<p><b>法定人数<span>（需高于{{item.quorum}}%）</span></b> <Progress :percent="item.cnt" status="active" /></p>
+						<p><b>同意<span>（高于{{item.support}}%，决议生效）</span></b> <Progress :percent="item.yes_proportion" status="active" /></p>
 						<p><b>否决</b> <Progress :percent="item.no_proportion" class="warningProgress"/></p>
 						<div class="btn" v-if="item.btn_show">
-							<Button type="success" size="large" icon="md-albums" @click="userVote(1,item.id,item.keyname)">同意</Button>
-							<Button type="info" size="large" icon="md-albums" @click="userVote(2,item.id,item.keyname)">否决</Button>
+							<Button type="success" size="large" icon="ios-checkmark-circle-outline" @click="userVote(1,item.id,item.keyname)">同意</Button>
+							<Button type="info" size="large" icon="ios-close-circle-outline" @click="userVote(2,item.id,item.keyname)">否决</Button>
 						</div>
 					</div>
 				</Card>
@@ -46,14 +48,13 @@
 		<div class="mouldBoard" v-else>
 			<Card :bordered="false" class="mouldItem">
 				<div class="msgBoard">
-					<p>暂无表决记录，立即发起表决</p>
+					<p>暂无决议记录，立即发起决议</p>
 					<Button type="primary" @click="addVote()" size="large" icon="md-barcode" >发起决议</Button>
 				</div>
 			</Card>
 		</div>
-		<Drawer title="新的表决" width="350" :closable="false" v-model="isAddDrawer" class="newVoteBoard">
+		<Drawer title="新的决议" width="350" :closable="false" v-model="isAddDrawer" class="newVoteBoard">
 			<div>
-				<!--<h4>新的表决</h4>-->
 				<p>决议内容</p>
 				<Input v-model="addVoteInput" type="textarea" :autosize="{minRows: 3,maxRows: 5}" placeholder="请填写决议内容" />
 				<div class="btn">
@@ -73,7 +74,7 @@
 		data(){
 			return{
 				searchInput: '',
-				searchType: '表决中',
+				searchType: '全部',
 				addVoteInput: '',
 				isShowDrawer: false,
 				isAddDrawer: false,
@@ -99,7 +100,8 @@
                     display: 'block',
                     marginBottom: '16px'
                 },
-				voteList:[]
+				voteList:[],
+				tokenAll:0
 			}
 		},
 		computed: {
@@ -108,13 +110,36 @@
 			})
 		},	
 		methods:{
+			addVote(){
+				this.$router.push({
+					path:'MintTransfer',
+					query:{
+						"only":this.$route.query.only
+					}
+				})
+			    this.$emit('menuActiveName', 12)
+			},
 			takeVote(){
 				if(this.addVoteInput != ''){
 					let _this = this;
 					this.$store.state.userInstance().methods.addVoteList(0,this.Address,this.Address,0, this.addVoteInput).send({
-						from: this.Address
+						from: this.Address,
+						gasPrice: '40000000000'
 					}).on('transactionHash',function( receipt){
-						_this.$Spin.show()
+						_this.$Spin.show({
+			                render: (h) => {
+			                    return h('div', [
+			                        h('Icon', {
+			                            'class': 'demo-spin-icon-load',
+			                            props: {
+			                                type: 'ios-loading',
+			                                size: 32
+			                            }
+			                        }),
+			                        h('div', '正在处理')
+			                    ])
+			                }
+			            });
 					}).then(result => {
 						let codes = result.events.createVote.returnValues.codes
 						this.$Spin.hide()
@@ -131,8 +156,8 @@
 							data: Qs.stringify(data)
 						}).then((response) => {
 							if(response.data.state == 0){
-								this.$Notice.info({
-									title: '会议提交成功！'
+								this.$Notice.success({
+									title: '决议发起成功！'
 								})
 								this.mountedRefreshList()
 								this.isAddDrawer = !this.isAddDrawer
@@ -151,18 +176,31 @@
 					})
 				}else{
 					this.$Notice.warning({
-						title: '表决内容不能为空！'
+						title: '决议内容不能为空！'
 					});
 				}
 			},
 			userVote(state,id,codes){
 				let _this = this;
 				let flag = state == 1 ? true : false
-				console.log(codes,flag)
 				this.$store.state.userInstance().methods.setVoteList(codes,flag).send({
-					from: this.Address
+					from: this.Address,
+					gasPrice: '40000000000'
 				}).on('transactionHash',function( receipt){
-					_this.$Spin.show()
+					_this.$Spin.show({
+		                render: (h) => {
+		                    return h('div', [
+		                        h('Icon', {
+		                            'class': 'demo-spin-icon-load',
+		                            props: {
+		                                type: 'ios-loading',
+		                                size: 32
+		                            }
+		                        }),
+		                        h('div', '正在处理')
+		                    ])
+		                }
+		            });
 				}).then(result => {
 					this.$Spin.hide()
 					let data = {
@@ -177,8 +215,8 @@
 						data: Qs.stringify(data)
 					}).then((response) => {
 						if(response.data.state == 0){
-							this.$Notice.info({
-								title: '投票成功！'
+							this.$Notice.success({
+								title: '表决成功！'
 							});
 							this.changeSearchType(this.searchType)
 							return true
@@ -194,7 +232,7 @@
 					})
 				})
 			},
-			searchVote(){
+			searchVote(title){
 				let condition = returnTypeMsg(title) == 4 ? 0 : 1
 				let data = {
 					"only":this.$route.query.only,
@@ -203,7 +241,7 @@
 					"state": returnTypeMsg(this.searchType),
 					"condition": condition
 				};
-				this.searchList(data)
+				//this.searchList(data)
 			},
 			changeSearchType(title){
 				let condition = returnTypeMsg(title) == 4 ? 0 : 1
@@ -225,9 +263,10 @@
 					if(response.data.state == 0){
 						let list = response.data.info
 						for(let i=0; i<list.length;i++){
-							//let lastTimeHint = new Date(timestamp * 1000).get;
-							list[i].start_time =  mutil.timestampToTime(list[i].start_time) + '(剩余约'+ list[i].remnant.toFixed(2) +'个小时)'
-							list[i].F =  list[i].surname + list[i].name 
+							list[i].start_time =  mutil.timestampToTime(list[i].start_time) 
+							list[i].remnant = list[i].remnant > 0 ? list[i].remnant : 0
+							list[i].last_time = '剩余约'+ list[i].remnant.toFixed(1) +'小时'
+							list[i].name =  list[i].surname + list[i].name 
 							list[i].id =  list[i].id 
 							list[i].no_proportion =  Number(list[i].no_proportion )
 							list[i].yes_proportion =  Number(list[i].yes_proportion )
@@ -236,12 +275,8 @@
 								list[i].btn_show = true
 							}
 							list[i].state = returnTypeMsg(list[i].state)
-							list[i].keyname = list[i].keyname
-							if(list[i].type != 0){
-								let msg = list[i].type == 1 ? '增发' : '转账'
-								console.log(list[i].number)
-								list[i].content = '给' + list[i].surname_t + list[i].name_t  + msg + list[i].number + '枚Token'
-							}
+							list[i].cnt =+ ((list[i].yes_cnt + list[i].no_cnt) * 100 / Number(list[i].quorum)).toFixed(2)
+							console.log(typeof list[i].cnt)
 						}
 						
 						this.voteList = list
@@ -267,7 +302,11 @@
 			}
 		},
 		created(){
-			this.mountedRefreshList()
+			this.$store.state.userInstance().methods.totalSupply().call()
+				.then(result => {
+					this.tokenAll = result / 10 ** 18
+					this.mountedRefreshList()
+				})
 		}
 	}
 	
@@ -325,11 +364,13 @@
 				flexs()
 				.radio
 					margin-right: 30px
+				button:hover
+					color: #2d8cf0
 			.addVote
 				margin-right: 30px
 			
 	.voteItem
-		min-height: 350px
+		height: 440px
 		margin: 0 30px 30px 0
 		.msgBoard
 			padding: 20px 16px;
@@ -338,7 +379,7 @@
 				b
 					margin-right: 16px
 					display: inline-block
-					min-width: 100px
+					min-width: 85px
 					font-weight: 400
 				&:first-child
 					margin-top: 0
@@ -377,7 +418,5 @@
 			
 </style>
 <style>
-	.ivu-tooltip p.tooltip-msg{
-		
-	}
+	.ivu-tooltip{width: 100%;}
 </style>

@@ -1,7 +1,7 @@
 <template>
 	<div class="index-board">
 		<div class="inner">
-			<h3>公司信息认证</h3>
+			<h3>公司信息认证<Icon type="ios-help-circle-outline" color="#2d8cf0" size="22" @click="helpBox = !helpBox"/></h3>
 			<div>
 				 <Form :model="companyIdent" label-position="left" :label-width="75" inline ref="companyIdent" :rules="ruleInline">
 					<FormItem label="公司名称" prop="Name" class=" w66">
@@ -24,10 +24,10 @@
 						</Input>
 					</FormItem>
 					<FormItem label="成立日期" prop="BirDate" >
-						<DatePicker style="width:100%" size="large" type="date" placeholder="成立日期" v-model="companyIdent.BirDate" :readonly="companyIsIdint"></DatePicker>
+						<DatePicker style="width:100%" size="large" type="date" placeholder="请选择成立日期" v-model="companyIdent.BirDate" :readonly="companyIsIdint"></DatePicker>
 					</FormItem>
-					<FormItem label="组织名称" prop="IdentCode">
-						<Input  placeholder="企业组织名称" size="large" v-model="companyIdent.IdentCode" :readonly="companyIsIdint">
+					<FormItem label="链上组织名称" prop="IdentCode" class="only">
+						<Input  placeholder="请输入链上组织名称" size="large" v-model="companyIdent.IdentCode" :readonly="companyIsIdint">
 							 <Button slot="append" @click="isIdentCode(companyIdent.IdentCode)">
 								 <Icon type="ios-search" size="16"/>
 							 </Button>
@@ -53,6 +53,15 @@
 				</div>
 			</div>
 		</div>
+		 <Modal
+			v-model="helpBox"
+			title="公司信息认证"
+			ok-text="OK"
+			class-name="vertical-center-modal"
+			cancel-text="Cancel">
+			<p>链上组织名称：链上组织名称是你在线治理公司的组织名称，唯一且不可更改！建议使用与公司名称相同的组织名称，设置前请先检查你的组织名称是否可用。</p>
+			<p slot="footer" class="tipMsg">链上组织名称设置成功后无法进行修改，因此请认真填写</p>
+		</Modal>
 	</div>
 </template>
 
@@ -63,6 +72,7 @@
 	export default {
 		data(){
 			return{
+				helpBox:false,
 				companyIdent: {
                     Name: '',
                     Number: '',
@@ -86,7 +96,7 @@
 						{required:true, message:'请输入注册号码', trigger:'blur'}
 					],
 					Site:[
-						{required:true, message:'请选择注册地点', trigger:'change'}
+						{required:true, message:'请选择注册国家', trigger:'change'}
 					],
 					Fund:[
 						{required:true, message:'请输入注册资本', trigger:'blur'}
@@ -95,7 +105,7 @@
 						{required:true, message:'请选择成立日期', trigger:'change', type:'date'}
 					],
 					IdentCode:[
-						{required:true, message:'请输入组织名称', trigger:'blur'}
+						{required:true, message:'请输入链上组织名称', trigger:'blur'}
 					]
 				}
 			}
@@ -132,7 +142,7 @@
 							if(response.data.state == 0){
 								if(this.$route.query.only != undefined){
 									if(this.userType.type == 'error'){
-										this.$Notice.info({
+										this.$Notice.success({
 											title: '公司信息已重新提交，请等待审核通过！'
 										});
 										this.$router.push({
@@ -162,7 +172,7 @@
 						})
 					} else {
 						this.$Notice.warning({
-							title: '请正确输入表单信息！'
+							title: '请填写完整的公司认证信息！'
 						});
 					}
 				})
@@ -181,7 +191,7 @@
 						}).then((response) => {
 							let state = response.data.state;
 							if(state == 2){
-								this.$Notice.info({
+								this.$Notice.success({
 									title: '该组织名称暂未被占用！'
 								});
 							}else{
@@ -191,7 +201,7 @@
 							}
 						})
 					}else{
-						this.$Notice.info({
+						this.$Notice.success({
 							title: '该组织名称暂未被占用！'
 						});
 					}
@@ -252,12 +262,18 @@
 		h3
 			font-size:26px;
 			margin-bottom: 40px;
+			i
+				position: relative;
+				top: -13px;
+				left: 5px;
 		.ivu-form-item
 			min-width: 321px
 			&.w66
 				width: 65.5%
 			.ivu-form-item-label
 				font-size: 16px;
+			button:hover
+				color: #2d8cf0
 		.btn-con
 			bottom: 80px
 			left: 100px
@@ -280,4 +296,22 @@
 		font-size: 14px;
 		color:#000;
 	}
+	.ivu-modal .tipMsg{
+		text-align: left
+	}
+	.vertical-center-modal{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .vertical-center-modal .ivu-modal{
+        top: 0;
+    }
+    .ivu-form-item-required .ivu-form-item-label:before{
+    	margin-right:0
+    }
+    .ivu-form-item.only label{
+    	position: relative;
+    	top: -6px;
+    }
 </style>

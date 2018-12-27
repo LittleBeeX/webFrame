@@ -2,18 +2,20 @@
 	<div class="index-board">
 		<div class="approve">
 			<div class="content-describe">
-				您需要授权一定量的LT用于支付<br/>
-				如果剩余额度小于支付额度，将支付失败<br>
-				剩余Token额度：{{balanceOf}} LT<br>
-				剩余授权额度：{{approveGetVal}} LT<br>
-				设置授权额度：<Input v-model="approveSetVal" size="large" style="width: 150px" />
+				您至少需要授权不少于{{orderNum}}LT用于支付手续费<br/>
+				当已授权TOKEN余额小于支付额度时，您的支付将失败<br>
+				TOKEN总余额：{{balanceOf}} LT<br>
+				已授权TOKEN余额：{{approveGetVal}} LT<br>
+				<div class="center">
+					设置授权额度：<Input v-model="approveSetVal" size="large" style="width: 150px" ><span slot="append">LT</span></Input>
+				</div>
 			</div>
 			<div class="btn-con">
 				<Button type="primary" size="large" @click="goApprove">授权</Button>
 			</div>
 		</div>
 		<div class="payment">
-			<div class="content-describe" v-if="tipMsg == 1">
+			<div class="content-describe" v-if="tipMsg == 2">
 				您的自治组织准备好了<br/>
 				现在需要您支付{{orderNum}}LT，<br/>LittleBeeX将审核您已提交的信息，审核通过后，<br/>您将在LittleBeeX上治理您的公司！
 			</div>
@@ -69,13 +71,12 @@
 				                                size: 32
 				                            }
 				                        }),
-				                        h('div', '数据请求中')
+				                        h('div', '正在处理')
 				                    ])
 				                }
 				            });
 						}).then(result => {
 							this.$Spin.hide();
-							console.log(result.transactionHash)
 							this.$Spin.hide();
 							let data = {
 								"address": this.Address,
@@ -126,12 +127,12 @@
 		                                size: 32
 		                            }
 		                        }),
-		                        h('div', '数据请求中')
+		                        h('div', '正在处理')
 		                    ])
 		                }
 		            });
 				}).then(result => {
-					this.$Notice.warning({
+					this.$Notice.success({
 						title: '授权成功！'
 					});
 					this.$Spin.hide();
@@ -166,9 +167,10 @@
 					if(response.data.state == 0){
 						this.tipMsg = response.data.info.type 
 						this.orderNum = response.data.info.money
+						this.approveSetVal = response.data.info.money
 					}else{
 						this.$Notice.warning({
-							title: '无当前组织信息！'
+							title: '暂无当前组织信息！'
 						});
 						this.$router.push({
 							path:'/'
@@ -200,9 +202,12 @@
 			flex-direction: column;
 			justify-content: space-between;
 			min-height: 400px;
+			flex-basis: 460px
 			box-shadow: 0 2px 7px rgba(0,0,0,0.15);
-			padding: 50px 70px;
+			padding: 50px;
 			background-color: #fff;
+			.center
+				display: flex;
 			.content-describe
 				font-size: 16px;
 				width: 100%;

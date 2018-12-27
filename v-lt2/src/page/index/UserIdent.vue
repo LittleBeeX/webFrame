@@ -1,7 +1,8 @@
 <template>
 	<div class="index-board">
 		<div class="inner">
-			<h3>个人信息认证</h3>
+			<h3 v-if="isCreator">创建者个人信息认证</h3>
+			<h3 v-else>提交者个人信息认证</h3>
 			<div>
 				 <Form :model="userIdent" label-position="left" :label-width="75" inline ref="userIdent" :rules="ruleInline">
 					<FormItem label="名" prop="name">
@@ -24,7 +25,7 @@
 						</Select> 
 					</FormItem>
 					<FormItem label="出生日期" prop="birDate">
-						<DatePicker style="width:100%" type="date" size="large" placeholder="出生日期" v-model="userIdent.birDate"  :readonly="userIsIdint"></DatePicker>
+						<DatePicker style="width:100%" type="date" size="large" placeholder="请选择出生日期" v-model="userIdent.birDate"  :readonly="userIsIdint"></DatePicker>
 					</FormItem>
 					<FormItem label="护照号码" prop="passports">
 						<Input v-model="userIdent.passports" size="large" placeholder="请输入护照号码" :readonly="userIsIdint"></Input>
@@ -33,7 +34,7 @@
 					<FormItem label="钱包地址" class="address" >
 						<Input v-model="Address" size="large" readonly></Input>
 					</FormItem>
-					<FormItem label="公司职务" prop="position">
+					<FormItem label="组织职务" prop="position">
 						<Select v-model="userIdent.position" :readonly="userIsIdint">
 							<Option v-for="item in positionList" size="large" :value="item.value" :key="item.value">{{ item.label }}</Option>
 						</Select>
@@ -111,6 +112,7 @@
 	export default {
 		data(){
 			return{
+				isCreator:true,
 				file: null,
                 loadingStatus: false,
 				userType:{
@@ -139,17 +141,17 @@
 				],
 				positionList:[
 					{
-						value:'1',
-						label:'董事'
-					},{
 						value:'2',
 						label:'股东'
 					},{
-						value:'3',
-						label:'股东兼董事'
+						value:'1',
+						label:'董事'
 					},{
 						value:'4',
 						label:'员工'
+					},{
+						value:'3',
+						label:'股东兼董事'
 					},{
 						value:'5',
 						label:'股东兼员工'
@@ -173,7 +175,7 @@
                         { required: true, message: '请选择性别', trigger: 'change' }
                     ], 
 					position: [
-                        { required: true, message: '请选择公司职务', trigger: 'change' }
+                        { required: true, message: '请选择组织职务', trigger: 'change' }
                     ], 
 					nationality: [
                         { required: true, message: '请选择国籍', trigger: 'change' }
@@ -227,7 +229,7 @@
 								if(response.data.state == 0){
 									if(this.$route.query.only != undefined){
 										if(this.userType.type == 'error'){
-											this.$Notice.info({
+											this.$Notice.success({
 												title: '个人信息已重新提交，请等待审核通过！'
 											});
 											this.$router.push({
@@ -249,7 +251,7 @@
 							}
 						} else {
 							 this.$Notice.warning({
-									title: '请正确输入表单信息！'
+									title: '请填写完整的个人认证信息！'
 							 });
 						}
 				})
@@ -279,6 +281,7 @@
 					this.nationalityList = response.data.info;
 				})
 			if(this.$route.query.only != undefined){
+				this.isCreator = false
 				this.onlys = this.$route.query.only
 				let data = {
 					"address": this.Address,
@@ -316,10 +319,14 @@
 								this.userIsIdint = true
 							}	
 						}
+						if(response.data.info.company.creator){
+							this.isCreator = true
+						}
 					}
 				})
 			}else{
 				this.onlys = ''
+				this.isCreator = true
 			}
 		},
 		mounted () {

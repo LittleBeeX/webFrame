@@ -1,21 +1,21 @@
 <template>
 	<div class="index-board">
 		<div class="inner">
-			<h3>令牌设置<Icon type="md-help-circle" @click="helpBox = !helpBox"/></h3>
+			<h3>令牌设置<Icon type="ios-help-circle-outline" color="#2d8cf0" size="22" @click="helpBox = !helpBox"/></h3>
 			<div>
 				 <Form :model="tokenIdent" label-position="left" :label-width="75" inline ref="tokenIdent" :rules="ruleInline">
 					<FormItem label="支持占比" prop="support">
-						<Input :max="100" v-model="tokenIdent.support" size="large" placeholder="请输入支持占比">
+						<Input v-model="tokenIdent.support" size="large" placeholder="50">
 							 <span slot="append">%</span>
 						</Input>
 					</FormItem>
 					<FormItem label="法定人数" prop="quorum">
-						<Input v-model="tokenIdent.quorum" size="large" placeholder="请输入法定人数">
+						<Input v-model="tokenIdent.quorum" size="large" placeholder="15">
 							<span slot="append">%</span>
 						</Input>
 					</FormItem>
-					<FormItem label="持续时间" prop="duration">
-						<Input v-model="tokenIdent.duration" size="large" placeholder="请输入持续时间">
+					<FormItem label="投票时间" prop="duration">
+						<Input v-model="tokenIdent.duration" size="large" placeholder="24">
 							<span slot="append">H</span>
 						</Input>
 					</FormItem>
@@ -29,7 +29,7 @@
 						<Input v-model="tokenIdent.token_number" size="large" placeholder="请输入令牌数量"></Input>
 					</FormItem>
 				</Form>
-				<div class="btn-con">
+				<div class="btn-con" v-if="btnTypes">
 				    <Button class="fl" type="primary" @click="backConfig()">
 						<Icon type="ios-arrow-back"></Icon>
 						上一步
@@ -45,10 +45,12 @@
 			v-model="helpBox"
 			title="令牌设置"
 			ok-text="OK"
+			class-name="vertical-center-modal"
 			cancel-text="Cancel">
-			<p>支持占比：用于确认投票通过的票数占比</p>
-			<p>法定人数：用于确认投票通过的人数占比</p>
-			<p>持续时间：用于设置发起一次投票的周期</p>
+			<p>支持占比：设置公司决议的投票占比，必须高于此占比才能通过决议</p>
+			<p>法定人数：设置公司决议的人数占比，必须高于此占比才能通过决议</p>
+			<p>持续时间：设置发起一次决议的投票有效时间，必须在设置的时间范围内进行投票</p>
+			<p slot="footer" class="tipMsg">令牌设置成功后无法进行修改，因此请认真填写</p>
 		</Modal>
 	</div>
 </template>
@@ -59,6 +61,7 @@
 		data(){
 			return{
 				helpBox:false,
+				btnTypes:true,
 				tokenIdent: {
 					support: '',
 					quorum: '',
@@ -81,17 +84,19 @@
 						{validator: validateNumber, trigger: 'blur'}
 					],
 					duration:[
-						{required:true, message:'请输入持续时间', trigger:'blur'}
+						{required:true, message:'请输入投票时间', trigger:'blur'},
+						{validator: validateNumber, trigger: 'blur'}
 					],
 					token_name:[
 						{required:true, message:'请输入令牌名称', trigger:'blur'}
 					],
 					token_symbol:[
-						{required:true, message:'请输入令牌符号', trigger:'blur'}
+						{required:true, message:'请输入令牌符号', trigger:'blur'},
+						{validator: validateSymbol, trigger: 'blur'}
 					],
 					token_number:[
 						{required:true, message:'请输入令牌数量', trigger:'blur'},
-						{validator: validateNumber, trigger: 'blur'}
+						{validator: validateVal, trigger: 'blur'}
 					]
 				}
 			}
@@ -132,13 +137,13 @@
 						}) 
 					} else {
 						this.$Notice.warning({
-							title: '请正确输入表单信息！',
+							title: '请填写完整的令牌设置信息！',
 						});
 					}
 				})
 			}
 		},
-		mounted(){
+		created(){
 			if(this.$route.query.only != "undefined"){
 				let data = {
 					"address": this.$store.state.web3.coinbase,
@@ -151,12 +156,19 @@
 				}).then((response) => {
 					let company = response.data.info.company;
 					if(response.data.state == 0){
-						this.tokenIdent.support = company.support
-						this.tokenIdent.quorum = company.quorum
-						this.tokenIdent.duration = company.duration
-						this.tokenIdent.token_name = company.token_name
-						this.tokenIdent.token_symbol = company.token_symbol
-						this.tokenIdent.token_number = company.token_number
+						if(company.token_name != ''){
+							this.tokenIdent.support = company.support
+							this.tokenIdent.quorum = company.quorum
+							this.tokenIdent.duration = company.duration
+							this.tokenIdent.token_name = company.token_name
+							this.tokenIdent.token_symbol = company.token_symbol
+							this.tokenIdent.token_number = company.token_number
+							
+							if(company.state != 0){
+								this.btnTypes = false
+							}
+						}
+						
 					}
 				})
 			}else{
@@ -170,10 +182,29 @@
 		}
 	}
 	
+	const validateVal = (rule, value, callback) => {
+		if (!Number.isInteger(+value)) {
+			callback(new Error('请输入数字值'));
+		} else {
+			callback();
+		}
+	};
 	const validateNumber = (rule, value, callback) => {
 		if (!Number.isInteger(+value)) {
 			callback(new Error('请输入数字值'));
 		} else {
+			if(value > 100 || value <0){
+				callback(new Error('数值应为1-100之间'));
+			}else{
+				callback();
+			}
+		}
+	};
+	const isSymbol = new RegExp("^[A-Z]+$");
+	const validateSymbol = (rule, value, callback) => {
+		if(!isSymbol.test(value)){
+			callback(new Error('请输入大写英文字母'));
+		}else{
 			callback();
 		}
 	};
@@ -184,6 +215,10 @@
 		h3
 			font-size:26px;
 			margin-bottom: 40px;
+			i
+				position: relative;
+				top: -13px;
+				left: 5px;
 		.ivu-form-item
 			min-width: 321px
 			&.w66
@@ -207,4 +242,15 @@
 		font-size: 14px;
 		color:#000;
 	}
+	.ivu-modal .tipMsg{
+		text-align: left
+	}
+	.vertical-center-modal{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .vertical-center-modal .ivu-modal{
+            top: 0;
+        }
 </style>

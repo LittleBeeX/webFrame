@@ -1,7 +1,7 @@
 <template>
 	<div class="index-board">
 		<div class="inner">
-			<h3>令牌设置<Icon type="md-help-circle" @click="helpBox = !helpBox"/></h3>
+			<h3>令牌设置<Icon type="ios-help-circle-outline" color="#2d8cf0" size="22" @click="helpBox = !helpBox"/></h3>
 			<div>
 				 <Form :model="tokenIdent" label-position="left" :label-width="75" inline ref="tokenIdent" :rules="ruleInline">
 					<FormItem label="支持占比" prop="support">
@@ -14,7 +14,7 @@
 							<span slot="append">%</span>
 						</Input>
 					</FormItem>
-					<FormItem label="持续时间" prop="duration">
+					<FormItem label="投票时间" prop="duration">
 						<Input v-model="tokenIdent.duration" size="large" placeholder="24">
 							<span slot="append">H</span>
 						</Input>
@@ -45,11 +45,12 @@
 			v-model="helpBox"
 			title="令牌设置"
 			ok-text="OK"
+			class-name="vertical-center-modal"
 			cancel-text="Cancel">
 			<p>支持占比：设置公司决议的投票占比，必须高于此占比才能通过决议</p>
 			<p>法定人数：设置公司决议的人数占比，必须高于此占比才能通过决议</p>
 			<p>持续时间：设置发起一次决议的投票有效时间，必须在设置的时间范围内进行投票</p>
-			<p slot="footer" class="tipMsg">提示：令牌设置成功后无法进行修改，因此请认真填写</p>
+			<p slot="footer" class="tipMsg">令牌设置成功后无法进行修改，因此请认真填写</p>
 		</Modal>
 	</div>
 </template>
@@ -83,7 +84,7 @@
 						{validator: validateNumber, trigger: 'blur'}
 					],
 					duration:[
-						{required:true, message:'请输入持续时间', trigger:'blur'},
+						{required:true, message:'请输入投票时间', trigger:'blur'},
 						{validator: validateNumber, trigger: 'blur'}
 					],
 					token_name:[
@@ -136,7 +137,7 @@
 						}) 
 					} else {
 						this.$Notice.warning({
-							title: '请正确输入表单信息！',
+							title: '请填写完整的令牌设置信息！',
 						});
 					}
 				})
@@ -214,6 +215,10 @@
 		h3
 			font-size:26px;
 			margin-bottom: 40px;
+			i
+				position: relative;
+				top: -13px;
+				left: 5px;
 		.ivu-form-item
 			min-width: 321px
 			&.w66
@@ -240,5 +245,12 @@
 	.ivu-modal .tipMsg{
 		text-align: left
 	}
-			
+	.vertical-center-modal{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .vertical-center-modal .ivu-modal{
+            top: 0;
+        }
 </style>

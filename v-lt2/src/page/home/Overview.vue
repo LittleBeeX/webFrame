@@ -97,7 +97,7 @@
 					</Card>
 				</Col>
 				<Col span="14">
-					<Card :bordered="false" class="companyBusiness">
+					<Card :bordered="false" class="companyBusiness" no-data-text="暂无动态">
 						<p slot="title">公司动态</p>
 						<Table height="300" :columns="businessList.rows" :data="businessList.cols"></Table>
 					</Card>
@@ -122,7 +122,7 @@
 				businessList:{
 					rows:[
 						 {
-							title: '日期',
+							title: '发起日期',
 							key: 'date'
 						},
 						{
@@ -169,7 +169,7 @@
 						label:'出生日期',
 						vals:''
 					},{
-						label:'公司职务',
+						label:'组织职务',
 						vals:''
 					},{
 						label:'持股比例',
@@ -246,7 +246,7 @@
 					if(response.data.state == 0){
 						let userMsg = response.data.info.chain
 						let companyMsg = response.data.info.company
-						let companyDataArr = [companyMsg.name,companyMsg.code,companyMsg.capital,mutil.timestampToTime(companyMsg.establish),cityType(this.nationalityList,companyMsg.address)]
+						let companyDataArr = [companyMsg.name,companyMsg.code,companyMsg.capital + ' USD$',mutil.timestampToTime(companyMsg.establish),cityType(this.nationalityList,companyMsg.address)]
 						let userDataArr = [userMsg.surname + userMsg.name,userMsg.country_cn,userMsg.passports,mutil.timestampToTime(userMsg.create_time),returnTypeUser(userMsg.position),userMsg.token_proportion + '%']
 						
 						for(let i=0;i<this.userMsgList.length;i++){
@@ -293,13 +293,15 @@
 				}).then((response) => {
 					if(response.data.state == 0){
 						let list = response.data.info
+						let arr = []
 						for(let i=0;i<list.length;i++){
-							this.businessList.cols.push({
+							arr.push({
 								date: mutil.timestampToTime(list[i].start_time),
 								campaign: list[i].content,
-								type: list[i].state
+								type: returnTypeMsg(list[i].state)
 							})
 						}
+						this.businessList.cols = arr
 						return true;
 					}else{
 						this.$Notice.warning({
@@ -340,6 +342,36 @@
 				break;
 			case '5':
 				msg = '股东兼员工'
+				break;
+		}
+		return msg
+	}
+	
+	function returnTypeMsg(msg){
+		switch(msg){
+			case '表决中':
+				msg = 0
+				break;
+			case '已通过':
+				msg = 1
+				break;
+			case '未通过':
+				msg = 2
+				break;
+			case '全部':
+				msg = 4
+				break;
+			case '0':
+				msg = '表决中'
+				break;
+			case '1':
+				msg = '已通过'
+				break;
+			case '2':
+				msg = '未通过'
+				break;
+			case '4':
+				msg = '全部'
 				break;
 		}
 		return msg
@@ -396,5 +428,12 @@
 			left: 15px
 			top: 15px
 		img
-			height: 350px
+			height: 343px
+			
+	.companyBusiness
+		.ivu-table-wrapper
+				border: 0;
+				.ivu-table:after{
+					background-color: transparent
+				}
 </style>

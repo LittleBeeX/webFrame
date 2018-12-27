@@ -4,9 +4,9 @@
 			<h2>欢迎来到LittleBeeX</h2>
 			<p class="node">
 				当前节点：以太坊测试网(Ropsten)
-				<span class="hint">需解锁Metamask钱包，并选择所需的服务器节点</span>
-				<Button type="primary" @click="takeRopstenToken">获取测试Token</Button>
-				<Button type="primary"><a href="https://faucet.ropsten.be/" target="_blank">获取(Ropsten)节点Eth</a></Button>
+				<span class="hint">请先解锁Metamask钱包，并选择所需的服务器节点</span>
+				<Button type="primary" @click="takeRopstenToken" :disabled="isHaveETH">获取测试TOKEN</Button>
+				<Button type="primary"><a href="https://faucet.ropsten.be/" target="_blank">获取(Ropsten)节点ETH</a></Button>
 			</p>
 			<div class="config-item">
 				<label>创建一个新组织，并开始KYC组织认证</label>
@@ -15,7 +15,7 @@
 				<p v-if="isHaveETH">你的ETH余额为0，请先获取不少于0.1ETH</p>
 			</div>
 			<div class="config-item">
-				<label>打开现有组织</label>
+				<label>或打开现有组织</label>
 				<p><Input v-model="companyName" size="large" :maxlength="20" type="text"/></p>
 				<Button class="open" type="primary" @click="openOrganization" :disabled="!isClick" :loading="loading">打开组织</Button>
 			</div>
@@ -105,7 +105,7 @@
 					this.balanceOf = result / 10 ** 18
 					if(this.balanceOf >= 100000){
 						this.$Notice.warning({
-							title: '已经获取足够Token，请勿重新获取！'
+							title: '已经获取足够TOKEN，请勿重新获取！'
 						});
 					}else{
 						const _this = this
@@ -124,14 +124,14 @@
 				                                size: 32
 				                            }
 				                        }),
-				                        h('div', '数据请求中')
+				                        h('div', '正在处理')
 				                    ])
 				                }
 				            });
 						}).then(result => {
 							this.$Spin.hide();
-							this.$Notice.info({
-								 title : '您的测试Token已获取成功，<br/>请进入Metamask钱包查看！'
+							this.$Notice.success({
+								 title : '您的测试TOKEN已获取成功，<br/>请进入Metamask钱包查看！'
 							});
 						})
 					}
