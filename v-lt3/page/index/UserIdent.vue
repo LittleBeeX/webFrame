@@ -35,7 +35,7 @@
 						<Input v-model="Address" size="large" readonly></Input>
 					</FormItem>
 					<FormItem :label="$t('indexUser.msg8')" prop="position">
-						<Select v-model="userIdent.position" :readonly="userIsIdint" :placeholder="$t('indexUser.msg7_1')">
+						<Select v-model="userIdent.position" :readonly="userIsIdint" :placeholder="$t('indexUser.msg8_1')">
 							<Option v-for="item in positionList" size="large" :value="item.value" :key="item.value">{{ item.label }}</Option>
 						</Select>
 					</FormItem>
@@ -333,7 +333,7 @@
 		},
 		mounted () {
 			this.uploadList = this.$refs.upload.fileList;
-			this.labelWidth = mutil.getSection('lang') == 'zh' ? 75 : 175
+			this.labelWidth = mutil.getSection('lang') == 'cn' ? 75 : 175
 			console.log(mutil.getSection('lang'))
 		}
 	}

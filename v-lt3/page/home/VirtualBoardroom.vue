@@ -136,7 +136,7 @@
 			                                size: 32
 			                            }
 			                        }),
-			                        h('div', this.$t('tipMsg1'))
+			                        h('div', _this.$t('tipMsg1'))
 			                    ])
 			                }
 			            });
@@ -197,7 +197,7 @@
 		                                size: 32
 		                            }
 		                        }),
-		                        h('div', this.$t('tipMsg1'))
+		                        h('div', _this.$t('tipMsg1'))
 		                    ])
 		                }
 		            });
@@ -275,7 +275,7 @@
 								list[i].btn_show = true
 							}
 							list[i].state = this.returnTypeMsg(list[i].state)
-							list[i].cnt =+ ((list[i].yes_cnt + list[i].no_cnt) * 100 / Number(list[i].quorum)).toFixed(2)
+							list[i].cnt =+ ((Number(list[i].yes_cnt) + Number(list[i].no_cnt)) * 100 / Number(response.data.cnt)).toFixed(2)
 						}
 						
 						this.voteList = list
@@ -368,7 +368,7 @@
 				margin-right: 30px
 			
 	.voteItem
-		height: 440px
+		height: 460px
 		margin: 0 30px 30px 0
 		.msgBoard
 			padding: 20px 16px;

@@ -76,26 +76,26 @@
 				},
 				ruleInline:{
 					support:[
-						{required:true, message:this.$t('indexUser.msg1_1'), trigger:'blur'},
+						{required:true, message:this.$t('indeToken.msg1_1'), trigger:'blur'},
 						{validator: validateNumber, trigger: 'blur'}
 					],
 					quorum:[
-						{required:true, message:this.$t('indexUser.msg2_1'), trigger:'blur'},
+						{required:true, message:this.$t('indeToken.msg2_1'), trigger:'blur'},
 						{validator: validateNumber, trigger: 'blur'}
 					],
 					duration:[
-						{required:true, message:this.$t('indexUser.msg3_1'), trigger:'blur'},
+						{required:true, message:this.$t('indeToken.msg3_1'), trigger:'blur'},
 						{validator: validateNumber, trigger: 'blur'}
 					],
 					token_name:[
-						{required:true, message:this.$t('indexUser.msg4_1'), trigger:'blur'}
+						{required:true, message:this.$t('indeToken.msg4_1'), trigger:'blur'}
 					],
 					token_symbol:[
-						{required:true, message:this.$t('indexUser.msg5_1'), trigger:'blur'},
+						{required:true, message:this.$t('indeToken.msg5_1'), trigger:'blur'},
 						{validator: validateSymbol, trigger: 'blur'}
 					],
 					token_number:[
-						{required:true, message:this.$t('indexUser.msg6_1'), trigger:'blur'},
+						{required:true, message:this.$t('indeToken.msg6_1'), trigger:'blur'},
 						{validator: validateVal, trigger: 'blur'}
 					]
 				}
@@ -137,14 +137,15 @@
 						}) 
 					} else {
 						this.$Notice.warning({
-							title: this.$t('indexUser.errorMsg1'),
+							title: this.$t('indeToken.errorMsg1'),
 						});
 					}
 				})
 			}
 		},
 		created(){
-			this.labelWidth = mutil.getSection('lang') == 'zh' ? 75 : 175
+			this.labelWidth = mutil.getSection('lang') == 'cn' ? 75 : 175
+			_this = this
 			if(this.$route.query.only != "undefined"){
 				let data = {
 					"address": this.$store.state.web3.coinbase,
@@ -174,7 +175,7 @@
 				})
 			}else{
 				this.$Notice.warning({
-					title:  this.$t('indexUser.errorMsg7')
+					title:  this.$t('indeToken.errorMsg7')
 				});
 				this.$router.push({
 					path:'/'
@@ -182,20 +183,20 @@
 			}
 		}
 	}
-	
+	let _this ;
 	const validateVal = (rule, value, callback) => {
 		if (!Number.isInteger(+value)) {
-			callback(new Error(this.$t('indexUser.errorMsg2')));
+			callback(new Error(_this.$t('indeToken.errorMsg2')));
 		} else {
 			callback();
 		}
 	};
 	const validateNumber = (rule, value, callback) => {
 		if (!Number.isInteger(+value)) {
-			callback(new Error(this.$t('indexUser.errorMsg2')));
+			callback(new Error(_this.$t('indeToken.errorMsg2')));
 		} else {
 			if(value > 100 || value <0){
-				callback(new Error(this.$t('indexUser.errorMsg3')));
+				callback(new Error(_this.$t('indeToken.errorMsg3')));
 			}else{
 				callback();
 			}
@@ -204,7 +205,7 @@
 	const isSymbol = new RegExp("^[A-Z]+$");
 	const validateSymbol = (rule, value, callback) => {
 		if(!isSymbol.test(value)){
-			callback(new Error(this.$t('indexUser.errorMsg4')));
+			callback(new Error(_this.$t('indeToken.errorMsg4')));
 		}else{
 			callback();
 		}

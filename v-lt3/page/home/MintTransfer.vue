@@ -139,7 +139,8 @@
 							}).then(result => {
 								let codes = result.events.createVote.returnValues.codes
 								this.$Spin.hide()
-								let msg = this.mappingMsg[this.Address]  + this.$t('homeTransfer.msg4') + nums + this.$t('homeTransfer.msg5') + this.mappingMsg[address] + this.$t('homeTransfer.msg6') + this.mintCode + this.$t('homeTransfer.msg7')
+								let msg = this.mappingMsg[this.Address] + this.$t('homeTransfer.msg4_1') + nums + 'TOKEN' + this.$t('homeTransfer.msg5') + this.mappingMsg[address] + this.$t('homeTransfer.msg6') + this.mintCode + this.$t('homeTransfer.msg7')
+								console.log(msg);
 								this.takeVote(address,1,nums,msg,codes)
 							})
 						}else{
@@ -182,7 +183,7 @@
 							}).then(result => {
 								let codes = result.events.createVote.returnValues.codes
 								this.$Spin.hide();
-								let msg = this.mappingMsg[this.Address]  + this.$t('homeTransfer.msg4_1') + nums + this.$t('homeTransfer.msg5') + this.mappingMsg[address] + this.$t('homeTransfer.msg6') + this.transferCode + this.$t('homeTransfer.msg7')
+								let msg = this.mappingMsg[this.Address] + this.$t('homeTransfer.msg4_1') + nums + 'TOKEN' + this.$t('homeTransfer.msg5') + this.mappingMsg[address] + this.$t('homeTransfer.msg6') + this.transferCode + this.$t('homeTransfer.msg7')
 								this.takeVote(address,2,nums,msg,codes)
 							})
 						}else{
@@ -285,7 +286,7 @@
 				b
 					margin-right: 16px
 					display: inline-block
-					width: 100px
+					width: 140px
 				&:first-child
 					margin-top: 0
 			.btn

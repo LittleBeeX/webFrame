@@ -6,7 +6,6 @@
 					<a href="/index.php/cn/home/index" class="float-left navbar-brand"></a>
 					<div class="funcall">
 						<ul class="float-left nav-fnc" >
-							<li><a href="/">{{$t('index.btn1')}}</a></li>
 							<li><a href="/">{{$t('index.btn2')}}</a></li>
 							<li><router-link to="config">{{$t('index.btn3')}}</router-link></li>
 							<li><a  href="/index.php/cn/home/index">{{$t('index.btn4')}}</a></li>
@@ -92,12 +91,11 @@
 			changeLanguage(type){
 				if(type=="en"){
 			      this.$i18n.locale="en"
-			      this.language = "English"
 			    }else{
 			      this.$i18n.locale="cn"
-			      this.language = "简体中文"
 			    }
             	this.$i18n.locale = type
+            	this.language = this.$t('index.btn8')
             	mutil.setSection('lang', type)
 			},
 			refreshLang(){
@@ -137,11 +135,11 @@
 			background: transparent;
 			
 	.ivu-layout-header
-		background: #20206A;
+		background: #0070BA;
 		height: 50px;
 		line-height: 50px;
+		padding: 0 0 0 15px;
 	nav
-		width: 1200px;
 		margin: 0 auto;
 		position: relative;
 		display: flex;
@@ -193,7 +191,7 @@
 			padding: 50px 100px 80px;
 	
 	.ivu-layout-footer	
-		background: #20206a;
+		background: #0070BA;
 		width: 100%;
 	footer
 		width: 1200px;

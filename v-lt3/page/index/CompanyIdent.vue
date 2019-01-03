@@ -212,7 +212,7 @@
 			}
 		},
 		created(){
-			this.labelWidth = mutil.getSection('lang') == 'zh' ? 75 : 175
+			this.labelWidth = mutil.getSection('lang') == 'cn' ? 75 : 175
 			this.$axios.post('/index.php/cn/home/node_se/nationality')
 				.then((response) => {
 					this.nationalityList = response.data.info;
