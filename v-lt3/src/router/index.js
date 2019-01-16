@@ -14,10 +14,18 @@ const HomeCapTable = () =>
 	import('@/page/home/CapTable')
 const HomeMintTransfer = () =>
 	import('@/page/home/MintTransfer')
-const HomeVirtualBoardroom = () =>
-	import('@/page/home/VirtualBoardroom')
+const HomeTrustee = () =>
+	import('@/page/home/Trustee')
+const HomeStockholder = () =>
+	import('@/page/home/Stockholder')
 const HomeESOP = () =>
 	import('@/page/home/ESOP')
+const HomeCreatePlan = () =>
+	import('@/page/home/CreatePlan')
+const HomeManagePlan = () =>
+	import('@/page/home/ManagePlan')
+const HomeMyPlan = () =>
+	import('@/page/home/MyPlan')
 const HomeSTO = () =>
 	import('@/page/home/STO')
 
@@ -70,11 +78,23 @@ const router = new Router({
 					path: 'mintTransfer',
 					component: HomeMintTransfer
 				}, {
-					path: 'virtualBoardroom',
-					component: HomeVirtualBoardroom
+					path: 'trustee',
+					component: HomeTrustee
+				}, {
+					path: 'stockholder',
+					component: HomeStockholder
 				}, {
 					path: 'esop',
 					component: HomeESOP
+				}, {
+					path: 'createPlan',
+					component: HomeCreatePlan
+				}, {
+					path: 'managePlan',
+					component: HomeManagePlan
+				}, {
+					path: 'myPlan',
+					component: HomeMyPlan
 				}, {
 					path: 'sto',
 					component: HomeSTO

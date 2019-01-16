@@ -18,11 +18,18 @@
 			<div class="page_logo">
 				<img src="../../assets/images/littlebeex-logo.png" mode="" @click="goIndex"/>
 			</div>
-			<Menu ref="side_menu" :active-name="activeName" theme="dark" width="auto" :open-names="['1']" class="slider-menu" @on-select="changeBreadTitle">
-				<MenuItem :name="item.name" :itemName="item.title" v-for="item in slider" :title="item.urls">
-				<Icon :size="item.iconSize" :type="item.icon" />
-				{{item.label}}
-				</MenuItem>
+			<Menu ref="side_menu" :active-name="activeName" theme="dark" width="auto" :open-names="['1']" class="slider-menu">
+				<MenuItem :name="item.name" :itemName="item.title" v-for="item in slider" :title="item.urls" v-if='!item.isChild' :to="item.urls">
+					<Icon :size="item.iconSize" :type="item.icon" />
+					{{item.label}}
+				</MenuItem> 
+				<Submenu :name="item.name" v-else>
+                    <template slot="title">
+                        <Icon type="ios-paper" />
+                        	{{item.label}}
+                    </template>
+                    <MenuItem :name="itemChild.name" :to="itemChild.urls" :title="itemChild.urls" :itemName="itemChild.title" v-for="itemChild in item.children">{{itemChild.label}}</MenuItem>
+                </Submenu>
 			</Menu>
 		</Sider>
 		<Layout class="board">
@@ -60,45 +67,81 @@
 						title: 'Overview',
 						name: '10',
 						label: this.$t('home.btn1'),
-						urls: '../home/Overview',
+						urls: 'Overview?only=' + this.$route.query.only,
 						icon: 'md-home',
-						iconSize: '16'
+						iconSize: '16',
+						isChild:false,
+						children: []
 					}, {
 						title: 'CapTable',
 						name: '11',
 						label: this.$t('home.btn2'),
-						urls: '../home/CapTable',
+						urls: 'CapTable?only=' + this.$route.query.only,
 						icon: 'ios-apps',
-						iconSize: '16'
+						iconSize: '16',
+						isChild:false,
+						children: []
 	
 					}, {
 						title: 'MintTransfer',
 						name: '12',
 						label: this.$t('home.btn3'),
-						urls: '../home/MintTransfer',
+						urls: 'MintTransfer?only=' + this.$route.query.only,
 						icon: 'md-repeat',
-						iconSize: '16'
+						iconSize: '16',
+						isChild:false,
+						children: []
 					}, {
-						title: 'VirtualBoardroom',
-						name: '13',
 						label: this.$t('home.btn4'),
-						urls: '../home/VirtualBoardroom',
 						icon: 'logo-windows',
-						iconSize: '14'
+						iconSize: '14',
+						name: '13',
+						isChild:true,
+						children: [
+							{
+								title: 'Trustee',
+								name: '13-1',
+								label: '董事会决议',
+								urls: 'trustee?only=' + this.$route.query.only,
+							},{
+								title: 'Stockholder',
+								name: '13-2',
+								label: '股东会决议',
+								urls: 'stockholder?only=' + this.$route.query.only,
+							}
+						]
 					}, {
-						title: 'ESOP',
-						name: '14',
 						label: this.$t('home.btn5'),
-						urls: '../home/ESOP',
 						icon: 'md-person',
-						iconSize: '16'
+						iconSize: '16',
+						name: '14',
+						isChild:true,
+						children: [
+							{
+								title: 'CreatePlan',
+								name: '14-1',
+								label: '创建期权奖励',
+								urls: 'createPlan?only=' + this.$route.query.only,
+							},{
+								title: 'ManagePlan',
+								name: '14-2',
+								label: '管理期权奖励',
+								urls: 'managePlan?only=' + this.$route.query.only,
+							},{
+								title: 'MyPlan',
+								name: '14-3',
+								label: '我的期权奖励',
+								urls: 'myPlan?only=' + this.$route.query.only,
+							}
+						]
 					}, {
 						title: 'STO',
 						name: '15',
 						label: this.$t('home.btn6'),
-						urls: '../home/STO',
+						urls: 'STO?only=' + this.$route.query.only,
 						icon: 'md-star',
-						iconSize: '16'
+						isChild:false,
+						children: []
 					}
 				],
 				BreadTitle: '主页',
@@ -118,6 +161,7 @@
 		},
 		methods: {
 			changeBreadTitle(names) {
+				console.log(names)
 				this.BreadTitle = names
 				for(let i=0; i< this.slider.length; i++){
 					if(this.slider[i].name == names){
@@ -128,17 +172,6 @@
 					}
 				}
 			},
-			changeLangEvent(type) {
-				if(type=="en"){
-			      this.$i18n.locale="en"
-			      this.language = "English"
-			    }else{
-			      this.$i18n.locale="cn"
-			      this.language = "简体中文"
-			    }
-            	this.$i18n.locale = type
-            	mutil.setSection('lang', type)
-			},
 			goIndex(){
 				this.$router.push({
 					path:'/'
@@ -146,13 +179,6 @@
 			},
 			menuActiveName(val){
 				this.activeName = val
-			},
-			refreshLang(){
-				if(this.$route.query.lang != undefined){
-					this.changeLangEvent(this.$route.query.lang)
-				}else{
-					this.changeLangEvent(mutil.getSection('lang'))
-				}
 			},
 			refreshAdmin(){
 				let data = {
@@ -189,8 +215,7 @@
 			
 		},
 		created() {
-			this.refreshLang();
-			this.refreshAdmin();
+			this.refreshAdmin()
 		}
 	}
 </script>

@@ -40,7 +40,7 @@
 						</Select>
 					</FormItem>
 					<br>
-					<FormItem :label="$t('indexUser.msg9')">
+					<FormItem :label="$t('indexUser.msg9')" class="hzzm">
 						<Upload
 							ref="upload"
 							:readonly="userIsIdint"
@@ -82,6 +82,11 @@
 								<Progress v-if="item.showProgress" :percent="item.percentage" hide-info></Progress>
 							</template>
 						</div>
+					</FormItem>
+					<FormItem class="hzzm-msg">
+						<p>{{$t('indexUser.msg11')}}</p>
+						<p>{{$t('indexUser.msg12')}}</p>
+						<p>{{$t('indexUser.msg13')}}</p>
 					</FormItem>
 				</Form>
 				<Alert v-if="userType.isShow" :type="userType.type">{{userType.setMes}}</Alert>
@@ -186,7 +191,7 @@
 				 defaultList: [
                     {
                         'name': 'a42bdcc1178e62b4694c830f028db5c0',
-                        'url': require('../../assets/images/hzzm.png')
+                        'url': require('../../assets/images/hzzm.jpg')
                     }
                 ],
 				imgUrl: '',
@@ -353,7 +358,17 @@
 			.ivu-form-item-label
 				font-size: 16px;
 			button[type="button"]
-				width: 170px
+				width: 170px;
+				
+		.hzzm
+			min-width: 250px;
+			
+		.hzzm-msg
+			margin-top: 50px;
+			p
+				font-size: 14px !important;
+				margin-left: -50px;
+			
 		.address
 			width: 65.5%;
 		.btn-con

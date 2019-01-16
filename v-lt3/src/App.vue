@@ -6,6 +6,7 @@
 
 <script>
 import pollWeb3 from '@/util/pollWeb3'
+import mutil from '@/util/mutil'
 export default {
   name: 'App',
 	mounted () {
@@ -15,10 +16,32 @@ export default {
 		pollWeb3()
 		this.$store.dispatch('registerWeb3');
 	},
+	methods:{
+		changeLanguage(type) {
+				if(type=="en"){
+			      this.$i18n.locale="en"
+			    }else{
+			      this.$i18n.locale="cn"
+			    }
+            	this.$i18n.locale = type
+            	this.language = this.$t('index.btn8')
+            	mutil.setSection('lang', type)
+            	console.log(mutil.getSection('lang'))
+			},
+			refreshLang(){
+				if(this.$route.query.lang != undefined){
+					mutil.setSection('lang', this.$route.query.lang)
+					this.changeLanguage(this.$route.query.lang)
+				}else{
+					this.changeLanguage(mutil.getSection('lang'))
+				}
+			},
+	},
 	created(){
 		this.$Notice.config({
-	    duration: 10
-	});
+		    duration: 10
+		})
+		this.refreshLang()
 	}
 }
 </script>
@@ -30,6 +53,15 @@ export default {
 	}
 	.ivu-btn{
 		border-radius: 0 !important;
+	}
+	.ivu-select-selection,.ivu-input-number,.ivu-input,.ivu-input-group-append{
+		border-radius: 0 !important;
+	}
+	.companyMessage, .world, .userMessage, .companyBusiness,.ivu-card,.ivu-notice-notice{
+		border-radius: 0 !important;
+	}
+	.ivu-form-item-required .ivu-form-item-label:before {
+		content: ""!important;
 	}
 	.ivu-menu-dark.ivu-menu-vertical .ivu-menu-item, .ivu-menu-dark.ivu-menu-vertical .ivu-menu-submenu-title{
 		border-bottom: 1px solid rgba(255,255,255,0.1);

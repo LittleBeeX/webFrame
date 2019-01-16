@@ -225,7 +225,7 @@
 				return msg
 			}
 		},
-		mounted(){
+		created(){
 			this.mountedRefreshListMsg()
 			this.mountedRefreshTokenMsg()
 		}
@@ -240,7 +240,6 @@
 	
 	.capTable
 		min-height: 300px
-		border-radius: 4px
 		background: white
 		margin-right: 30px;
 		.tabBoard

@@ -11,9 +11,9 @@
 							<li><a  href="/index.php/cn/home/index">{{$t('index.btn4')}}</a></li>
 						</ul>
 						<ul class="float-right nav-token">
-							<li v-if="isLogin"><span><a href="/index.php/cn/home/index/register">{{$t('index.btn5')}}</a></span></li>
-							<li v-if="isLogin"><span><a href="/index.php/cn/home/index/login">{{$t('index.btn6')}}</a></span></li>
-							<li v-else><span><a href="javascript:void(0)" @click="closeLogin">{{$t('index.btn7')}}</a></span></li>
+							<li v-if="isLogin" class="login"><span><a href="/index.php/cn/home/index/login">{{$t('index.btn6')}}</a></span></li>
+							<li v-if="isLogin" class="register"><span><a href="/index.php/cn/home/index/register">{{$t('index.btn5')}}</a></span></li>
+							<li v-else class="backup"><span><a href="javascript:void(0)" @click="closeLogin">{{$t('index.btn7')}}</a></span></li>
 							<Dropdown trigger="click" @on-click="changeLanguage">
 								<a href="javascript:void(0)">
 									{{language}}
@@ -167,8 +167,44 @@
 				display: flex;
 				display: -webkit-flex;
 				&>li
-					margin: 0 20px;
+					margin: 0 10px;
 					list-style: none;
+					&.login a,&.backup a
+						border: 1px solid #fff;
+						border-radius: 25px;
+						box-sizing: border-box;
+						cursor: pointer;
+						display: inline-block;
+						line-height: 12px;
+						min-width: 70px;
+						overflow: hidden;
+						padding: 7px 14px;
+						text-align: center;
+						text-decoration: none;
+						-ms-touch-action: none;
+						touch-action: none;
+						vertical-align: middle;
+						min-height: auto;
+					&.register a
+						background: #fff;
+						border: none;
+						border-radius: 25px;
+						box-sizing: border-box;
+						color: #2c2e2f;
+						cursor: pointer;
+						display: inline-block;
+						font-size: 12px;
+						font-family: pp-sans-small-regular, Helvetica Neue, Arial, sans-serif;
+						line-height: 12px;
+						min-width: 70px;
+						overflow: hidden;
+						padding: 8px 15px;
+						text-align: center;
+						text-decoration: none;
+						-ms-touch-action: none;
+						touch-action: none;
+						vertical-align: middle;
+						min-height: auto;
 					a
 						color:white;
 						font-size: 14px;

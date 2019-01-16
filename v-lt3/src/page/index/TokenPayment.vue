@@ -88,7 +88,7 @@
 								url: '/index.php/cn/home/node_su/order',
 								data: Qs.stringify(data)
 							}).then((response) => {
-								this.$Notice.warning({
+								this.$Notice.success({
 									title: this.$t('indePay.tipMsg1')
 								});
 								this.isClick = false
