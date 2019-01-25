@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<Breadcrumb class="bread">
-			<div class="title">{{$t('homeVote.msg0')}}</div>
+			<div class="title">董事会决议</div>
 			<div class="b_func">
 				<div class="searchForm">
 					<RadioGroup v-model="searchType" class='radio' @on-change="changeSearchType(searchType)">
@@ -15,9 +15,9 @@
 						</Input>
 					</div>
 				</div>
-				<div class="addVote">
+				<!--<div class="addVote">
 					<Button type="primary" size="large" @click="isAddDrawer = !isAddDrawer" icon="md-barcode" >{{$t('homeVote.btn5')}}</Button>
-				</div>
+				</div>-->
 			</div>
 		</Breadcrumb>
 		<Row v-if="voteList.length > 0">
@@ -48,20 +48,11 @@
 		<div class="mouldBoard" v-else>
 			<Card :bordered="false" class="mouldItem">
 				<div class="msgBoard">
-					<p>{{$t('homeVote.msg11')}}</p>
-					<Button type="primary" @click="addVote()" size="large" icon="md-barcode" >{{$t('homeVote.btn5')}}</Button>
+					<p>暂无决议内容！</p>
+					<!--<Button type="primary" @click="addVote()" size="large" icon="md-barcode" >{{$t('homeVote.btn5')}}</Button>-->
 				</div>
 			</Card>
 		</div>
-		<Drawer :title="$t('homeVote.msg9')" width="350" :closable="false" v-model="isAddDrawer" class="newVoteBoard">
-			<div>
-				<p>{{$t('homeVote.msg10')}}</p>
-				<Input v-model="addVoteInput" type="textarea" :autosize="{minRows: 3,maxRows: 5}" :placeholder="$t('homeVote.msg10')" />
-				<div class="btn">
-					<Button type="success" long @click="takeVote">{{$t('homeVote.btn5')}}</Button>
-				</div>
-			</div>
-		</Drawer>
 		
 	</div>
 </template>
@@ -77,7 +68,6 @@
 				searchType: this.$t('homeVote.btn1'),
 				addVoteInput: '',
 				isShowDrawer: false,
-				isAddDrawer: false,
 				typeList:[
 					{
 						title:this.$t('homeVote.btn1'),
@@ -118,67 +108,6 @@
 					}
 				})
 			    this.$emit('menuActiveName', 12)
-			},
-			takeVote(){
-				if(this.addVoteInput != ''){
-					let _this = this;
-					this.$store.state.userInstance().methods.addVoteList(0,this.Address,this.Address,0, this.addVoteInput).send({
-						from: this.Address,
-						gasPrice: '40000000000'
-					}).on('transactionHash',function( receipt){
-						_this.$Spin.show({
-			                render: (h) => {
-			                    return h('div', [
-			                        h('Icon', {
-			                            'class': 'demo-spin-icon-load',
-			                            props: {
-			                                type: 'ios-loading',
-			                                size: 32
-			                            }
-			                        }),
-			                        h('div', _this.$t('tipMsg1'))
-			                    ])
-			                }
-			            });
-					}).then(result => {
-						let codes = result.events.createVote.returnValues.codes
-						this.$Spin.hide()
-						let data = {
-							"only":this.$route.query.only,
-							"type": 0,
-							"content": this.addVoteInput,
-							"address": this.Address,
-							"keyname": codes
-						};
-						this.$axios({
-							method: 'post',
-							url: '/index.php/cn/home/node_su/meeting',
-							data: Qs.stringify(data)
-						}).then((response) => {
-							if(response.data.state == 0){
-								this.$Notice.success({
-									title: this.$t('homeVote.tipMsg1')
-								})
-								this.mountedRefreshList()
-								this.isAddDrawer = !this.isAddDrawer
-								this.addVoteInput = ''
-								return true
-							}else{
-								this.$Notice.warning({
-									title: this.$t('errorMsg5')
-								});
-								this.$router.push({
-									path:'/'
-								})
-								return false
-							}
-						})
-					})
-				}else{
-					this.$Notice.warning({
-						title: this.$t('homeVote.errorMsg7')
-					});
-				}
 			},
 			userVote(state,id,codes){
 				let _this = this;
@@ -257,9 +186,10 @@
 				let data = newData
 				this.$axios({
 					method: 'post',
-					url: '/index.php/cn/home/node_se/meeting_list',
+					url: '/index.php/cn/home/node_se/meeting_sensible',
 					data: Qs.stringify(data)
 				}).then((response) => {
+					this.$Spin.hide()
 					if(response.data.state == 0){
 						let list = response.data.info
 						for(let i=0; i<list.length;i++){
@@ -268,8 +198,8 @@
 							list[i].last_time = this.$t('homeVote.msg3_1')+ list[i].remnant.toFixed(1) +this.$t('homeVote.msg3_2')
 							list[i].name =  list[i].surname + list[i].name 
 							list[i].id =  list[i].id 
-							list[i].no_proportion =  Number(list[i].no_proportion )
-							list[i].yes_proportion =  Number(list[i].yes_proportion )
+							list[i].no_proportion =  Number(list[i].no_cnt ) / Number(response.data.cnt)
+							list[i].yes_proportion =  Number(list[i].yes_cnt ) / Number(response.data.cnt)
 							list[i].btn_show = false
 							if(list[i].state == 0 && list[i].throw == 0){
 								list[i].btn_show = true
@@ -329,7 +259,25 @@
 				return msg
 			}
 		},
+		beforeCreate(){
+			this.$Spin.show({
+                render: (h) => {
+                    return h('div', [
+                        h('Icon', {
+                            'class': 'demo-spin-icon-load',
+                            props: {
+                                type: 'ios-loading',
+                                size: 32
+                            }
+                        }),
+                        h('div', this.$t('tipMsg1'))
+                    ])
+                }
+            });
+		},
 		created(){
+			this.$emit('menuActiveName', "13-1")
+			this.$emit('menuOpenNames', "13")
 			this.$store.state.userInstance().methods.totalSupply().call()
 				.then(result => {
 					this.tokenAll = result / 10 ** 18
@@ -364,8 +312,6 @@
 					margin-right: 30px
 				button:hover
 					color: #2d8cf0
-			.addVote
-				margin-right: 30px
 			
 	.voteItem
 		height: 460px

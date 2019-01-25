@@ -368,7 +368,8 @@
 				return msg
 			}
 		},
-		mounted(){
+		created(){
+			this.$emit('menuActiveName', "10")
 			this.$axios.post('/index.php/cn/home/node_se/nationality')
 				.then((response) => {
 					this.nationalityList = response.data.info;

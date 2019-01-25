@@ -26,7 +26,6 @@ export default {
             	this.$i18n.locale = type
             	this.language = this.$t('index.btn8')
             	mutil.setSection('lang', type)
-            	console.log(mutil.getSection('lang'))
 			},
 			refreshLang(){
 				if(this.$route.query.lang != undefined){
@@ -62,6 +61,14 @@ export default {
 	}
 	.ivu-form-item-required .ivu-form-item-label:before {
 		content: ""!important;
+	}
+	.ivu-tooltip-inner {
+	    word-wrap: break-word;
+    	white-space: normal;	
+    	width: calc(100% - 16px);
+    	max-width: none !important;
+	    max-height: 400px;
+    	overflow: auto;
 	}
 	.ivu-menu-dark.ivu-menu-vertical .ivu-menu-item, .ivu-menu-dark.ivu-menu-vertical .ivu-menu-submenu-title{
 		border-bottom: 1px solid rgba(255,255,255,0.1);

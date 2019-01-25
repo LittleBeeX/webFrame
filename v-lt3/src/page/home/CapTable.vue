@@ -9,7 +9,14 @@
 					<Card :bordered="false" class="capTable">
 						<p slot="title">{{$t('homeCapTable.msg1')}}</p>
 						<div class="tabBoard">
-							<Table height="700" :border="true" :stripe="true" :columns="businessList.rows" :data="businessList.cols"></Table>
+							<Table height="700" :border="true" :stripe="true" :columns="businessList.rows" :data="businessList.cols">
+								<template slot-scope="{ row }" slot="address">
+									{{row.address}}
+									<Icon type="ios-copy-outline" class="copy" size="22"
+										v-clipboard:copy="row.address"
+										v-clipboard:success="copyAddress"/>
+								</template>
+							</Table>
 						</div>
 					</Card>
 				</Col>
@@ -86,6 +93,7 @@
 						{
 							title: this.$t('homeCapTable.msg1_5'),
 							key: 'address',
+							slot: 'address',
 							tooltip:true,
 							minWidth: 140
 						}
@@ -223,9 +231,13 @@
 						break;
 				}
 				return msg
+			},
+			copyAddress(){
+				 this.$Message.info('复制成功！');
 			}
 		},
 		created(){
+			this.$emit('menuActiveName', "11")
 			this.mountedRefreshListMsg()
 			this.mountedRefreshTokenMsg()
 		}
@@ -248,7 +260,12 @@
 				.ivu-table:after{
 					background-color: transparent
 				}
-				    
+			.copy
+				position: relative
+				cursor:pointer
+				top: -2px
+				&:hover
+					color: #2d8cf0	    
 	
 	.tokenBoard,.userBoard
 		.msgBoard

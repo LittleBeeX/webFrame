@@ -18,7 +18,7 @@
 			<div class="page_logo">
 				<img src="../../assets/images/littlebeex-logo.png" mode="" @click="goIndex"/>
 			</div>
-			<Menu ref="side_menu" :active-name="activeName" theme="dark" width="auto" :open-names="['1']" class="slider-menu">
+			<Menu ref="side_menu" :active-name="activeName" theme="dark" width="auto" :open-names="openNames" class="slider-menu">
 				<MenuItem :name="item.name" :itemName="item.title" v-for="item in slider" :title="item.urls" v-if='!item.isChild' :to="item.urls">
 					<Icon :size="item.iconSize" :type="item.icon" />
 					{{item.label}}
@@ -46,7 +46,7 @@
 				</Dropdown>
 			</Header>-->
 			<Content class="content">
-				<router-view @menuActiveName="menuActiveName" :BreadTitle="BreadTitle"></router-view>
+				<router-view @menuActiveName="menuActiveName" @menuOpenNames="menuOpenNames" :BreadTitle="BreadTitle"></router-view>
 			</Content>
 		</Layout>
 	</div>
@@ -62,10 +62,11 @@
 			return {
 				language:'简体中文',
 				activeName:"10",
+				openNames:['10'],
 				slider: [
 					{
 						title: 'Overview',
-						name: '10',
+						name: "10",
 						label: this.$t('home.btn1'),
 						urls: 'Overview?only=' + this.$route.query.only,
 						icon: 'md-home',
@@ -74,7 +75,7 @@
 						children: []
 					}, {
 						title: 'CapTable',
-						name: '11',
+						name: "11",
 						label: this.$t('home.btn2'),
 						urls: 'CapTable?only=' + this.$route.query.only,
 						icon: 'ios-apps',
@@ -84,7 +85,7 @@
 	
 					}, {
 						title: 'MintTransfer',
-						name: '12',
+						name: "12",
 						label: this.$t('home.btn3'),
 						urls: 'MintTransfer?only=' + this.$route.query.only,
 						icon: 'md-repeat',
@@ -95,48 +96,48 @@
 						label: this.$t('home.btn4'),
 						icon: 'logo-windows',
 						iconSize: '14',
-						name: '13',
+						name: "13",
 						isChild:true,
 						children: [
 							{
-								title: 'Trustee',
-								name: '13-1',
-								label: '董事会决议',
-								urls: 'trustee?only=' + this.$route.query.only,
-							},{
 								title: 'Stockholder',
-								name: '13-2',
-								label: '股东会决议',
+								name: "13-1",
+								label: '董事会决议',
 								urls: 'stockholder?only=' + this.$route.query.only,
+							},{
+								title: 'Trustee',
+								name: "13-2",
+								label: '股东会决议',
+								urls: 'trustee?only=' + this.$route.query.only,
 							}
 						]
 					}, {
 						label: this.$t('home.btn5'),
 						icon: 'md-person',
 						iconSize: '16',
-						name: '14',
+						name: "14",
 						isChild:true,
 						children: [
 							{
 								title: 'CreatePlan',
-								name: '14-1',
+								name: "14-1",
 								label: '创建期权奖励',
 								urls: 'createPlan?only=' + this.$route.query.only,
 							},{
 								title: 'ManagePlan',
-								name: '14-2',
+								name: "14-2",
 								label: '管理期权奖励',
 								urls: 'managePlan?only=' + this.$route.query.only,
 							},{
 								title: 'MyPlan',
-								name: '14-3',
+								name: "14-3",
 								label: '我的期权奖励',
 								urls: 'myPlan?only=' + this.$route.query.only,
 							}
 						]
 					}, {
 						title: 'STO',
-						name: '15',
+						name: 15,
 						label: this.$t('home.btn6'),
 						urls: 'STO?only=' + this.$route.query.only,
 						icon: 'md-star',
@@ -161,7 +162,6 @@
 		},
 		methods: {
 			changeBreadTitle(names) {
-				console.log(names)
 				this.BreadTitle = names
 				for(let i=0; i< this.slider.length; i++){
 					if(this.slider[i].name == names){
@@ -179,6 +179,9 @@
 			},
 			menuActiveName(val){
 				this.activeName = val
+			},
+			menuOpenNames(val){
+				this.openNames[0] = val
 			},
 			refreshAdmin(){
 				let data = {

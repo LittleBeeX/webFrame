@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<Breadcrumb class="bread">
-			<div class="title">{{$t('homeVote.msg0')}}</div>
+			<div class="title">股东会决议</div>
 			<div class="b_func">
 				<div class="searchForm">
 					<RadioGroup v-model="searchType" class='radio' @on-change="changeSearchType(searchType)">
@@ -24,7 +24,7 @@
 			<Col  :xs="24" :sm="12" :lg="8" v-for="item in voteList">
 				<Card :bordered="false" class="voteItem">
 					<p slot="title">
-						<Tooltip max-width="300" :content="item.content" placement="bottom-start">
+						<Tooltip :content="item.content" placement="bottom-start">
 							<p class="tooltip-msg">{{item.content}}</p>
 						</Tooltip>
 					</p>
@@ -33,7 +33,7 @@
 						<p><b>{{$t('homeVote.msg3')}}</b>{{item.last_time}}</p>
 						<p><b v-if="item.type == 1">{{$t('homeVote.msg4_1')}}</b><b v-else>{{$t('homeVote.msg4')}}</b>{{item.name}}</p>
 						<p><b>{{$t('homeVote.msg5')}}</b>{{item.state}}</p>
-						<p><b>{{$t('homeVote.msg6')}}<span>（{{$t('homeVote.msg6_1')}}{{item.quorum}}%）</span></b> <Progress :percent="item.cnt" status="active" /></p>
+						<p><b>{{$t('homeVote.msg6')}}<span>{{$t('homeVote.msg6_1')}}{{item.quorum}}%）</span></b> <Progress :percent="item.cnt" status="active" /></p>
 						<p><b>{{$t('homeVote.msg7')}}<span>{{$t('homeVote.msg7_1')}}{{item.support}}%{{$t('homeVote.msg7_2')}}</span></b> <Progress :percent="item.yes_proportion" status="active" /></p>
 						<p><b>{{$t('homeVote.msg8')}}</b> <Progress :percent="item.no_proportion" class="warningProgress"/></p>
 						<div class="btn" v-if="item.btn_show">
@@ -260,6 +260,7 @@
 					url: '/index.php/cn/home/node_se/meeting_list',
 					data: Qs.stringify(data)
 				}).then((response) => {
+					this.$Spin.hide()
 					if(response.data.state == 0){
 						let list = response.data.info
 						for(let i=0; i<list.length;i++){
@@ -330,9 +331,25 @@
 			}
 		},
 		created(){
+			this.$emit('menuActiveName', "13-2")
+			this.$emit('menuOpenNames', "13")
 			this.$store.state.userInstance().methods.totalSupply().call()
 				.then(result => {
 					this.tokenAll = result / 10 ** 18
+					this.$Spin.show({
+		                render: (h) => {
+		                    return h('div', [
+		                        h('Icon', {
+		                            'class': 'demo-spin-icon-load',
+		                            props: {
+		                                type: 'ios-loading',
+		                                size: 32
+		                            }
+		                        }),
+		                        h('div', this.$t('tipMsg1'))
+		                    ])
+		                }
+		            });
 					this.mountedRefreshList()
 				})
 		}
@@ -364,8 +381,6 @@
 					margin-right: 30px
 				button:hover
 					color: #2d8cf0
-			.addVote
-				margin-right: 30px
 			
 	.voteItem
 		height: 460px

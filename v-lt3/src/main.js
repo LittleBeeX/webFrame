@@ -15,6 +15,9 @@ const i18n = new VueI18n({
     messages: messages
 })
 
+import VueClipboard from 'vue-clipboard2'
+Vue.use(VueClipboard)
+
 import iView from 'iview'
 import 'iview/dist/styles/iview.css'
 Vue.use(iView);

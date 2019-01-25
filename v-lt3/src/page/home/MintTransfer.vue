@@ -140,7 +140,6 @@
 								let codes = result.events.createVote.returnValues.codes
 								this.$Spin.hide()
 								let msg = this.mappingMsg[this.Address] + this.$t('homeTransfer.msg4_1') + nums + 'TOKEN' + this.$t('homeTransfer.msg5') + this.mappingMsg[address] + this.$t('homeTransfer.msg6') + this.mintCode + this.$t('homeTransfer.msg7')
-								console.log(msg);
 								this.takeVote(address,1,nums,msg,codes)
 							})
 						}else{
@@ -219,7 +218,6 @@
 								"only":this.$route.query.only
 							}
 						})
-					    this.$emit('menuActiveName', 13)
 						return true
 					}else{
 						this.$Notice.warning({
@@ -234,6 +232,7 @@
 			}
 		},
 		created(){
+			this.$emit('menuActiveName', "12")
 			let data = {
 				"only":this.$route.query.only
 			};

@@ -16,7 +16,7 @@
 			</div>
 			<div class="config-item">
 				<label>{{$t('indexConfig.msg6')}}</label>
-				<p><Input v-model="companyName" size="large" :maxlength="20" type="text"/></p>
+				<p><Input v-model="companyName" size="large" :maxlength="20" type="text" @on-keydown.enter="openOrganization"/></p>
 				<Button class="open" type="primary" @click="openOrganization" :disabled="!isClick" :loading="loading">{{$t('indexConfig.btn4')}}</Button>
 			</div>
 		</div>
@@ -41,7 +41,9 @@
 			Address: state => state.web3.coinbase
 		}),
 		methods:{
+			haha(){console.log(797)},
 			openOrganization(){
+				if(this.isClick == false){return false}
 				let data = {
 					"only":this.companyName,
 					"address": this.Address

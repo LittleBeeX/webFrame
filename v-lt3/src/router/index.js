@@ -22,10 +22,14 @@ const HomeESOP = () =>
 	import('@/page/home/ESOP')
 const HomeCreatePlan = () =>
 	import('@/page/home/CreatePlan')
+const HomeCreateUser = () =>
+	import('@/page/home/CreateUser')
 const HomeManagePlan = () =>
 	import('@/page/home/ManagePlan')
 const HomeMyPlan = () =>
 	import('@/page/home/MyPlan')
+const HomeTimePage = () =>
+	import('@/page/home/TimePage')
 const HomeSTO = () =>
 	import('@/page/home/STO')
 
@@ -90,11 +94,17 @@ const router = new Router({
 					path: 'createPlan',
 					component: HomeCreatePlan
 				}, {
+					path: 'createUser',
+					component: HomeCreateUser
+				}, {
 					path: 'managePlan',
 					component: HomeManagePlan
 				}, {
 					path: 'myPlan',
 					component: HomeMyPlan
+				}, {
+					path: 'timePage',
+					component: HomeTimePage
 				}, {
 					path: 'sto',
 					component: HomeSTO
